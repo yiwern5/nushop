@@ -11,8 +11,13 @@
 ### At present, various transactions, including the sale of T-shirts and resale of used goods, are being conducted through disparate telegram channels. As a consequence, certain students may fail to avail themselves of the opportunity to obtain attractive and engaging merchandise from NUS clubs and societies, or secondhand items at reduced prices, due to their absence from these telegram channels.
 
 ## Proposed Core Features
+### Homepage, Product listings, Shopping cart and checkout, user profile, order tracking and history, admin dashboard
 
 ## User Stories
+###
+| As a  | I want to | So that I can | Priority |
+| ---   | ---       | ---           | ---      |
+| Buyer | Search products using keyword | find the products that I need quickly | Must have |
 
 ## Design and Plan
 
