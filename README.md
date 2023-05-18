@@ -1,7 +1,7 @@
 # NUShop
 
 ## Level of Acheivement
-### Apollo
+### Apollo 11
 
 ## Project Scope (summary)
 
