@@ -12,7 +12,7 @@
             <a href="/" class="text-xl font-semibold">NUShop</a>
             <div class="space-x-6">
                 <a href="#" class="text-lg font-semibold hover:text-gray-500">New item</a>
-                <a href="#" class="text-lg font-semibold hover:text-gray-500">Browse</a>
+                <a href="{% url 'product:products' %}" class="text-lg font-semibold hover:text-gray-500">Browse</a>
                 <a href="#" class="text-lg font-semibold hover:text-gray-500">Search</a>
 
                 {% if request.user.is_authenticated %}
