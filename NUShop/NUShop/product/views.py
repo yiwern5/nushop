@@ -54,5 +54,5 @@ def edit(request, pk):
 
     return render(request, 'product/form.html', {
         'form': form,
-        'title': 'Edit product',
+        'title': 'Edit product'
     })
