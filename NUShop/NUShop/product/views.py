@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.db.models import Q
 
-from . models import Category, Product
+from .models import Category, Product
 
 def products(request):
     query = request.GET.get('query', '')
