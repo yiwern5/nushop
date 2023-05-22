@@ -1,9 +1,9 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.db.models import Q
-
-from . models import Category, Product
-from .forms import NewProductForm, EditProductForm
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
+from django.shortcuts import render, get_object_or_404, redirect
+
+from .models import Category, Product
+from .forms import NewProductForm, EditProductForm
 
 # Create your views here.
 def products(request):
