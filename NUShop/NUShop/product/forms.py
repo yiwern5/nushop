@@ -2,6 +2,7 @@ from django import forms
 from .models import Product
 
 INPUT_CLASSES = 'w-full py-4 px-6 rounded-xl border'
+
 class NewProductForm(forms.ModelForm):
     class Meta:
         model = Product
