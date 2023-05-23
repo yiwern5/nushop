@@ -3,7 +3,6 @@ from django.db import models
 
 from product.models import Product
 
-# Create your models here.
 class Chat(models.Model):
     product = models.ForeignKey(Product, related_name='chats', on_delete=models.CASCADE)
     members = models.ManyToManyField(User, related_name='chats')
@@ -12,7 +11,7 @@ class Chat(models.Model):
 
     class Meta:
         ordering = ('-modified_at',)
-
+    
 class ChatMessage(models.Model):
     chat = models.ForeignKey(Chat, related_name='messages', on_delete=models.CASCADE)
     content = models.TextField()
