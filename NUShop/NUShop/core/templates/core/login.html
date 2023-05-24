@@ -8,19 +8,22 @@
         <link rel="stylesheet" href="{% static 'styles.css' %}"> 
     </head>
     <body>
-        <div class="w-1/2 my-6 mx-auto p-6 bg-secondary rounded-xl">
-            <h1 class="mb-6 text-3xl">Log in</h1>
+        <div align="center" class="mt-6">
+            <img src="{% static 'logo.png' %}" alt="logo" width="380" >
+        </div>
+        
+        <div class="w-1/3 mt-6 mx-auto p-6 bg-secondary rounded-xl">
     
             <form method="post" action=".">
                 {% csrf_token %}
                 
                 <div class="mb-3">
-                    <label class="inline-block mb-2">Username</label><br>
+                    <label class="inline-block mb-2">Email/Telegram Handle:</label><br>
                     {{ form.username }}
                 </div>
     
                 <div class="mb-3">
-                    <label class="inline-block mb-2">Password</label><br>
+                    <label class="inline-block mb-2">Password:</label><br>
                     {{ form.password }}
                 </div>
     
@@ -34,8 +37,17 @@
                         {{ form.non_field_errors }}
                     </div>
                 {% endif %}
-    
-                <button class="py-4 px-8 text-lg bg-teal-500 hover:bg-teal-700 rounded-xl text-white">Submit</button>
+                <div class="center">
+                    <button class="bt-primary text-3xl text-center rounded-3xl text-white">Login</button>
+                </div>
+                <div class="center">
+                    <p>If you do not have an account:</p>
+                </div>
+                
+                <div class="center">
+                    <button class="bt-secondary text-3xl text-center rounded-3xl">Sign Up here</button>
+                </div>
+                
             </form>
         </div>
     </body>
