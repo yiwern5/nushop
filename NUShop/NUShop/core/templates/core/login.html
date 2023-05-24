@@ -38,15 +38,13 @@
                 <div class="center">
                     <button class="bt-primary text-3xl text-center rounded-3xl text-white">Login</button>
                 </div>
-                <div class="center">
-                    <p>If you do not have an account:</p>
-                </div>
-                
-                <div class="center">
-                    <button class="bt-secondary text-3xl text-center rounded-3xl">Sign Up here</button>
-                </div>
-                
             </form>
+            <div class="center">
+                <p>If you do not have an account:</p>
+            </div>
+            <div class="center">
+                <a href="{% url 'core:signup' %}" class="bt-secondary text-3xl text-center rounded-3xl">Sign Up here</a>
+            </div>
         </div>
     </body>
 </html>
