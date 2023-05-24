@@ -17,13 +17,11 @@
             <form method="post" action=".">
                 {% csrf_token %}
                 
-                <div class="mb-3">
-                    <label class="inline-block mb-2">Email/Telegram Handle:</label><br>
+                <div class="mb-3 form-border">
                     {{ form.username }}
                 </div>
     
-                <div class="mb-3">
-                    <label class="inline-block mb-2">Password:</label><br>
+                <div class="mb-3 form-border">
                     {{ form.password }}
                 </div>
     
