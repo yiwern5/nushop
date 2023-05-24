@@ -14,10 +14,6 @@ body {
     background-color: #FDFFF9;
 }
 
-.text-primary {
-    color:  #528029;
-}
-
 .text-tertiary {
     color:  #E9B32C;
 }
@@ -66,7 +62,7 @@ button:hover {
     display: flex;
     justify-content: center;
     margin: 10px
-  }
+}
 
 .form-border {
     border-bottom: 1px solid #528029;
