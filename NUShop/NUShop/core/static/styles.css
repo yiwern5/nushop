@@ -1,3 +1,7 @@
+body {
+    background-color: #528029;
+}
+
 .bg-primary {
     background-color: #528029;
 }
@@ -7,15 +11,27 @@
 }
 
 .bg-tertiary{
-    background-color: #E9B32C;
+    background-color: #FDFFF9;
+}
+
+.text-primary {
+    color:  #528029;
 }
 
 .text-tertiary {
-    color: #E9B32C;
+    color:  #E9B32C;
+}
+
+.text-white-hover-tertiary {
+    color: white
+}
+
+.text-white-hover-tertiary:hover {
+    color:  #E9B32C;
 }
 
 button:hover {
-    background-color:#E9B32C;
+    background-color: #E9B32C;
     
 }
 
@@ -29,7 +45,7 @@ button:hover {
 }
 
 .bt-primary:hover {
-    background-color:#E9B32C;
+    background-color: #E9B32C;
 }
 
 .bt-secondary{

@@ -7,9 +7,11 @@
         <script src="https://cdn.tailwindcss.com"></script>
         <link rel="stylesheet" href="{% static 'styles.css' %}"> 
     </head>
-    <body class="bg-primary">
+    <body>
         <div align="center" class="mt-6">
-            <img src="{% static 'logo.png' %}" alt="logo" width="380" >
+            <a href="/">
+                <img src="{% static 'logo.png' %}" alt="logo" width="380">
+            </a>
         </div>
         
         <div class="w-1/3 mt-6 mx-auto p-6 bg-secondary rounded-xl">
@@ -38,15 +40,13 @@
                 <div class="center">
                     <button class="bt-primary text-3xl text-center rounded-3xl text-white">Login</button>
                 </div>
-                <div class="center">
-                    <p>If you do not have an account:</p>
-                </div>
-                
-                <div class="center">
-                    <button class="bt-secondary text-3xl text-center rounded-3xl">Sign Up here</button>
-                </div>
-                
             </form>
+            <div class="center">
+                <p>If you do not have an account:</p>
+            </div>
+            <div class="center">
+                <a href="{% url 'core:signup' %}" class="bt-secondary text-3xl text-center rounded-3xl">Sign Up here</a>
+            </div>
         </div>
     </body>
 </html>
