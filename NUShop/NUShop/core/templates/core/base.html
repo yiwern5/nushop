@@ -10,16 +10,16 @@
         <title>{% block title %}{%endblock%} | NUShop</title>
     </head>
     <body class="bg-secondary">
-        <nav class="py-6 px-6 flex justify-between items-center border-b border-gray-200">
-            <a href="/">
-                <img src="{% static 'logo.png' %}" alt="logo" width="200">
+        <nav class="py-3 px-6 flex justify-between items-end border-b-primary">
+            <a href="/" class="text-5xl cinzel text-primary">
+                NUShop
             </a>
             <div class="space-x-6">
-                <a href="{% url 'product:products' %}" class="text-lg font-semibold text-primary hover:text-gray-500">Browse</a>
-                <a href="{% url 'chat:inbox' %}" class="text-lg font-semibold text-primary hover:text-gray-500">Chat</a>
-                <a href="{% url 'product:new' %}" class="text-lg font-semibold text-primary hover:text-gray-500">Add Product</a>
-                <a href="#" class="text-lg font-semibold text-primary hover:text-gray-500">Cart</a>
-                <a href="{% url 'dashboard:index' %}" class="text-lg font-semibold text-primary hover:text-gray-500">Account</a>
+                <a href="{% url 'product:products' %}" class="text-2xl cinzel text-primary hover:text-yellow-500">Browse</a>
+                <a href="{% url 'chat:inbox' %}" class="text-2xl cinzel text-primary hover:text-yellow-500">Chat</a>
+                <a href="{% url 'product:new' %}" class="text-2xl cinzel text-primary hover:text-yellow-500">Add Product</a>
+                <a href="#" class="text-2xl cinzel text-primary hover:text-yellow-500">Cart</a>
+                <a href="{% url 'dashboard:index' %}" class="text-2xl cinzel text-primary hover:text-yellow-500">Account</a>
             </div>
         </nav>
         <div class="px-6 py-6">
