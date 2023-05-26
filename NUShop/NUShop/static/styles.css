@@ -2,31 +2,35 @@ body {
     background-color: #528029;
 }
 
-.bg-primary {
+.bg-nushopprimary {
     background-color: #528029;
 }
 
-.bg-secondary {
+.bg-primary-light {
+    background-color: rgba(82, 128, 41, 0.1);
+}
+
+.bg-nushopsecondary {
     background-color: #FDFFF9;
 }
 
-.bg-tertiary{
-    background-color: #FDFFF9;
+.bg-nushoptertiary{
+    background-color: #E9B32C;
 }
 
-.text-primary {
+.text-nushopprimary {
     color:  #528029;
 }
 
-.text-tertiary {
+.text-nushoptertiary {
     color:  #E9B32C;
 }
 
-.text-white-hover-tertiary {
+.text-white-hover-nushoptertiary {
     color: white
 }
 
-.text-white-hover-tertiary:hover {
+.text-white-hover-nushoptertiary:hover {
     color:  #E9B32C;
 }
 
@@ -35,7 +39,7 @@ button:hover {
     
 }
 
-.bt-primary {
+.bt-nushopprimary {
     color: white;
     background-color: #528029;
     margin: 2%;
@@ -44,11 +48,11 @@ button:hover {
     padding-bottom: 2%
 }
 
-.bt-primary:hover {
+.bt-nushopprimary:hover {
     background-color: #E9B32C;
 }
 
-.bt-secondary{
+.bt-nushopsecondary{
     color: #528029;
     background-color: white;
     border: 2px solid #528029;
@@ -58,17 +62,108 @@ button:hover {
     padding-bottom: 2%
 }
 
-.bt-secondary:hover {
+.bt-nushopsecondary:hover {
     background-color:#E9B32C;
+}
+
+.bt-nushoptertiary{
+    color: #E9B32C;
+    background-color: white;
+    border: 2px solid #E9B32C;
+    margin: 2%;
+    width: 80%;
+    padding-top: 2%;
+    padding-bottom: 2%
+}
+
+.bt-nushoptertiary:hover{
+    color: white;
+    background-color: #E9B32C;
+    border: 2px solid #E9B32C;
+    margin: 2%;
+    width: 80%;
+    padding-top: 2%;
+    padding-bottom: 2%
+}
+
+.border-nushopprimary {
+    border: 2px solid #528029;
 }
 
 .center {
     display: flex;
     justify-content: center;
-    margin: 10px
+    margin: 10px;
 }
 
 .form-border {
     border-bottom: 1px solid #528029;
     margin: 20px;
 }
+
+.grid-parent {    
+    align-items: center;
+    justify-items: center;
+}
+
+.grid-item {
+    width: 100%;
+}
+
+.grid-item:hover {
+    width: 100%;
+    transform: scale(1.021);
+    box-shadow: 0 10px 20px 4px rgba(35, 35, 35, .1);
+    border-radius: 10px;
+}
+
+.product-name {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.animate__animated.animate__fadeInUp {
+    --animate-delay: 1s;
+    --animate-duration: 1.5s
+}
+
+.side-nav{
+    position: fixed;
+    left: 0;
+    height: 100%;
+    scroll-margin-bottom: auto;
+}
+
+.main {
+    margin-left: 200px; /* Same as the width of the sidenav */
+}
+
+.footer {
+    margin-top: auto;
+}
+
+.bt-right {
+    position: absolute;
+    right: 4%;
+}
+
+.pfp {
+    height: 100px;
+    max-width: 100px;
+    border-radius: 50%;
+    border: 2px solid #528029;
+    object-fit: cover;
+ }
+
+.bt-account {
+background-color: #E9B32C;
+color: white;
+}
+
+.bt-account:hover {
+    background-color: #528029;
+    color: white;
+ }

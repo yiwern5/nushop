@@ -1,48 +1,62 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Products{% endblock %}
+{% block title %}Browse{% endblock %}
 
 {% block content %}
-    <div class="pb-6 grid grid-cols-4 gap-4 bg-gray-100">
-        <div class="col-span-1">
-            <form method="get" action="{% url 'product:products' %}">
-                <input name="query" class="w-full py-4 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Find a bike, a chair or car...">
+    <div class="flex">
+        <div class="side-nav px-4 w-1/5 bg-nushopsecondary border-r border-gray-200">
+            <form method="get" action="{% url 'product:products' %}" class="pt-4">
+                <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
 
-                <button class="mt-2 py-4 px-8 text-lg bg-teal-500 text-white rounded-xl">Search</button>
+                <div class="center">
+                <button class="py-3 px-8 bg-nushopprimary text-white rounded-xl">Search</button>
+                </div>
             </form>
 
             <hr class="my-6">
 
-            <p class="font-semibold">Categories</p>
+            <p class="text-sm font-semibold">Categories</p>
 
             <ul>
                 {% for category in categories %}
-                    <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
+                    <li class="py-2 px-2 text-sm rounded-xl{% if category.id == category_id %} bg-primary-light {% endif %}">
                         <a href="{% url 'product:products' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
 
-            <hr class="my-6">
-
-            <p class="font-semibold">Clear filters</p>
-
-            <ul>
-                <li><a href="{% url 'product:products' %}" class="mt-2 py-4 px-8 inline-block bg-yellow-500 text-lg rounded-xl text-white">Clear</a>
+            <div class="center">
+                <ul class="pb-6">
+                    <li><a href="{% url 'product:products' %}" class="mt-2 py-3 px-8 inline-block bg-yellow-500 rounded-xl text-white">Clear Filter</a>
+                </ul>
+            </div>
         </div>
 
-        <div class="col-span-3">
-            <div class="grid grid-cols-3 gap-3">
+        <div class="ml-64 mt-12 p-4 w-4/5">
+            <h3 class="mb-12 text-2xl">
+                {% if query %}
+                    {% if category_id %}
+                        {{ query }} in {{ category_name }}
+                    {% else %}
+                        {{ query }}
+                    {% endif %}
+                {% elif category_id %}
+                    {{ category_name }}
+                {% else %}
+                    Featured
+                {% endif %}
+            </h3>
+            <div class="grid grid-cols-4 gap-3 grid-parent">
                 {% for product in products %}
-                    <div>
+                    <div class="grid-item">
                         <a href="{% url 'product:detail' product.id %}">
-                            <div>
-                                <img src="{{ product.image.url }}" class="rounded-t-xl">
+                            <div class="w-full overflow-hidden rounded-t-lg bg-gray-200">
+                                <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
                             </div>
     
-                            <div class="p-6 bg-white rounded-b-xl">
-                                <h2 class="text-2xl">{{ product.name }}</h2>
-                                <p class="text-gray-500">Price: {{ product.price }}</p>
+                            <div class="px-4 rounded-b-xl">
+                                <span class="product-name mt-2 text-sm font-semibold">{{ product.name }}</span>
+                                <p class="mt-4 mb-4 text-xl font-medium text-nushoptertiary">${{ product.price }}</p>
                             </div>
                         </a>
                     </div>
