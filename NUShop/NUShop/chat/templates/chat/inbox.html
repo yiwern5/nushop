@@ -8,7 +8,7 @@
 <div class="space-y-6">
     {% for chat in chats %}
         <a href="{% url 'chat:detail' chat.id %}">
-            <div class="p-6 flex bg-gray-100 rounded-xl">
+            <div class="p-6 flex bg-primary-light rounded-xl">
                 <div class="pr-6">
                     <img src="{{ chat.product.image.url }}" class="w-20 rounded-xl">
                 </div>
