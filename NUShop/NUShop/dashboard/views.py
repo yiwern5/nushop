@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
+from django.db.models import Q
 
 from product.models import Category, Product
 
@@ -34,4 +35,20 @@ def viewseller(request):
         'categories': categories,
         'category_id': int(category_id),
         'category_name': category_name,
+    })
+
+@login_required
+def mypurchases(request):
+    products = Product.objects.filter(created_by=request.user)
+
+    return render(request, 'dashboard/mypurchases.html', {
+        'products': products, 
+    })
+
+@login_required
+def mysales(request):
+    products = Product.objects.filter(created_by=request.user)
+
+    return render(request, 'dashboard/mysales.html', {
+        'products': products, 
     })

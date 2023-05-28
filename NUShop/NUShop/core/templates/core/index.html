@@ -7,7 +7,7 @@
 {% endblock %}  
 
 {% block content %}
-    <div id="carouselExampleAutoplaying" class="carousel slide rounded-xl" data-bs-ride="carousel">
+    <div id="carouselExampleAutoplaying" class="carousel slide rounded-xl mt-6" data-bs-ride="carousel">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -87,8 +87,8 @@
         </div>
     </div>
 
-    <div class="mt-3 px-6 pt-10 pb-3 container-fluid scroll">
-        <h2 class="mb-3 text-3xl text-bold">Featured</h2>
+    <h2 class="mb-3 ml-6 mt-6 text-3xl text-bold">Featured</h2>
+    <div class="px-6 pb-3 container-fluid scroll">
         <div class="d-flex flex-row flex-nowrap">
             {% for product in products %}
             <div class="col mr-4">
@@ -109,8 +109,8 @@
         </div>
     </div>
 
-    <div class="mt-3 px-6 pt-10 pb-3 container-fluid scroll">
-        <h2 class="mb-3 text-3xl text-bold">For You</h2>
+    <h2 class="mb-3 ml-6 mt-6 text-3xl text-bold">For You</h2>
+    <div class="px-6 pb-3 container-fluid scroll">
         <div class="d-flex flex-row flex-nowrap">
             {% for product in products %}
             <div class="col mr-4">
@@ -131,8 +131,8 @@
         </div>
     </div>
 
-    <div class="mt-3 px-6 pt-10 pb-3 container-fluid scroll">
-        <h2 class="mb-3 text-3xl text-bold">On Sale</h2>
+    <h2 class="mb-3 ml-6 mt-6 text-3xl text-bold">On Sale</h2>
+    <div class="px-6 pb-3 container-fluid scroll">
         <div class="d-flex flex-row flex-nowrap">
             {% for product in products %}
             <div class="col mr-4">
@@ -153,8 +153,8 @@
         </div>
     </div>
 
-    <div class="mt-3 px-6 pt-10 pb-3 container-fluid scroll">
-        <h2 class="mb-3 text-3xl text-bold">Trending</h2>
+    <h2 class="mb-3 ml-6 mt-6 text-3xl text-bold">Trending</h2>
+    <div class="px-6 pb-3 container-fluid scroll">
         <div class="d-flex flex-row flex-nowrap">
             {% for product in products %}
             <div class="col mr-4">

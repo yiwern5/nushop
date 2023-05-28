@@ -3,16 +3,18 @@
 {% block title %}My Sales{% endblock %}
 
 {% block content %}
-    <div class="grid grid-cols-4 gap-4 mt-3">
+    <div class="grid grid-cols-4 gap-4">
         <div class="col-span-1 vl">
-            <form method="get" action="{% url 'product:products' %}">
-                <input name="query" class="border-search border rounded-xl" type="text" value="{{ query }}" placeholder="Find an order">
+            <form method="get" action="{% url 'product:products' %}" class="pt-4 pr-2">
+                <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
 
                 <button class="mt-2 text-xl bg-nushopprimary bt-nushopprimary text-white rounded-xl text-center">Search</button>
-            </form>
+            </form> 
 
-            <p class="text-xl">Status:</p>
-            
+            <hr class="my-6">
+
+            <p class="text-sm font-semibold">Status:</p>
+
             <ul>
                 {% for stat in status %}
                     <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
@@ -21,8 +23,8 @@
                 {% endfor %}
             </ul>
 
-            <ul>
-                <li><a href="{% url 'product:products' %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>
+            <ul class="pr-2">
+                <li><a href="{% url 'product:products' %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>            
         </div>
 
         <div class="col-span-3">
