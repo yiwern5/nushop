@@ -1,11 +1,14 @@
 {% extends 'core/base.html' %}
 
+{% load static %}
+
 {% block title %}{{ product.name }} {% endblock %}
 
 {% block content %}
 <div class="grid grid-cols-7 grid-rows-2 gap-2 mt-3">
     <div class="col-span-3 row-span-3">
         <img src="{{ product.image.url }}" class="rounded-xl img-size">
+        
     </div>
 
     <div class="col-span-4 row-span-1">
@@ -63,35 +66,62 @@
     </div>
 </div>
 
-<div class="grid grid-cols-15 grid-rows-3 gap-2 border-nushopprimary rounded-xl mt-6 px-4 text-xl">
-    <div class="col-span-3 row-span-3">
-        <img src="{{ user.image.url }}" class="rounded-xl">
-    </div>
-    <div class="col-span-12 row-span-1">
-        <h1><strong>NUS Computing Club</strong></h1>
-    </div>
-    <div class="col-span-6 row-span-1">
-        <h1>online now</h1>
-    </div>
-    <div class="col-span-3 row-span-1">
-        <h1>Ratings:</h1>
-    </div>
-    <div class="col-span-3 row-span-1">
-        <h1>Listings:</h1>
-    </div>
-    <div class="col-span-3 row-span-1">
-        <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
-    </div>
-    <div class="col-span-3 row-span-1">
-        <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</button>
-    </div>
-    <div class="col-span-3 row-span-1">
-        <h1>Response Rate:</h1>
-    </div>
-    <div class="col-span-3 row-span-1">
-        <h1>Followers:</h1>
-    </div>
+<div class="mt-6 px-3 py-6 border-nushopprimary rounded-xl">
+    <div class="grid grid-cols-7">
+        <div class="w-full col-span-1 overflow-hidden center">
+            <img src="{% static 'green logo.png' %}" class="pfp">
+        </div>
 
+        <div class="col-span-2">
+            <div class="grid grid-rows-3">
+                <div class="row-span-1">
+                    <h1><strong>NUS Computing Club</strong></h1>
+                </div>
+                <div class="row-span-1">
+                    <h1>online now</h1>
+                </div>
+                <div class="row-span-1">
+                    <div class="grid grid-cols-2">
+                        <div class="col-span-1">
+                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
+                        </div>
+                        <div class="col-span-1">
+                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+
+        <div class="col-span-1">
+            <ul>
+                <li class="text-xl font-semibold ml-12 mb-12 mt-4">Listings</li>
+                <li class="text-xl font-semibold ml-12 mb-4 mt-10">Followers</li>
+            </ul>
+        </div>
+
+        <div class="col-span-1">
+            <ul>
+                <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">20</li>
+                <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">555</li>
+            </ul>
+        </div>
+
+        <div class="col-span-1">
+            <ul>
+                <li class="text-xl font-semibold ml-12 mb-12 mt-4">Ratings</li>
+                <li class="text-xl font-semibold ml-12 mb-4 mt-10">Response Rate</li>
+            </ul>
+        </div>
+
+        <div class="col-span-1">
+            <ul>
+                <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">4.8</li>
+                <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">98%</li>
+            </ul>
+        </div>
+    </div>
 </div>
 
 <div class="mt-6 mb-3 text-3xl">

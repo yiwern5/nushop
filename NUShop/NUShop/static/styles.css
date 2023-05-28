@@ -234,6 +234,10 @@ color: white;
 }
 
 .border-nushopprimary {
+    border: 1px solid #528029;
+}
+
+.border-nushopprimary {
     border: 3px solid #528029;
 }
 
