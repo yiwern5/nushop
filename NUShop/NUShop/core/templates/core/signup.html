@@ -13,7 +13,7 @@
                 <img src="{% static 'logo.png' %}" alt="logo" width="380">
             </a>
         </div>
-        <div class="w-1/3 mt-3 mx-auto p-6 bg-secondary rounded-xl">
+        <div class="w-1/3 mt-3 mx-auto p-6 bg-nushopsecondary rounded-xl">
         
             <form method="post" action=".">
                 {% csrf_token %}
@@ -40,14 +40,14 @@
                     </div>
                 {% endif %}
                 <div class="center">
-                    <button class="bt-primary text-3xl text-center rounded-3xl text-white">Sign Up</button>
+                    <button class="bt-nushopprimary text-3xl text-center rounded-3xl text-white">Sign Up</button>
                 </div>
             </form>
             <div class="center">
                 <p>If you already have an account:</p>
             </div>
             <div class="center">
-                <a href="{% url 'core:login' %}" class="bt-secondary text-3xl text-center rounded-3xl">Login here</a>
+                <a href="{% url 'core:login' %}" class="bt-nushopsecondary text-3xl text-center rounded-3xl">Login here</a>
             </div>
         </div>
     </body>
