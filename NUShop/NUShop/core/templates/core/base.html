@@ -17,18 +17,19 @@
         <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
         <title>{% block title %}{%endblock%} | NUShop</title>
     </head>
+
     <body class="bg-nushopsecondary">
-        <nav class="sticky z-50 top-0 py-2 px-6 flex justify-between items-center bg-nushopsecondary border-b border-gray-200">
-            <a href="/">
-                <img src="{% static 'green logo.png' %}" alt="logo" width="180">
-            </a>
-            <div class="space-x-6">
-                <a href="{% url 'product:products' %}" class="text-lg font-semibold text-nushopprimary hover:text-gray-500">Browse</a>
-                <a href="{% url 'chat:inbox' %}" class="text-lg font-semibold text-nushopprimary hover:text-gray-500">Chat</a>
-                <a href="{% url 'product:new' %}" class="text-lg font-semibold text-nushopprimary hover:text-gray-500">Add Product</a>
-                <a href="#" class="text-lg font-semibold text-nushopprimary hover:text-gray-500">Cart</a>
-                <a href="{% url 'dashboard:index' %}" class="text-lg font-semibold text-nushopprimary hover:text-gray-500">Account</a>
-            </div>
+        <nav class="sticky z-50 top-0 py-2 px-6 flex justify-between items-end bg-nushopsecondary border-b-primary">
+          <a href="/">
+              <img src="{% static 'green logo.png' %}" alt="logo" width="180">
+          </a>
+          <div class="space-x-6">
+              <a href="{% url 'product:products' %}" class="text-2xl cinzel text-nushopprimary hover:text-yellow-500">Browse</a>
+              <a href="{% url 'chat:inbox' %}" class="text-2xl cinzel text-nushopprimary hover:text-yellow-500">Chat</a>
+              <a href="{% url 'product:new' %}" class="text-2xl cinzel text-nushopprimary hover:text-yellow-500">Add Product</a>
+              <a href="#" class="text-2xl cinzel text-nushopprimary hover:text-yellow-500">Cart</a>
+              <a href="{% url 'dashboard:index' %}" class="text-2xl cinzel text-nushopprimary hover:text-yellow-500">Account</a>
+          </div>
         </nav>
         <div class="px-6 pb-6">
             {% block content %}

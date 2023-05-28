@@ -1,0 +1,61 @@
+{% extends 'core/base.html' %}
+
+{% block title %}My Sales{% endblock %}
+
+{% block content %}
+    <div class="grid grid-cols-4 gap-4">
+        <div class="col-span-1 vl">
+            <form method="get" action="{% url 'product:products' %}">
+                <input name="query" class="border-search border rounded-xl" type="text" value="{{ query }}" placeholder="Find an order">
+
+                <button class="mt-2 text-xl bg-primary bt-primary text-white rounded-xl text-center">Search</button>
+            </form>
+
+            <p class="text-xl">Status:</p>
+            
+            <ul>
+                {% for stat in status %}
+                    <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
+                        <a href="{% url 'product:products' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <ul>
+                <li><a href="{% url 'product:products' %}" class="mt-2 inline-block bt-secondary text-xl rounded-xl text-center">Clear Filter</a>
+        </div>
+
+        <div class="col-span-3">
+            <div class="list">
+                {% for product in products %}
+                    <div class="p-3 bg-tertiary rounded-xl mb-2">
+                        <a href="{% url 'product:detail' product.id %}">
+                            <div class="grid grid-cols-4 grid-rows-3 gap-4">
+                                <div class="col-span-3 row-span-1 text-2xl">
+                                    <h1>NUS Computing</h1>
+                                </div>
+                                <div class="col-span-1 row-span-1 ">
+                                    <button class="mt-2 text-xl bt-tertiary-2 rounded-xl text-center">View Buyer</button>
+                                </div>
+                                <div class="col-span-1 row-span-1 ">
+                                    <!--<img src="{{ product.image.url }}" class="rounded-xl">-->
+                                </div>
+                                <div class="col-span-3 row-span-1 ">
+                                    <h2 class="text-2xl text-black">{{ product.name }}</h2>
+                                    <p class="text-black">Price: {{ product.price }}</p>
+                                </div>
+                                <div class="row-span-1 col-span-2"></div>
+                                <div class="row-span-1 col-span-1">
+                                    <button class="mt-2 text-xl bt-tertiary-2 rounded-xl text-center">Review</button>
+                                </div>
+                                <div class="row-span-1 col-span-1">
+                                    <button class="mt-2 text-xl bt-tertiary-1 rounded-xl text-center">Buy Again</button>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
