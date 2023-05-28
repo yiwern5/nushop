@@ -3,16 +3,21 @@
 {% block title %}{{ product.name }} {% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-7 grid-rows-4 gap-2">
+<div class="grid grid-cols-7 grid-rows-2 gap-2 mt-3">
     <div class="col-span-3 row-span-3">
-        <img src="{{ product.image.url }}" class="rounded-xl">
+        <img src="{{ product.image.url }}" class="rounded-xl img-size">
     </div>
 
     <div class="col-span-4 row-span-1">
         <h1 class="mb-6 text-3xl">{{ product.name }}</h1>
-        <h1 class="mb-6 text-3xl">{{ product.review }}</h1>
+        <div class="text-xl">
+            <p>Review</p>
+            <p>Rating</p>
+            <p>Number Sold</p>
+        </div>
+        <!--<h1 class="mb-6 text-3xl">{{ product.review }}</h1>
         <h1 class="mb-6 text-3xl">{{ product.rating }}</h1>
-        <h1 class="mb-6 text-3xl">{{ product.numbersold }}</h1>
+        <h1 class="mb-6 text-3xl">{{ product.numbersold }}</h1>-->
     </div>
     
     <div class="col-span-4 row-span-1">
@@ -22,8 +27,8 @@
         {% if request.user == product.created_by %}
             <div class="mt-6 p-6 bg white rounded-xl">
                 <p>This is your product!</p>
-                <a href="{% url 'product:edit' product.id %}" class="inline-block text-lg font-semibold bg-teal-500 text-white rounded-xl">Edit</a>
-                <a href="{% url 'product:delete' product.id %}" class="inline-block text-lg font-semibold bg-red-500 text-white rounded-xl">Delete</a>
+                <a href="{% url 'product:edit' product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Edit</a>
+                <a href="{% url 'product:delete' product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
             </div>
         {% else %}
             <a href="{% url 'chat:new' product.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white hover:bg-teal-700 rounded-xl">Contact Seller</a>
@@ -34,26 +39,31 @@
         <div class="text-3xl">
             <p>Variations</p>
         </div>
-        <div class="bg-tertiary rounded-xl p-4">
+        <div class="bg-primary-light rounded-xl p-4">
             <p>Size</p>
             <p>Delivery Method</p>
             <p>Quantity</p>
         </div>
     </div>
-
-    <div class="col-span-1 row-span-1">
-        <img src="{{ product.image.url }}" class="rounded-xl">
+    
+    <div class="col-span-3 row-span-1 container-fluid scroll d-flex flex-row ">
+        <div class="mx-2 col">
+            <img src="{{ product.image.url }}" class="rounded-xl">
+        </div>
+        <div class="mx-2 col">
+            <img src="{{ product.image.url }}" class="rounded-xl">
+        </div>
+        <div class="mx-2 col">
+            <img src="{{ product.image.url }}" class="rounded-xl">
+        </div>
+        <div class="mx-2 col">
+            <img src="{{ product.image.url }}" class="rounded-xl">
+        </div>
+        
     </div>
-    <div class="col-span-1 row-span-1">
-        <img src="{{ product.image.url }}" class="rounded-xl">
-    </div>
-    <div class="col-span-1 row-span-1">
-        <img src="{{ product.image.url }}" class="rounded-xl">
-    </div>
-
 </div>
 
-<div class="grid grid-cols-15 grid-rows-3 gap-2 border rounded-xl mt-4 px-4 text-xl">
+<div class="grid grid-cols-15 grid-rows-3 gap-2 border-nushopprimary rounded-xl mt-6 px-4 text-xl">
     <div class="col-span-3 row-span-3">
         <img src="{{ user.image.url }}" class="rounded-xl">
     </div>
@@ -70,10 +80,10 @@
         <h1>Listings:</h1>
     </div>
     <div class="col-span-3 row-span-1">
-        <button class="mt-2 text-xl bt-tertiary-2 rounded-xl text-center">View Shop</button>
+        <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
     </div>
     <div class="col-span-3 row-span-1">
-        <button class="mt-2 text-xl bt-tertiary-1 rounded-xl text-center">Chat with Seller</button>
+        <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</button>
     </div>
     <div class="col-span-3 row-span-1">
         <h1>Response Rate:</h1>
@@ -84,10 +94,10 @@
 
 </div>
 
-<div class="mt-6 text-3xl">
+<div class="mt-6 mb-3 text-3xl">
     Description
 </div>
-<div class="bg-tertiary rounded-lg p-4">
+<div class="bg-primary-light rounded-lg p-4">
     {% if product.description %}
         <p class="text-black">
             {{ product.description}}
@@ -99,32 +109,33 @@
     {% endif %}
 </div>
 
-<div class="mt-6 text-3xl">
+<div class="mt-6 mb-3 text-3xl">
     Review
 </div>
-<div class="bg-tertiary rounded-lg p-4">
+<div class="bg-primary-light rounded-lg p-4">
     <p>good</p>
 </div>
 
-<div class="mt-6 text-3xl">
+<div class="mt-6 mb-3 text-3xl">
     Recommended
 </div>
-<div class="px-6 py-12 rounded-xl">
-    <div class="grid grid-cols-5 gap-3">
+<div class="px-6 py-3 rounded-xl">
         {% for product in related_products %}
-            <div>
-                <a href="{% url 'product:detail' product.id %}">
-                    <div>
-                        <img src="{{ product.image.url}}" class="rounded-t-xl">
-                    </div>
-                    <div class="rounded-b-xl">
-                        <h2 class="text-xl">{{ product.name }}</h2>
-                        <p class="text-xl text-yellow-500">$ {{ product.price }}</p>
-                    </div>
-                </a>
+            <div class="col mr-4">
+                <div class="card rounded-xl border-0">
+                    <a href="{% url 'product:detail' product.id %}">
+                        <div class="product-pic">
+                            <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
+                        </div>
+            
+                        <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
+                            <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
+                            <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price }}</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         {% endfor %}
-    </div>
 </div>
 
 {% endblock %}

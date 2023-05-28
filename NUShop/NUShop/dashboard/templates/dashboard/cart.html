@@ -9,23 +9,26 @@
                 {% for product in products %}
                     <div class="p-3 rounded-xl mb-2">
                         <a href="{% url 'product:detail' product.id %}">
-                            <div class="grid grid-cols-4 grid-rows-3 gap-4">
-                                <div class="col-span-3 row-span-1 text-2xl">
+                            <div class="grid grid-cols-5 gap-2">
+                                <div class="col-span-4 text-2xl">
                                     <h1>NUS Computing</h1>
                                 </div>
-                                <div class="col-span-1 row-span-1 ">
-                                    <button class="mt-2 text-xl bt-tertiary-2 rounded-xl text-center">View Shop</button>
+                                <div class="col-span-1">
+                                    <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
                                 </div>
-                                <div class="col-span-1 row-span-1 ">
-                                    <!--<img src="{{ product.image.url }}" class="rounded-xl">-->
+                                <div class="col-span-1">
+                                    <img src="{{ product.image.url }}" class="rounded-xl img-size">
                                 </div>
-                                <div class="col-span-3 row-span-1 ">
-                                    <h2 class="text-2xl text-black">{{ product.name }}</h2>
-                                    <p class="text-black">Variation:</p>
+                                <div class="col-span-3">
+                                    <h2 class="text-3xl text-black">{{ product.name }}</h2>
+                                    <p class="text-black text-xl">Variation:</p>
                                 </div>
-                                <div class="col-span-1 row-span-1"></div>
-                                <div class="col-span-3 row-span-1">
-                                    <p>Quantity:</p>
+                                <div class="col-span-1">
+                                    <p class="text-3xl text-yellow-500">$ {{ product.price }}</p></p>
+                                </div>
+                                <div class="col-span-1"></div>
+                                <div class="col-span-4">
+                                    <p class="text-xl">Quantity:</p>
                                 </div>
                                 
                             </div>
@@ -34,17 +37,19 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="col-span-2 border-primary rounded-xl m-12">
-            <div class="text-black text-3xl text-center text-white bg-primary p-3">
+        <div class="col-span-2 border-nushopprimary rounded-xl m-12">
+            <div class="text-white text-3xl text-center bg-nushopprimary p-3 rounded-t-lg">
                 <h1>Summary</h1>
             </div>
             <div class="text-left text-black m-6">
-                <p>Subtotal:</p>
-                <p>Shipping Fee:</p>
-                <p class="text-2xl">Total:</p>
+                <div class="text-xl">
+                    <p>Subtotal:</p>
+                    <p>Shipping Fee:</p>
+                </div>
+                <p class="text-3xl">Total:</p>
             </div>
             <div class="m-6">
-                <button class="text-xl bt-secondary rounded-xl text-center">Checkout</button>
+                <button class="text-xl bt-nushopsecondary rounded-xl text-center">Checkout</button>
             </div>
         </div>
     </div>
