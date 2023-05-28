@@ -3,15 +3,13 @@
 {% block title %}Browse{% endblock %}
 
 {% block content %}
-    <div class="flex">
-        <div class="side-nav px-4 w-1/5 bg-nushopsecondary border-r border-gray-200">
+    <div class="grid grid-cols-5 gap-4">
+        <div class="col-span-1 vl">
             <form method="get" action="{% url 'product:products' %}" class="pt-4">
                 <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
 
-                <div class="center">
-                <button class="py-3 px-8 bg-nushopprimary text-white rounded-xl">Search</button>
-                </div>
-            </form>
+                <button class="mt-2 text-xl bg-nushopprimary bt-nushopprimary text-white rounded-xl text-center">Search</button>
+            </form> 
 
             <hr class="my-6">
 
@@ -25,14 +23,11 @@
                 {% endfor %}
             </ul>
 
-            <div class="center">
-                <ul class="pb-6">
-                    <li><a href="{% url 'product:products' %}" class="mt-2 py-3 px-8 inline-block bg-yellow-500 rounded-xl text-white">Clear Filter</a>
-                </ul>
-            </div>
+            <ul>
+                <li><a href="{% url 'product:products' %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>            
         </div>
 
-        <div class="ml-64 mt-12 p-2 w-4/5">
+        <div class="col-span-4 pt-4 pl-2">
             <h3 class="mb-12 text-2xl">
                 {% if query %}
                     {% if category_id %}

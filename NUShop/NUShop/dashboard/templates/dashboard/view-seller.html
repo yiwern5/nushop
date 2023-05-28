@@ -47,66 +47,59 @@
             </div>
         </div>
     </div>
-    <div class="mt-6 px-6 py-12 rounded-xl">
-        <div class="flex">
-            <div class="side-nav px-4 w-1/5 bg-nushopsecondary border-r border-gray-200">
-                <form method="get" action="{% url 'product:products' %}" class="pt-4">
-                    <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
-    
-                    <div class="center">
-                    <button class="py-3 px-8 bg-nushopprimary text-white rounded-xl">Search</button>
-                    </div>
-                </form>
-    
-                <hr class="my-6">
-    
-                <p class="text-sm font-semibold">Categories</p>
-    
-                <ul>
-                    {% for category in categories %}
-                        <li class="py-2 px-2 text-sm rounded-xl{% if category.id == category_id %} bg-primary-light {% endif %}">
-                            <a href="{% url 'product:products' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
-                        </li>
-                    {% endfor %}
-                </ul>
-    
-                <div class="center">
-                    <ul class="pb-6">
-                        <li><a href="{% url 'product:products' %}" class="mt-2 py-3 px-8 inline-block bg-yellow-500 rounded-xl text-white">Clear Filter</a>
-                    </ul>
-                </div>
-            </div>
-    
-            <div class="ml-64 mt-12 p-4 w-4/5">
-                <h3 class="mb-12 text-2xl">
-                    {% if query %}
-                        {% if category_id %}
-                            {{ query }} in {{ category_name }}
-                        {% else %}
-                            {{ query }}
-                        {% endif %}
-                    {% elif category_id %}
-                        {{ category_name }}
+    <div class="grid grid-cols-5 gap-4">
+        <div class="col-span-1 vl">
+            <form method="get" action="{% url 'product:products' %}" class="pt-4 pr-2">
+                <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
+
+                <button class="mt-2 text-xl bg-nushopprimary bt-nushopprimary text-white rounded-xl text-center">Search</button>
+            </form> 
+
+            <hr class="my-6">
+
+            <p class="text-sm font-semibold">Categories</p>
+
+            <ul>
+                {% for category in categories %}
+                    <li class="py-2 px-2 text-sm rounded-xl{% if category.id == category_id %} bg-primary-light {% endif %}">
+                        <a href="{% url 'product:products' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+
+            <ul>
+                <li class="pr-2"><a href="{% url 'product:products' %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>            
+        </div>
+
+        <div class="col-span-4 pt-4 pl-2">
+            <h3 class="mb-12 text-2xl">
+                {% if query %}
+                    {% if category_id %}
+                        {{ query }} in {{ category_name }}
                     {% else %}
-                        Featured
+                        {{ query }}
                     {% endif %}
-                </h3>
-                <div class="grid grid-cols-4 gap-3 grid-parent">
-                    {% for product in products %}
-                        <div class="grid-item">
-                            <a href="{% url 'product:detail' product.id %}">
-                                <div class="w-full overflow-hidden rounded-t-lg bg-gray-200">
-                                    <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
-                                </div>
-        
-                                <div class="px-4 rounded-b-xl">
-                                    <span class="product-name mt-2 text-sm font-semibold">{{ product.name }}</span>
-                                    <p class="mt-4 mb-4 text-xl font-medium text-nushoptertiary">${{ product.price }}</p>
-                                </div>
-                            </a>
-                        </div>
-                    {% endfor %}
-                </div>
+                {% elif category_id %}
+                    {{ category_name }}
+                {% else %}
+                    Featured
+                {% endif %}
+            </h3>
+            <div class="grid grid-cols-4 gap-3 grid-parent">
+                {% for product in products %}
+                    <div class="grid-item">
+                        <a href="{% url 'product:detail' product.id %}">
+                            <div class="w-full overflow-hidden rounded-t-lg bg-gray-200">
+                                <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
+                            </div>
+    
+                            <div class="px-4 rounded-b-xl">
+                                <span class="product-name mt-2 text-sm font-semibold">{{ product.name }}</span>
+                                <p class="mt-4 mb-4 text-xl font-medium text-nushoptertiary">${{ product.price }}</p>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
