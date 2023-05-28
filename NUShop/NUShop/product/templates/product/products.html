@@ -5,7 +5,7 @@
 {% block content %}
     <div class="grid grid-cols-5 gap-4">
         <div class="col-span-1 vl">
-            <form method="get" action="{% url 'product:products' %}" class="pt-4">
+            <form method="get" action="{% url 'product:products' %}" class="pt-4 pr-2">
                 <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
 
                 <button class="mt-2 text-xl bg-nushopprimary bt-nushopprimary text-white rounded-xl text-center">Search</button>
@@ -23,7 +23,7 @@
                 {% endfor %}
             </ul>
 
-            <ul>
+            <ul class="pr-2">
                 <li><a href="{% url 'product:products' %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>            
         </div>
 
