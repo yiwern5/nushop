@@ -19,7 +19,7 @@
         <div class="carousel-inner">
             {% for product in products %}
             <div class="carousel-item {% if forloop.first %} active {% endif %}" data-bs-interval="3000">
-                <img src="{{ product.image.url }}" class="d-block w-100" style="height:500px;">
+                <img src="{% static 'big sale.webp' %}" class="d-block w-100" style="height:500px;">
             </div>
             {% endfor %}
         </div>
