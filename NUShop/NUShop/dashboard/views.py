@@ -84,12 +84,3 @@ def mysales(request):
         'category_id': int(category_id),
         'category_name': category_name,
     })
-
-
-@login_required
-def cart(request):
-    products = Product.objects.filter(created_by=request.user)
-
-    return render(request, 'dashboard/cart.html', {
-        'products': products, 
-    })

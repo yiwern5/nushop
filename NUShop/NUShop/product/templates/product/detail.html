@@ -46,7 +46,11 @@
             <p>Size</p>
             <p>Delivery Method</p>
             <p>Quantity</p>
-        </div>
+            <div class="mt-4">
+            <a href="{% url 'cart:add_to_cart' product.id %}" class="mt-2 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</a>
+            <a href="#" class="mt-2 px-6 text-xl bt-nushoptertiary-1 rounded-xl text-center">Buy</a>
+            </div>
+        </div>        
     </div>
     
     <div class="col-span-3 row-span-1 container-fluid scroll d-flex flex-row ">
@@ -86,7 +90,7 @@
                             <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
                         </div>
                         <div class="col-span-1">
-                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</button>
+                            <a href="{% url 'chat:new' product.id %}" class="mt-2 px-6 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</a>
                         </div>
                     </div>
                 </div>
