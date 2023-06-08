@@ -8,7 +8,7 @@ class CartProduct(models.Model):
     created_by = models.ForeignKey(User, related_name='cart_product', on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0)
+    quantity = models.IntegerField(default=1)
  
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"

@@ -27,7 +27,7 @@ def add_to_cart(request, pk):
     if cart_qs.exists():
         cart = cart_qs[0]
         # check if the cart product is in the cart
-        if isinstance(cart_product, CartProduct):
+        if cart_product in cart.products.all():
             cart_product.quantity += 1
             cart_product.save()
             messages.info(request, "This product quantity was updated.")
