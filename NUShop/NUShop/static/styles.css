@@ -116,19 +116,6 @@
     justify-items: center;
 }
 
-.grid-item {
-    width: 100%;
-    height: 330px;
-}
-
-.grid-item:hover {
-    width: 100%;
-    height: 330px;
-    transform: scale(1.021);
-    box-shadow: 0 10px 20px 4px rgba(35, 35, 35, .1);
-    border-radius: 10px;
-}
-
 .category-item {
     width: 100%;
 }
@@ -182,20 +169,34 @@
  }
 
 .bt-account {
-background-color: #E9B32C;
-color: white;
+    border: 2px solid #E9B32C;
+    background-color: #E9B32C;
+    color: white;
 }
 
 .bt-account:hover {
+    border: 2px solid #528029;
     background-color: #528029;
     color: white;
- }
+}
 
- .card {
+.bt-account-2 {
+    border: 2px solid #E9B32C;
+    background-color: #FDFFF9;
+    color: #E9B32C;
+}
+
+.bt-account-2:hover {
+    border: 2px solid #528029;
+    background-color: #528029;
+    color: white;
+}
+
+.card {
     width: 220px;
     height: 330px;
     border-radius: 10px;
- }
+}
 
 .card:hover {
     transform: scale(1.021);
@@ -258,4 +259,14 @@ color: white;
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.form-account {
+    border-radius: 2%;
+    border: 2px solid grey;
+    outline: none;
+}
+
+.form-account:focus{
+    border-color: #528029;
 }

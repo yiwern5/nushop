@@ -1,0 +1,214 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    {{ user.name }}'s Profile
+{% endblock %}  
+
+{% block content %}
+<div class="grid grid-cols-6 pt-6 pb-2 px-6">
+    <div class="w-full col-span-1 overflow-hidden">
+        <div class="grid grid-rows-3">
+            <div class="row-span-2 flex justify-center mt-5">
+                {% if seller.image %}
+                <img src="{{ user.image.url }}" class="pfp">
+                {% else %}
+                <img src="{% static 'green logo.png' %}" class="pfp">
+                {% endif %}
+            </div>
+            <div class="row-span-1 flex justify-center">
+                <a href="#" class="text-sm font-semibold">Change</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-3 ml-6">
+        <div class="grid grid-rows-3 gap-4">
+            <div class="row-span-1">
+                <ul>
+                    <li class="text-gray-400">Name</li>
+                    {% if user.name %}
+                    <li class="text-xl font-semibold">{{ user.name }}</li>
+                    {% else %}
+                    <li class="text-lg font-semibold text-yellow-300">Complete your profile</li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="row-span-1">
+                <ul>
+                    <li class="text-gray-400">Email</li>
+                    <li class="text-xl font-semibold">{{ user.email }}</li>
+                </ul>
+            </div>
+            <div class="row-span-1">
+                <ul>
+                {% if user.role.pk == 2 %}
+                    <li class="text-gray-400">Major</li>
+                    {% if user.major %}
+                    <li class="text-xl font-semibold">{{ user.major }}</li>
+                    {% else %}
+                    <li class="text-lg font-semibold text-yellow-300">Complete your profile</li>
+                    {% endif %}
+                {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-span-2">
+        <div class="grid grid-rows-3 gap-4">
+            <div class="row-span-1">
+                <ul>
+                    <li class="text-gray-400">Username</li>
+                    <li class="text-xl font-semibold">{{ user.username }}</li>
+                </ul>
+            </div>
+            <div class="row-span-1">
+                <ul>
+                    <li class="text-gray-400">Contact Number</li>
+                    {% if user.contact_number %}
+                    <li class="text-xl font-semibold">{{ user.contact_number }}</li>
+                    {% else %}
+                    <li class="text-lg font-semibold text-yellow-300">Complete your profile</li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="row=span-1">
+                <ul>
+                    {% if user.role.pk == 2 %}
+                        <li class="text-gray-400">Faculty</li>
+                        {% if user.major %}
+                        <li class="text-xl font-semibold">{{ user.major.faculty_name }}</li>
+                        {% else %}
+                        <li class="text-lg font-semibold text-yellow-300">Complete your profile</li>
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ul class="pl-12 pb-6">
+    <li class="text-gray-400">Bio</li>
+    {% if user.bio %}
+    <li class="text-xl font-semibold">{{ user.bio }}</li>
+    {% else %}
+    <li class="text-lg font-semibold text-yellow-300">Complete your profile</li>
+    {% endif %}
+</ul>
+
+<li class="center mb-12">
+    {% if user.role.pk == 2 %}
+    <a href="{% url 'dashboard:individual-details' user.username %}" class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl">Edit Personal Details</a>
+    {% else %}
+    <a href="{% url 'dashboard:student-org-details' user.username %}" class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl">Edit Personal Details</a>
+    {% endif %}
+</li>
+
+{% comment %} Change Password {% endcomment %}
+<div class="p-2">
+    <div class="text-2xl cinzel text-nushopprimary">Change Password</div>
+</div>
+
+<form method="post" action="{% url 'dashboard:change-password' %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <input type="password" name="old_password" placeholder="Enter Old Password" class="w-1/4 py-2 px-6 form-account">
+    </div>
+    <div class="mb-3">
+        <input type="password" name="new_password1" placeholder="Enter New Password" class="w-1/4 py-2 px-6 form-account">
+    </div>
+    <div class="mb-3">
+        <input type="password" name="new_password2" placeholder="Confirm New Password" class="w-1/4 py-2 px-6 form-account">
+    </div>
+    {% if form.errors or form.non_field_errors %}
+        <div class="mb-3 p-6 bg-red-100 rounded-xl">
+            {% for field in form %}
+                {{ field.errors }}
+            {% endfor %}
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+    <div>
+        <button class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl mt-1 mb-6">Change Password</button>
+    </div>
+</form>
+
+<div class="grid grid-cols-2 mt-10">
+    <div class='col-span-1'>
+        <div class="text-2xl cinzel text-nushopprimary">Bank Details</div>
+    </div>
+    <div class='col-span-1'>
+        <div class="text-2xl cinzel text-nushopprimary">Delivery Address</div>
+    </div>
+</div>
+
+<div class="grid grid-cols-2 pt-2">
+    {% comment %} Bank Details {% endcomment %}
+    <div class='col-span-1'>
+        {% if user.bank_details %}
+        <div class="grid grid-row-3 gap-4">
+            <div class='row-span-1'>
+                <ul>
+                    <li class="text-gray-400">Full Name</li>
+                    <li class="text-xl font-semibold">{{ user.bank_details.name }}</li>
+                </ul>
+            </div>
+            <div class='row-span-1'>
+                <ul>
+                    <li class="text-gray-400">Bank Name</li>
+                    <li class="text-xl font-semibold">{{ user.bank_details.bank_name }}</li>
+                </ul>
+            </div>
+            <div class='row-span-1'>
+                <ul>
+                    <li class="text-gray-400">Bank Account No.</li>
+                    <li class="text-xl font-semibold">{{ user.bank_details.account_number }}</li>
+                </ul>
+            </div>
+        </div>
+
+        <li class="center mb-12 mt-6">
+            <a href="{% url 'dashboard:edit-bank-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Edit Bank Details</a>
+        </li>
+        {% else %}
+        <li class="center mb-12">
+            <a href="{% url 'dashboard:add-bank-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Add Bank Details</a>
+        </li>
+        {% endif %}
+    </div>
+    <div class='col-span-1'>
+        {% comment %} Delivery Address Details {% endcomment %}
+        {% if user.delivery_address %}
+        <div class="grid grid-row-3 gap-4">
+            <div class='row-span-1'>
+                <ul>
+                    <li class="text-gray-400">Full Name</li>
+                    <li class="text-xl font-semibold">{{ user.delivery_address.name }}</li>
+                </ul>
+            </div>
+            <div class='row-span-2'>
+                <ul>
+                    <li class="text-gray-400">Address</li>
+                    <li class="text-xl font-semibold">{{ user.delivery_address.address_line1 }}</li>
+                    <li class="text-xl font-semibold">{{ user.delivery_address.address_line2 }}</li>
+                    <li class="text-xl font-semibold">{{ user.delivery_address.block_unitno }}</li>
+                    <li class="text-xl font-semibold">{{ user.delivery_address.postcode }} Singapore</li>
+                </ul>
+            </div>
+        </div>
+
+        <li class="center mb-12 mt-6">
+            <a href="{% url 'dashboard:edit-delivery-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Edit Delivery Details</a>
+        </li>
+        {% else %}
+        <li class="center mb-12">
+            <a href="{% url 'dashboard:add-delivery-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Add Delivery Details</a>
+        </li>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

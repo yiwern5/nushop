@@ -69,30 +69,27 @@
 <div class="mt-6 px-3 py-6 border-nushopprimary rounded-xl">
     <div class="grid grid-cols-7">
         <div class="w-full col-span-1 overflow-hidden center">
+            {% if seller.image %}
+            <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
+            {% else %}
             <img src="{% static 'green logo.png' %}" class="pfp">
+            {% endif %}
         </div>
 
         <div class="col-span-2">
-            <div class="grid grid-rows-3">
-                <div class="row-span-1">
-                    <h1><strong>NUS Computing Club</strong></h1>
-                </div>
-                <div class="row-span-1">
-                    <h1>online now</h1>
-                </div>
-                <div class="row-span-1">
-                    <div class="grid grid-cols-2">
-                        <div class="col-span-1">
-                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
-                        </div>
-                        <div class="col-span-1">
-                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</button>
-                        </div>
+            <ul>
+                <li class="text-lg font-semibold ml-12 my-3">{{ seller.name }}</li>
+                <li class="text-lg font-semibold ml-12 my-3">online now</li>
+                <div class="grid grid-cols-2 mt-4 ">
+                    <div class="col-span-1">
+                        <a href="{% url 'dashboard:view-seller' seller.username %}" class="mt-2 px-4 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</a>
+                    </div>
+                    <div class="col-span-1">
+                        <a href="{% url 'chat:new' product.id %}" class="mt-2 px-4 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</a>
                     </div>
                 </div>
-            </div>
+            </ul>
         </div>
-    
 
         <div class="col-span-1">
             <ul>
@@ -103,8 +100,8 @@
 
         <div class="col-span-1">
             <ul>
-                <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">20</li>
-                <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">555</li>
+                <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">{{ seller_product.count }}</li>
+                <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">{{ seller.followers.count }}</li>
             </ul>
         </div>
 
