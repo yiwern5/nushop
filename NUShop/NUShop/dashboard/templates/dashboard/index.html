@@ -7,7 +7,7 @@
 {% endblock %}  
 
 {% block content %}
-    <div class="mt-6 px-3 py-6 border-nushopprimary rounded-xl">
+    <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
         <div class="grid grid-cols-7">
             <div class="w-full col-span-1 overflow-hidden center">
                 <img src="{% static 'green logo.png' %}" class="pfp">
@@ -58,19 +58,21 @@
                 </a>
             </div>
         </div>
-        <div class="grid grid-cols-5 gap-3 grid-parent">
+        <div class="grid grid-cols-5 gap-4 grid-parent">
             {% for product in products %}
-                <div class="grid-item">
-                    <a href="{% url 'product:detail' product.id %}">
-                        <div class="w-full overflow-hidden rounded-t-lg bg-gray-200">
-                            <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
-                        </div>
-
-                        <div class="px-4 rounded-b-xl">
-                            <span class="product-name mt-2 font-semibold">{{ product.name }}</span>
-                            <p class="mt-4 mb-4 text-xl font-medium text-nushoptertiary">${{ product.price }}</p>
-                        </div>
-                    </a>
+                <div class="col">
+                    <div class="card rounded-xl border-0">
+                        <a href="{% url 'product:detail' product.id %}">
+                            <div class="product-pic">
+                                <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
+                            </div>
+                
+                            <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
+                                <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
+                                <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price }}</p>
+                            </div>
+                        </a>
+                    </div>
                 </div>
             {% endfor %}
         </div>

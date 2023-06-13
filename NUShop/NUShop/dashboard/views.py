@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, render
 from django.db.models import Q
-
+from .forms import AddressForm
 from product.models import Category, Product
+from dashboard.models import Address
 
 # Create your views here.
 @login_required
@@ -92,4 +93,19 @@ def cart(request):
 
     return render(request, 'dashboard/cart.html', {
         'products': products, 
+    })
+
+@login_required
+def payment(request):
+    products = Product.objects.filter(created_by=request.user)
+    if request.method == 'POST':
+        form = AddressForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+    else:
+        form = AddressForm()
+    return render(request, 'dashboard/payment.html', {
+        'form': form,
+        'title': 'Payment',
+        'products': products,
     })

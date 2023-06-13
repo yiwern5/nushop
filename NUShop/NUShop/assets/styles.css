@@ -1,5 +1,263 @@
-body {
-    background-color: aquamarine;
-    text-decoration: none;
+.bg-nushopprimary {
+    background-color: #528029;
+}
+
+/* bg-tertiary become bg-primary-light */
+.bg-primary-light {
+    background-color: rgba(82, 128, 41, 0.1);
+}
+
+.bg-nushopsecondary {
+    background-color: #FDFFF9;
+}
+
+.bg-nushoptertiary{
+    background-color: #E9B32C;
+}
+
+.text-nushopprimary {
+    color:  #528029;
+}
+
+.text-nushoptertiary {
+    color:  #E9B32C;
+}
+
+.text-white-hover-nushoptertiary {
+    color: white
+}
+
+.text-white-hover-nushoptertiary:hover {
+    color:  #E9B32C;
+}
+
+/* bt-primary */
+.bt-nushopprimary {
     color: white;
+    background-color: #528029;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 100%;
+    padding-top: 2%;
+    padding-bottom: 2%
+}
+
+.bt-nushopprimary:hover {
+    background-color: #E9B32C;
+}
+
+/* bt-secondary */
+.bt-nushopsecondary{
+    color: #528029;
+    background-color: white;
+    border: 2px solid #528029;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 100%;
+    padding-top: 2%;
+    padding-bottom: 2%
+}
+
+.bt-nushopsecondary:hover {
+    background-color:#E9B32C;
+}
+
+/* .bt-tertiary-1 */
+.bt-nushoptertiary-1 {
+    color: white;
+    background-color: #E9B32C;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 90%;
+    padding-top: 2%;
+    padding-bottom: 2%
+}
+
+.bt-nushoptertiary-1:hover {
+    background-color:#528029;
+}
+
+.bt-nushoptertiary-2 {
+    color: #E9B32C;
+    background-color: white;
+    border: 2px solid #E9B32C;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    width: 90%;
+    padding-top: 2%;
+    padding-bottom: 2%
+}
+
+.bt-nushoptertiary-2:hover {
+    background-color:#528029;
+}
+
+.border-search {
+    border: 2px solid #528029;
+    width: 100%;
+    padding-top: 4%;
+    padding-bottom: 4%;
+    padding-left: 4%;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    margin: 10px;
+}
+
+.form-border {
+    border-bottom: 1px solid #528029;
+    margin: 20px;
+}
+
+.grid-parent {    
+    align-items: center;
+    justify-items: center;
+}
+
+.grid-item {
+    width: 100%;
+    height: 330px;
+}
+
+.grid-item:hover {
+    width: 100%;
+    height: 330px;
+    transform: scale(1.021);
+    box-shadow: 0 10px 20px 4px rgba(35, 35, 35, .1);
+    border-radius: 10px;
+}
+
+.category-item {
+    width: 100%;
+}
+
+.category-item:hover {
+    width: 100%;
+    transform: scale(1.021);
+    box-shadow: 0 10px 20px 4px rgba(35, 35, 35, .1);
+    border-radius: 10px;
+}
+
+.product-name {
+    display: block;
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.animate__animated.animate__fadeInUp {
+    --animate-delay: 1s;
+    --animate-duration: 1.5s
+}
+
+.side-nav{
+    position: fixed;
+    left: 0;
+    height: 100%;
+    scroll-margin-bottom: auto;
+}
+
+.main {
+    margin-left: 200px; /* Same as the width of the sidenav */
+}
+
+.footer {
+    margin-top: auto;
+}
+
+.bt-right {
+    position: absolute;
+    right: 4%;
+}
+
+.pfp {
+    height: 100px;
+    max-width: 100px;
+    border-radius: 50%;
+    border: 2px solid #528029;
+    object-fit: cover;
+ }
+
+.bt-account {
+background-color: #E9B32C;
+color: white;
+}
+
+.bt-account:hover {
+    background-color: #528029;
+    color: white;
+ }
+
+ .card {
+    width: 220px;
+    height: 330px;
+    border-radius: 10px;
+ }
+
+.card:hover {
+    transform: scale(1.021);
+    box-shadow: 0 10px 20px 4px rgba(35, 35, 35, .1);
+    border-radius: 10px;
+}
+
+.product-pic {
+    width:220px;
+    height: 220px;
+    object-fit: contain;
+    background-color: rgba(82, 128, 41, 0.1);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.product-desc {
+    height: 110px;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.scroll {
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.carousel-indicators .active {
+    background-color: #E9B32C;
+}
+
+
+/* potential bootstrap issue */
+.border-b-primary {
+    border-bottom: 2px solid #528029;
+}
+
+.border-nushopprimary-1 {
+    border: 1px solid #528029;
+    margin: 20px;
+}
+
+/* border-nushopprimary-3 */
+.border-nushopprimary-3 {
+    border: 3px solid #528029;
+}
+
+@font-face {
+    font-family: Cinzel;
+    src: url(Cinzel.ttf);
+}
+.cinzel{
+    font-family: 'Cinzel';
+}
+
+.vl {
+    border-right: 2px solid #528029;
+    padding-right: 6px;
+}
+
+.img-size {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }

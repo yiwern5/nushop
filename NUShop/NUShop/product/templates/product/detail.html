@@ -5,25 +5,47 @@
 {% block title %}{{ product.name }} {% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-7 grid-rows-2 gap-2 mt-3">
-    <div class="col-span-3 row-span-3">
-        <img src="{{ product.image.url }}" class="rounded-xl img-size">
+<div class="grid grid-cols-3 gap-2 mt-3">
+    <div class="col-span-1 row-span-4">
+        <div id="carouselExampleIndicators" class="carousel slide">
+            <div class="carousel-indicators">
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+            </div>
+            <div class="carousel-inner">
+              <div class="carousel-item active">
+                <img src="{{ product.image.url }}" class="d-block w-100 rounded-xl" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="{{ product.image.url }}" class="d-block w-100 rounded-xl" alt="...">
+              </div>
+              <div class="carousel-item">
+                <img src="{{ product.image.url }}" class="d-block w-100 rounded-xl" alt="...">
+              </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+              <span class="carousel-control-next-icon" aria-hidden="true"></span>
+              <span class="visually-hidden">Next</span>
+            </button>
+        </div>
         
     </div>
 
-    <div class="col-span-4 row-span-1">
+    <div class="col-span-2 row-span-1">
         <h1 class="mb-6 text-3xl">{{ product.name }}</h1>
         <div class="text-xl">
-            <p>Review</p>
-            <p>Rating</p>
-            <p>Number Sold</p>
+            <p>*****20 ratings   553 sold</p>
         </div>
         <!--<h1 class="mb-6 text-3xl">{{ product.review }}</h1>
         <h1 class="mb-6 text-3xl">{{ product.rating }}</h1>
         <h1 class="mb-6 text-3xl">{{ product.numbersold }}</h1>-->
     </div>
-    
-    <div class="col-span-4 row-span-1">
+    <div class="col-span-2 row-span-1">
         <p class="text-yellow-500 text-3xl">$ {{ product.price }}</p>
         <!--<p class="text-gray-500"><strong>Seller: </strong>{{ product.created_by.username }}</p>-->
 
@@ -38,35 +60,75 @@
         {% endif%}
     </div>
 
-    <div class="col-span-4 row-span-2">
+    <div class="col-span-2 row-span-1">
         <div class="text-3xl">
             <p>Variations</p>
         </div>
         <div class="bg-primary-light rounded-xl p-4">
-            <p>Size</p>
-            <p>Delivery Method</p>
+            <div class="btn-group dropend">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Size
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">S</a></li>
+                    <li><a class="dropdown-item" href="#">M</a></li>
+                    <li><a class="dropdown-item" href="#">L</a></li>
+                    <li><a class="dropdown-item" href="#">XL</a></li>
+                </ul>
+            </div>
+            <div class="btn-group dropend">
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Delivery Method
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#">Meet Up</a></li>
+                    <li><a class="dropdown-item" href="#">Delivery</a></li>
+                </ul>
+            </div>
             <p>Quantity</p>
         </div>
     </div>
-    
-    <div class="col-span-3 row-span-1 container-fluid scroll d-flex flex-row ">
-        <div class="mx-2 col">
-            <img src="{{ product.image.url }}" class="rounded-xl">
+    <div class="col-span-2"></div>
+    <!--
+        <div class="col-span-1 row-span-1">
+        <div class="pb-3 container-fluid scroll">
+            <div class="d-flex flex-row flex-nowrap">
+                <div class="col mr-4">
+                    <div class="card rounded-xl border-0">
+                        <div class="product-pic">
+                            <img src="{{ product.image.url }}" class="rounded-xl h-full w-full object-cover object-center">
+                        </div>
+                    </div>
+                </div>
+                <div class="col mr-4">
+                    <div class="card rounded-xl border-0">
+                        <div class="product-pic">
+                            <img src="{{ product.image.url }}" class="rounded-xl h-full w-full object-cover object-center">
+                        </div>
+                    </div>
+                </div>
+                <div class="col mr-4">
+                    <div class="card rounded-xl border-0">
+                        <div class="product-pic">
+                            <img src="{{ product.image.url }}" class="rounded-xl h-full w-full object-cover object-center">
+                        </div>
+                    </div>
+                </div>
+                <div class="col mr-4">
+                    <div class="card rounded-xl border-0">
+                        <div class="product-pic">
+                            <img src="{{ product.image.url }}" class="rounded-xl h-full w-full object-cover object-center">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="mx-2 col">
-            <img src="{{ product.image.url }}" class="rounded-xl">
-        </div>
-        <div class="mx-2 col">
-            <img src="{{ product.image.url }}" class="rounded-xl">
-        </div>
-        <div class="mx-2 col">
-            <img src="{{ product.image.url }}" class="rounded-xl">
-        </div>
-        
     </div>
+    -->
 </div>
 
-<div class="mt-6 px-3 py-6 border-nushopprimary rounded-xl">
+
+<div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
     <div class="grid grid-cols-7">
         <div class="w-full col-span-1 overflow-hidden center">
             <img src="{% static 'green logo.png' %}" class="pfp">
@@ -75,7 +137,7 @@
         <div class="col-span-2">
             <div class="grid grid-rows-3">
                 <div class="row-span-1">
-                    <h1><strong>NUS Computing Club</strong></h1>
+                    <h1 class="text-2xl">NUS Computing Club</h1>
                 </div>
                 <div class="row-span-1">
                     <h1>online now</h1>
@@ -83,10 +145,10 @@
                 <div class="row-span-1">
                     <div class="grid grid-cols-2">
                         <div class="col-span-1">
-                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
+                            <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
                         </div>
                         <div class="col-span-1">
-                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</button>
+                            <button class="text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</button>
                         </div>
                     </div>
                 </div>
@@ -124,7 +186,21 @@
     </div>
 </div>
 
-<div class="mt-6 mb-3 text-3xl">
+<nav id="navbar-example2" class="navbar mb-3 rounded-lg mt-3">
+    <ul class="nav nav-pills">
+      <li class="nav-item">
+        <a class="nav-link text-gray-500 hover:text-yellow-500" href="#description">Description</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-gray-500 hover:text-yellow-500" href="#review">Review</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-gray-500 hover:text-yellow-500" href="#recommended">Recommended</a>
+      </li>
+    </ul>
+</nav>
+
+<div id="description" class="mt-6 mb-3 text-3xl">
     Description
 </div>
 <div class="bg-primary-light rounded-lg p-4">
@@ -138,14 +214,14 @@
     </p>
     {% endif %}
 </div>
-
+<div id="review"></div>
 <div class="mt-6 mb-3 text-3xl">
     Review
 </div>
 <div class="bg-primary-light rounded-lg p-4">
     <p>good</p>
 </div>
-
+<div id="recommended"></div>
 <div class="mt-6 mb-3 text-3xl">
     Recommended
 </div>
