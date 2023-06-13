@@ -10,14 +10,22 @@
     <div class="mt-6 px-3 py-6 border-nushopprimary rounded-xl">
         <div class="grid grid-cols-7">
             <div class="w-full col-span-1 overflow-hidden center">
+                {% if seller.image %}
+                <img src="{{ seller.image.url }}" class="pfp">
+                {% else %}
                 <img src="{% static 'green logo.png' %}" class="pfp">
+                {% endif %}
             </div>
 
             <div class="col-span-2">
                 <ul>
-                    <li class="text-lg font-semibold ml-12 mb-2">NUShop Admin</li>
-                    <li class="text-lg font-semibold ml-12 mb-2">(Student Organisation)</li>
-                    <li class="font-semibold text-gray-400 ml-12 mb-2">This is some description...</li>
+                    <li class="text-lg font-semibold ml-12 mb-2">{{ seller.name }}</li>
+                    <li class="text-lg font-semibold ml-12 mb-2">({{ seller.role }})</li>
+                    {% if seller.bio %}
+                    <li class="font-semibold text-gray-400 ml-12 mb-2">{{ seller.bio }}</li>
+                    {% else %}
+                    <li class="font-semibold text-gray-400 ml-12 mb-2">No bio yet...</li>
+                    {% endif %}
                 </ul>
             </div>
 
@@ -30,8 +38,8 @@
 
             <div class="col-span-1">
                 <ul>
-                    <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">88</li>
-                    <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">555</li>
+                    <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">{{ products.count }}</li>
+                    <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">{{ seller.followers.count }}</li>
                 </ul>
             </div>
 
@@ -40,16 +48,23 @@
                     <li class="center">
                         <a href="#" class="py-2 px-2 w-4/5 bt-account text-xl text-center rounded-xl mt-1 mb-6">Chat</a>
                     </li>
+                    {% if request.user in seller.followers.all %}
                     <li class="center">
-                        <a href="#" class="py-2 px-2 w-4/5 bt-account text-xl text-center rounded-xl">Follow</a>
+                        <a href="{% url 'dashboard:unfollow' seller.username %}" class="py-2 px-2 w-4/5 bt-account-2 text-xl text-center rounded-xl">Unfollow</a>
                     </li>
+                    {% else %}
+                    <li class="center">
+                        <a href="{% url 'dashboard:follow' seller.username %}" class="py-2 px-2 w-4/5 bt-account text-xl text-center rounded-xl">Follow</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </div>
+
     <div class="grid grid-cols-5 gap-4">
         <div class="col-span-1 vl">
-            <form method="get" action="{% url 'product:products' %}" class="pt-4 pr-2">
+            <form method="get" action="{% url 'dashboard:view-seller' user.username %}" class="pt-4 pr-2">
                 <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
 
                 <button class="mt-2 text-xl bg-nushopprimary bt-nushopprimary text-white rounded-xl text-center">Search</button>
@@ -62,13 +77,13 @@
             <ul>
                 {% for category in categories %}
                     <li class="py-2 px-2 text-sm rounded-xl{% if category.id == category_id %} bg-primary-light {% endif %}">
-                        <a href="{% url 'product:products' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
+                        <a href="{% url 'dashboard:view-seller' user.username %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
 
             <ul>
-                <li class="pr-2"><a href="{% url 'product:products' %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>            
+                <li class="pr-2"><a href="{% url 'dashboard:view-seller' user.username %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>            
         </div>
 
         <div class="col-span-4 pt-4 pl-2">
@@ -87,18 +102,18 @@
             </h3>
             <div class="grid grid-cols-4 gap-3 grid-parent">
                 {% for product in products %}
-                    <div class="grid-item">
-                        <a href="{% url 'product:detail' product.id %}">
-                            <div class="w-full overflow-hidden rounded-t-lg bg-gray-200">
-                                <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
-                            </div>
-    
-                            <div class="px-4 rounded-b-xl">
-                                <span class="product-name mt-2 text-sm font-semibold">{{ product.name }}</span>
-                                <p class="mt-4 mb-4 text-xl font-medium text-nushoptertiary">${{ product.price }}</p>
-                            </div>
-                        </a>
-                    </div>
+                <div class="card rounded-xl border-0">
+                    <a href="{% url 'product:detail' product.id %}">
+                        <div class="product-pic">
+                            <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
+                        </div>
+            
+                        <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
+                            <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
+                            <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price }}</p>
+                        </div>
+                    </a>
+                </div>
                 {% endfor %}
             </div>
         </div>

@@ -39,9 +39,14 @@ def detail(request, pk):
     [0:3] is to list 3 products
     """
     related_products = Product.objects.filter(category=product.category, is_sold=False).exclude(pk=pk)[0:3]
+    seller = product.created_by
+    seller_product = Product.objects.filter(created_by=seller)
+    
     return render(request, 'product/detail.html', {
         'product': product,
-        'related_products': related_products
+        'related_products': related_products,
+        'seller': seller,
+        'seller_product': seller_product
     })
 
 @login_required
