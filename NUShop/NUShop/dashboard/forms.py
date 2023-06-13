@@ -1,49 +1,100 @@
-from django import forms 
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm 
-from django.contrib.auth.models import User
-from .models import Address
+from django import forms
+from django.contrib.auth.forms import PasswordChangeForm
+from authuser.models import User, Bank, DeliveryAddress
 
-class AddressForm(forms.ModelForm):
+INPUT_CLASSES = 'mb-3 w-full py-2 px-6 form-account'
+
+class EditIndividualForm(forms.ModelForm):
     class Meta:
-        model = Address
-        fields = ('firstname', 'lastname', 'address1', 'address2', 'blocknumber', 'zipcode', 'contactnumber', 'email')
+        model = User
+        fields = ('name', 'username', 'email', 'contact_number', 'major', 'bio',)
 
-    firstname = forms.CharField(widget=forms.TextInput(attrs= {
-        'placeholder': 'First Name',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'username': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'contact_number': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'major': forms.Select(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'bio': forms.Textarea(attrs={
+                'class': INPUT_CLASSES
+            }),
+        }
 
-    lastname = forms.CharField(widget=forms.TextInput(attrs= {
-        'placeholder': 'Last Name',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+class EditStudentOrganisationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('name', 'username', 'email', 'contact_number', 'bio',)
 
-    address1 = forms.CharField(widget=forms.TextInput(attrs= {
-        'placeholder': 'Address 1',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'username': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'contact_number': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'bio': forms.Textarea(attrs={
+                'class': INPUT_CLASSES
+            }),
+        }
 
-    address2 = forms.CharField(widget=forms.TextInput(attrs= {
-        'placeholder': 'Address 2 (Optional)',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+class EditBankDetailsForm(forms.ModelForm):
+    class Meta:
+        model = Bank
+        fields = ('name', 'bank_name', 'account_number',)
 
-    blocknumber = forms.CharField(widget=forms.TextInput(attrs= {
-        'placeholder': 'Block Number',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'bank_name': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'account_number': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+        }
 
-    zipcode = forms.CharField(widget=forms.TextInput(attrs= {
-        'placeholder': 'Zip Code',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+class EditDeliveryDetailsForm(forms.ModelForm):
+    class Meta:
+        model = DeliveryAddress
+        fields = ('name', 'block_unitno', 'address_line1', 'address_line2', 'postcode',)
 
-    contactnumber = forms.CharField(widget=forms.TextInput(attrs= {
-        'placeholder': 'Contact Number',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+        widgets = {
+            'name': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'block_unitno': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'address_line1': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'address_line2': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'postcode': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+        }
 
-    email = forms.CharField(widget=forms.EmailInput(attrs= {
-        'placeholder': 'Enter your Email address',
-        'class': 'w-full py-4 px-6 rounded-xl'
-    }))
+class CustomPasswordChangeForm(PasswordChangeForm):
+    class Meta:
+        model = User
+        fields = ('old_password', 'new_password1', 'new_password2')
+
