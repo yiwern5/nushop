@@ -66,9 +66,10 @@
 .bt-nushoptertiary-1 {
     color: white;
     background-color: #E9B32C;
+    border: 2px solid #E9B32C;
     margin-top: 2%;
     margin-bottom: 2%;
-    width: 100%;
+    width: 90%;
     padding-top: 2%;
     padding-bottom: 2%
 }
@@ -83,7 +84,7 @@
     border: 2px solid #E9B32C;
     margin-top: 2%;
     margin-bottom: 2%;
-    width: 100%;
+    width: 90%;
     padding-top: 2%;
     padding-bottom: 2%
 }
@@ -234,11 +235,13 @@
     border-bottom: 2px solid #528029;
 }
 
-.border-nushopprimary {
+.border-nushopprimary-1 {
     border: 1px solid #528029;
+    margin: 20px;
 }
 
-.border-nushopprimary {
+/* border-nushopprimary-3 */
+.border-nushopprimary-3 {
     border: 3px solid #528029;
 }
 

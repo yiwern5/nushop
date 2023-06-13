@@ -32,6 +32,7 @@ def products(request):
 
 def detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
+    products = Product.objects.filter(is_sold=False)[0:6]
     """
     is_sold can be changed to is_out_of_stock; 
     exclude pk=pk is to exclude this product from being shown in recommended;
@@ -44,6 +45,7 @@ def detail(request, pk):
     
     return render(request, 'product/detail.html', {
         'product': product,
+        'products': products, 
         'related_products': related_products,
         'seller': seller,
         'seller_product': seller_product

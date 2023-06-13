@@ -7,7 +7,7 @@
         <div class="col-span-4">
             <div class="list">
                 {% for product in products %}
-                    <div class="p-3 rounded-xl mb-3 mt-3 border-nushopprimary">
+                    <div class="p-3 rounded-xl mb-3 mt-3 border-nushopprimary-1">
                         <a href="{% url 'product:detail' product.id %}">
                             <div class="grid grid-cols-5 gap-2">
                                 <div class="col-span-4 text-2xl">
@@ -21,23 +21,19 @@
                                 </div>
                                 <div class="col-span-3">
                                     <h2 class="text-3xl text-black">{{ product.name }}</h2>
-                                    <p class="text-black text-xl">Variation:</p>
+                                    <p class="text-2xl">Quantity:</p>
+                                    <p class="text-black text-2xl">Variation:</p>
                                 </div>
                                 <div class="col-span-1">
                                     <p class="text-3xl text-yellow-500">$ {{ product.price }}</p></p>
-                                </div>
-                                <div class="col-span-1"></div>
-                                <div class="col-span-4">
-                                    <p class="text-xl">Quantity:</p>
-                                </div>
-                                
+                                </div>        
                             </div>
                         </a>
                     </div>
                 {% endfor %}
             </div>
         </div>
-        <div class="col-span-2 border-nushopprimary rounded-xl m-12">
+        <div class="col-span-2 border-nushopprimary-3 rounded-xl m-12">
             <div class="text-white text-3xl text-center bg-nushopprimary p-3 rounded-t-lg">
                 <h1>Summary</h1>
             </div>
@@ -49,7 +45,9 @@
                 <p class="text-3xl">Total:</p>
             </div>
             <div class="m-6">
-                <button class="text-xl bt-nushopsecondary rounded-xl text-center">Checkout</button>
+                <a href="{% url 'dashboard:payment' %}">
+                    <button class="text-xl bt-nushopsecondary rounded-xl text-center">Proceed to Pay</button>
+                </a>
             </div>
         </div>
     </div>
