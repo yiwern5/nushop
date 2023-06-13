@@ -1,9 +1,9 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import Q
 from django.urls import reverse
 from product.models import Category, Product
-from authuser.models import User, Bank, DeliveryAddress
+from authuser.models import User
 from .forms import CustomPasswordChangeForm, EditIndividualForm, EditStudentOrganisationForm, EditBankDetailsForm, EditDeliveryDetailsForm
 
 
@@ -104,16 +104,10 @@ def cart(request):
 @login_required
 def payment(request):
     products = Product.objects.filter(created_by=request.user)
-    if request.method == 'POST':
-        form = AddressForm(request.POST, request.FILES)
-        if form.is_valid():
-            form.save()
-    else:
-        form = AddressForm()
     return render(request, 'dashboard/payment.html', {
-        'form': form,
         'title': 'Payment',
         'products': products,
+    })
 
 @login_required
 def follow(request, username):
