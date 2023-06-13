@@ -1,7 +1,7 @@
 from django import forms
 from .models import Product
 
-INPUT_CLASSES = 'w-full py-3 px-6 rounded-xl border'
+INPUT_CLASSES = 'mb-3 w-full py-2 px-6 form-account rounded-xl'
 
 class NewProductForm(forms.ModelForm):
     class Meta:
