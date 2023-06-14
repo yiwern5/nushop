@@ -101,9 +101,9 @@
 
 <li class="center mb-12">
     {% if user.role.pk == 2 %}
-    <a href="{% url 'dashboard:individual-details' user.username %}" class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl">Edit Personal Details</a>
+    <a href="{% url 'authuser:individual-details' user.username %}" class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl">Edit Personal Details</a>
     {% else %}
-    <a href="{% url 'dashboard:student-org-details' user.username %}" class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl">Edit Personal Details</a>
+    <a href="{% url 'authuser:student-org-details' user.username %}" class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl">Edit Personal Details</a>
     {% endif %}
 </li>
 
@@ -112,7 +112,7 @@
     <div class="text-2xl cinzel text-nushopprimary">Change Password</div>
 </div>
 
-<form method="post" action="{% url 'dashboard:change-password' %}">
+<form method="post" action="{% url 'authuser:change-password' %}">
     {% csrf_token %}
     <div class="mb-3">
         <input type="password" name="old_password" placeholder="Enter Old Password" class="w-1/4 py-2 px-6 form-account">
@@ -171,11 +171,11 @@
         </div>
 
         <li class="center mb-12 mt-6">
-            <a href="{% url 'dashboard:edit-bank-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Edit Bank Details</a>
+            <a href="{% url 'authuser:edit-bank-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Edit Bank Details</a>
         </li>
         {% else %}
         <li class="center mb-12">
-            <a href="{% url 'dashboard:add-bank-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Add Bank Details</a>
+            <a href="{% url 'authuser:add-bank-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Add Bank Details</a>
         </li>
         {% endif %}
     </div>
@@ -201,11 +201,11 @@
         </div>
 
         <li class="center mb-12 mt-6">
-            <a href="{% url 'dashboard:edit-delivery-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Edit Delivery Details</a>
+            <a href="{% url 'authuser:edit-delivery-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Edit Delivery Details</a>
         </li>
         {% else %}
         <li class="center mb-12">
-            <a href="{% url 'dashboard:add-delivery-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Add Delivery Details</a>
+            <a href="{% url 'authuser:add-delivery-details' user.username %}" class="py-2 px-2 w-1/2 bt-account text-xl text-center rounded-xl">Add Delivery Details</a>
         </li>
         {% endif %}
     </div>
