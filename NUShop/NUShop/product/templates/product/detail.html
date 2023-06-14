@@ -6,7 +6,7 @@
 
 {% block content %}
 <div class="grid grid-cols-3 gap-2 mt-3">
-    <div class="col-span-1 row-span-4">
+    <div class="col-span-1 row-span-3">
         <div id="carouselExampleIndicators" class="carousel slide">
             <div class="carousel-indicators">
               <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -61,76 +61,57 @@
     </div>
 
     <div class="col-span-2 row-span-1">
+
         <div class="text-3xl">
             <p>Variations</p>
         </div>
+
         <div class="bg-primary-light rounded-xl p-4">
-            <div class="btn-group dropend">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  Size
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">S</a></li>
-                    <li><a class="dropdown-item" href="#">M</a></li>
-                    <li><a class="dropdown-item" href="#">L</a></li>
-                    <li><a class="dropdown-item" href="#">XL</a></li>
-                </ul>
+
+            <p class="text-xl">Size</p>
+            <div>
+                <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off">
+                <label class="btn btn-secondary" for="option1">S</label>
+
+                <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off">
+                <label class="btn btn-secondary" for="option2">M</label>
+
+                <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off">
+                <label class="btn btn-secondary" for="option3">L</label>
+
+                <input type="radio" class="btn-check" name="options" id="option4" autocomplete="off">
+                <label class="btn btn-secondary" for="option4">XL</label>
             </div>
-            <div class="btn-group dropend">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                  Delivery Method
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Meet Up</a></li>
-                    <li><a class="dropdown-item" href="#">Delivery</a></li>
-                </ul>
+            
+
+            <p class="text-xl">Delivery Method</p>
+            <div>
+                <input type="radio" class="btn-check" name="option" id="option5" autocomplete="off">
+                <label class="btn btn-secondary" for="option5">Meet Up</label>
+
+                <input type="radio" class="btn-check" name="option" id="option6" autocomplete="off">
+                <label class="btn btn-secondary" for="option6">Delivery</label>
             </div>
-            <p>Quantity</p>
+            
+            
+            <p class="text-xl">Quantity</p>
+            <script src=”script.js”>
+                <form>
+                    <div class="value-button" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
+                    <input type="number" id="number" value="0"/>
+                    <div class="value-button" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
+                </form>
+            </script>
+
         </div>
+
     </div>
-    <div class="col-span-2"></div>
-    <!--
-        <div class="col-span-1 row-span-1">
-        <div class="pb-3 container-fluid scroll">
-            <div class="d-flex flex-row flex-nowrap">
-                <div class="col mr-4">
-                    <div class="card rounded-xl border-0">
-                        <div class="product-pic">
-                            <img src="{{ product.image.url }}" class="rounded-xl h-full w-full object-cover object-center">
-                        </div>
-                    </div>
-                </div>
-                <div class="col mr-4">
-                    <div class="card rounded-xl border-0">
-                        <div class="product-pic">
-                            <img src="{{ product.image.url }}" class="rounded-xl h-full w-full object-cover object-center">
-                        </div>
-                    </div>
-                </div>
-                <div class="col mr-4">
-                    <div class="card rounded-xl border-0">
-                        <div class="product-pic">
-                            <img src="{{ product.image.url }}" class="rounded-xl h-full w-full object-cover object-center">
-                        </div>
-                    </div>
-                </div>
-                <div class="col mr-4">
-                    <div class="card rounded-xl border-0">
-                        <div class="product-pic">
-                            <img src="{{ product.image.url }}" class="rounded-xl h-full w-full object-cover object-center">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    -->
 </div>
 
 
 <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
     <div class="grid grid-cols-7">
-        <div class="w-full col-span-1 overflow-hidden center">
+        <div class="w-full col-span-1 overflow-hidden center row-span-2">
             {% if seller.image %}
             <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
             {% else %}
@@ -139,56 +120,56 @@
         </div>
 
         <div class="col-span-2">
-
-            <div class="grid grid-rows-3">
-                <div class="row-span-1">
-                    <h1 class="text-2xl">NUS Computing Club</h1>
-                </div>
-                <div class="row-span-1">
-                    <h1>online now</h1>
-                </div>
-                <div class="row-span-1">
-                    <div class="grid grid-cols-2">
-                        <div class="col-span-1">
-                            <a href="{% url 'dashboard:view-seller' seller.username %}" class="mt-2 px-4 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</a>
-                        </div>
-                        <div class="col-span-1">
-                            <a href="{% url 'chat:new' product.id %}" class="mt-2 px-4 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</a>                        
-                        </div>
-                    </div>
-                </div>
-            </ul>
+            <h1 class="text-2xl">NUS Computing Club</h1>
+            <p class="text-lg">online now</p>
         </div>
 
         <div class="col-span-1">
-            <ul>
-                <li class="text-xl font-semibold ml-12 mb-12 mt-4">Listings</li>
-                <li class="text-xl font-semibold ml-12 mb-4 mt-10">Followers</li>
-            </ul>
+            <p class="text-2xl">Ratings: </p>
         </div>
 
         <div class="col-span-1">
-            <ul>
-                <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">{{ seller_product.count }}</li>
-                <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">{{ seller.followers.count }}</li>
-            </ul>
+            <p class="text-2xl">3k</p>
         </div>
 
         <div class="col-span-1">
-            <ul>
-                <li class="text-xl font-semibold ml-12 mb-12 mt-4">Ratings</li>
-                <li class="text-xl font-semibold ml-12 mb-4 mt-10">Response Rate</li>
-            </ul>
+            <p class="text-2xl">Listings: </p>
         </div>
 
         <div class="col-span-1">
-            <ul>
-                <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">4.8</li>
-                <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">98%</li>
-            </ul>
+            <p class="text-2xl">98 </p>
+        </div>
+
+        <div class="col-span-1">
+            <a href="{% url 'dashboard:view-seller' seller.username %}">
+                <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
+            </a>
+        </div>
+
+        <div class="col-span-1">
+            <a href="{% url 'chat:new' product.id %}">
+                <button class="text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat with Seller</button>
+            </a>
+        </div>
+        
+        <div class="col-span-1">
+            <p class="text-2xl">Ratings: </p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-2xl">3k</p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-2xl">Listings: </p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-2xl">98 </p>
         </div>
     </div>
 </div>
+        
 
 <nav id="navbar-example2" class="navbar mb-3 rounded-lg mt-3">
     <ul class="nav nav-pills">
@@ -197,6 +178,9 @@
       </li>
       <li class="nav-item">
         <a class="nav-link text-gray-500 hover:text-yellow-500" href="#review">Review</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link text-gray-500 hover:text-yellow-500" href="#images">Images</a>
       </li>
       <li class="nav-item">
         <a class="nav-link text-gray-500 hover:text-yellow-500" href="#recommended">Recommended</a>
@@ -225,6 +209,67 @@
 <div class="bg-primary-light rounded-lg p-4">
     <p>good</p>
 </div>
+<div id="images"></div>
+<div class="mt-6 mb-3 text-3xl">
+    Images
+</div>
+
+<div class="px-6 pb-3 container-fluid scroll">
+    <div class="d-flex flex-row flex-nowrap">
+        
+        <!-- Modal -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div class="col mr-4">
+            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+            </div>
+        </div>
+        
+        <div class="col mr-4">
+            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+            </div>
+        </div>
+
+        <div class="col mr-4">
+            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+            </div>
+        </div>
+
+        <div class="col mr-4">
+            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+            </div>
+        </div>
+
+        <div class="col mr-4">
+            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+            </div>
+        </div>
+
+        <div class="col mr-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <div class="product-pic">
+                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <div id="recommended"></div>
 <div class="mt-6 mb-3 text-3xl">
     Recommended
