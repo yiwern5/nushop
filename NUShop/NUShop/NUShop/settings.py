@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'authuser',
     'chat',
+    'checkout',
     'core',
     'dashboard',
     'product',

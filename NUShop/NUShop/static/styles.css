@@ -240,6 +240,10 @@
     margin: 20px;
 }
 
+.border-nushopprimary-2 {
+    border: 2px solid #528029;
+}
+
 /* border-nushopprimary-3 */
 .border-nushopprimary-3 {
     border: 3px solid #528029;
