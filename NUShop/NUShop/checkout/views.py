@@ -73,6 +73,6 @@ def remove_from_cart(request, pk):
     )[0]
     cart.products.remove(cart_product)
     cart_product.delete()
-    messages.info(request, "This item was removed from your cart.")
+    messages.info(request, "This cart was removed from your cart.")
             
     return redirect("checkout:index")
