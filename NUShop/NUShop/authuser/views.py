@@ -42,7 +42,7 @@ def edit_student_org_details(request, username):
 
     return render(request, 'authuser/form.html', {
         'form': form,
-        'title': 'Personal Details',
+        'title': 'Edit Personal Details',
     })
 
 @login_required
