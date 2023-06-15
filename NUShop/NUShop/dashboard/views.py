@@ -92,14 +92,6 @@ def mysales(request):
     })
 
 @login_required
-def payment(request):
-    products = Product.objects.filter(created_by=request.user)
-    return render(request, 'dashboard/payment.html', {
-        'title': 'Payment',
-        'products': products,
-    })
-
-@login_required
 def follow(request, username):
     follower = request.user
     following = get_object_or_404(User, username=username)
