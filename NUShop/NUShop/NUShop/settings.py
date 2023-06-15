@@ -53,6 +53,7 @@ INSTALLED_APPS = [
 AUTH_USER_MODEL = 'authuser.User'
 
 AUTHENTICATION_BACKENDS = [
+    'NUShop.backends.UsernameEmailAuthBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 
