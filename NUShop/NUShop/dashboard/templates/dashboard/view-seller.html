@@ -7,57 +7,57 @@
 {% endblock %}  
 
 {% block content %}
-    <div class="mt-6 px-3 py-6 border-nushopprimary-2 rounded-xl">
+    <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
         <div class="grid grid-cols-7">
-            <div class="w-full col-span-1 overflow-hidden center">
+            <div class="w-full col-span-1 overflow-hidden center row-span-2">
                 {% if seller.image %}
-                <img src="{{ seller.image.url }}" class="pfp">
+                <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
                 {% else %}
                 <img src="{% static 'green logo.png' %}" class="pfp">
                 {% endif %}
             </div>
 
             <div class="col-span-2">
-                <ul>
-                    <li class="text-lg font-semibold ml-12 mb-2">{{ seller.name }}</li>
-                    <li class="text-lg font-semibold ml-12 mb-2">({{ seller.role }})</li>
-                    {% if seller.bio %}
-                    <li class="font-semibold text-gray-400 ml-12 mb-2">{{ seller.bio }}</li>
-                    {% else %}
-                    <li class="font-semibold text-gray-400 ml-12 mb-2">No bio yet...</li>
-                    {% endif %}
-                </ul>
+                <p class="text-3xl">{{ user.name }}</p>
+                <p class="text-xl">({{ user.role }})</p>
             </div>
 
             <div class="col-span-1">
-                <ul>
-                    <li class="text-xl font-semibold ml-12 mb-12 mt-4">Listings</li>
-                    <li class="text-xl font-semibold ml-12 mb-4 mt-10">Followers</li>
-                </ul>
+                <p class="text-2xl">Listings: </p>
             </div>
 
             <div class="col-span-1">
-                <ul>
-                    <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">{{ products.count }}</li>
-                    <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">{{ seller.followers.count }}</li>
-                </ul>
+                <p class="text-2xl">{{ products.count }}</p>
             </div>
 
             <div class="col-span-2">
-                <ul>
-                    <li class="center">
-                        <a href="#" class="py-2 px-2 w-4/5 bt-account text-xl text-center rounded-xl mt-1 mb-6">Chat</a>
-                    </li>
-                    {% if request.user in seller.followers.all %}
-                    <li class="center">
-                        <a href="{% url 'dashboard:unfollow' seller.username %}" class="py-2 px-2 w-4/5 bt-account-2 text-xl text-center rounded-xl">Unfollow</a>
-                    </li>
+                <a href="#">
+                    <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">Chat</button>
+                </a>
+            </div>
+
+            <div class="col-span-2">
+                <p class="text-lg">{{ seller.bio }}</p>
+            </div>
+            
+            <div class="col-span-1">
+                <p class="text-2xl">Followers: </p>
+            </div>
+
+            <div class="col-span-1">
+                <p class="text-2xl">{{ user.followers.count }}</p>
+            </div>
+
+            <div class="col-span-2">
+                {% if request.user in seller.followers.all %}
+                    <a href="{% url 'dashboard:unfollow' seller.username %}">
+                        <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">Unfollow</button>
+                    </a>
                     {% else %}
-                    <li class="center">
-                        <a href="{% url 'dashboard:follow' seller.username %}" class="py-2 px-2 w-4/5 bt-account text-xl text-center rounded-xl">Follow</a>
-                    </li>
+                    <a href="{% url 'dashboard:follow' seller.username %}">
+                        <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">Follow</button>
+                    </a>
                     {% endif %}
-                </ul>
             </div>
         </div>
     </div>

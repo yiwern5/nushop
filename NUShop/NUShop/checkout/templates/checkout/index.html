@@ -57,7 +57,7 @@
                     {% endfor %}
             </div>
         </div>
-        <div class="col-span-2 border-nushopprimary-2 rounded-xl m-12">
+        <div class="col-span-2 border-nushopprimary-2 rounded-xl m-6">
             <div class="text-white text-3xl text-center bg-nushopprimary p-3 rounded-t-lg">
                 <h1>Summary</h1>
             </div>
@@ -69,7 +69,9 @@
                 <p class="text-3xl">Total:</p>
             </div>
             <div class="m-6">
-                <button class="text-xl bt-nushopsecondary rounded-xl text-center">Checkout</button>
+                <a href="{% url 'checkout:payment'%}">
+                    <button class="text-xl bt-nushopsecondary rounded-xl text-center">Proceed to Payment</button>
+                </a>
             </div>
         </div>
     </div>

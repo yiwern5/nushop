@@ -10,7 +10,6 @@ urlpatterns = [
     path('<str:username>/view-profile/', views.viewprofile, name='view-profile'),
     path('my-purchases/', views.mypurchases, name='my-purchases'),
     path('my-sales/', views.mypurchases, name='my-sales'),
-    path('payment/', views.payment, name='payment'),
     path('<str:username>/follow/', views.follow, name='follow'),
     path('<str:username>/unfollow/', views.unfollow, name='unfollow'),
 ]
