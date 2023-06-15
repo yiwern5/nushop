@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-span-4 pt-4 pl-2">
-            <h3 class="mb-12 text-2xl">
+            <h1 class="mb-12 text-3xl cinzel text-nushopprimary">
                 {% if query %}
                     {% if category_id %}
                         {{ query }} in {{ category_name }}
@@ -40,7 +40,7 @@
                 {% else %}
                     Featured
                 {% endif %}
-            </h3>
+            </h1>
             <div class="grid grid-cols-4 gap-4 grid-parent">
                 {% for product in products %}
                     <div class="col">
