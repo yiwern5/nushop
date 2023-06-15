@@ -39,7 +39,9 @@
     <div class="col-span-2 row-span-1">
         <h1 class="mb-6 text-3xl">{{ product.name }}</h1>
         <div class="text-xl">
-            <p>*****20 ratings   553 sold</p>
+            <p class="text-3xl text-yellow-500">* * * * *</p>
+            <p>20 ratings</p>
+            <p>553 sold</p>
         </div>
         <!--<h1 class="mb-6 text-3xl">{{ product.review }}</h1>
         <h1 class="mb-6 text-3xl">{{ product.rating }}</h1>
@@ -110,7 +112,7 @@
 
 
 <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
-    <div class="grid grid-cols-7">
+    <div class="grid grid-cols-7 gap-3">
         <div class="w-full col-span-1 overflow-hidden center row-span-2">
             {% if seller.image %}
             <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
@@ -203,14 +205,78 @@
     {% endif %}
 </div>
 <div id="review"></div>
-<div class="mt-6 mb-3 text-3xl">
-    Review
+<div class="mt-9 mb-6 text-3xl">
+    Reviews
 </div>
 <div class="bg-primary-light rounded-lg p-4">
-    <p>good</p>
+    <div class="grid grid-cols-7">
+        <div class="col-span-1">
+            {% if seller.image %}
+            <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
+            {% else %}
+            <img src="{% static 'green logo.png' %}" class="pfp">
+            {% endif %}
+        </div>
+        <div class="col-span-1">
+            <p class="text-xl">{{ user.name }}</p>
+            <p>* * * * *</p>
+        </div>
+        <div class="col-span-1">                     
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img src="{{ product.image.url }}" width="50%" height="50%">
+            </div>    
+        </div>
+        <div class="col-span-1">                     
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-body">
+                        <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+                    </div>
+                    <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <img src="{{ product.image.url }}" width="50%" height="50%">
+            </div>    
+        </div>
+
+        <div class="col-span-3"></div>
+
+        <div class="col-span-1">
+            <p>Date: </p>
+            <p>Variation: </p>
+        </div>
+        <div class="col-span-1">
+            <p>13/5/2023</p>
+            <p>XS, Delivery</p>
+        </div>
+        <div class="col-span-5">
+            <p>good product</p>
+        </div>
+    </div>
 </div>
 <div id="images"></div>
-<div class="mt-6 mb-3 text-3xl">
+<div class="mt-9 mb-6 text-3xl">
     Images
 </div>
 
@@ -271,7 +337,7 @@
 </div>
 
 <div id="recommended"></div>
-<div class="mt-6 mb-3 text-3xl">
+<div class="mt-9 mb-6 text-3xl">
     Recommended
 </div>
 <div class="px-6 py-3 rounded-xl">

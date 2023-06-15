@@ -57,9 +57,9 @@
             <div class="w-1/3">
                 <h3 class="mb-5 font-semibold text-white">Menu</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" class="text-lg text-white-hover-nushoptertiary">About</a></li>
-                    <li><a href="#" class="text-lg text-white-hover-nushoptertiary">Privacy Policy</a></li>
-                    <li><a href="#" class="text-lg text-white-hover-nushoptertiary">Terms & Conditions</a></li>
+                    <li><a href="{% url 'core:aboutus' %}" class="text-lg text-white-hover-nushoptertiary">About Us</a></li>
+                    <li><a href="{% url 'core:privacypolicy' %}" class="text-lg text-white-hover-nushoptertiary">Privacy Policy</a></li>
+                    <li><a href="{% url 'core:tnc' %}" class="text-lg text-white-hover-nushoptertiary">Terms & Conditions</a></li>
                 </ul>
             </div>
         </footer>

@@ -9,56 +9,99 @@
 {% block content %}
     <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
         <div class="grid grid-cols-7">
-            <div class="w-full col-span-1 overflow-hidden center">
+            <div class="w-full col-span-1 overflow-hidden center row-span-2">
                 {% if seller.image %}
-                <img src="{{ user.image.url }}" class="pfp">
+                <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
                 {% else %}
                 <img src="{% static 'green logo.png' %}" class="pfp">
                 {% endif %}
             </div>
 
             <div class="col-span-2">
-                <ul>
-                    <li class="text-lg font-semibold ml-12 mb-2">{{ user.name }}</li>
-                    <li class="text-lg font-semibold ml-12 mb-2">({{ user.role }})</li>
-                    <li class="center">
-                        <a href="{% url 'dashboard:view-profile' user.username %}" class="bt-nushoptertiary-2 text-xl text-center rounded-xl">View Profile</a>
-                    </li>
-                </ul>
+                <p class="text-3xl">{{ user.name }}</p>
+                <p class="text-xl">({{ user.role }})</p>
             </div>
 
             <div class="col-span-1">
-                <ul>
-                    <li class="text-xl font-semibold ml-12 mb-12 mt-4">Listings</li>
-                    <li class="text-xl font-semibold ml-12 mb-4 mt-10">Followers</li>
-                </ul>
+                <p class="text-2xl">Listings: </p>
             </div>
 
             <div class="col-span-1">
-                <ul>
-                    <li class="text-xl font-semibold mr-12 mb-12 mt-4 text-right">{{ products.count }}</li>
-                    <li class="text-xl font-semibold mr-12 mb-4 mt-10 text-right">{{ user.followers.count }}</li>
-                </ul>
+                <p class="text-2xl">{{ products.count }}</p>
             </div>
 
             <div class="col-span-2">
-                <ul>
-                    <li class="center">
-                        <a href="{% url 'dashboard:my-purchases' %}" class="py-2 px-2 w-4/5 bt-account text-xl text-center rounded-xl mt-1 mb-6">My Purchases</a>
-                    </li>
-                    <li class="center">
-                        <a href="{% url 'dashboard:my-sales' %}" class="py-2 px-2 w-4/5 bt-account text-xl text-center rounded-xl">My Sales</a>
-                    </li>
-                </ul>
+                <a href="{% url 'dashboard:view-profile' user.username %}">
+                    <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">View Profile</button>
+                </a>
+            </div>
+
+            <div class="col-span-2">
+                <p class="text-lg">no bio yet...</p>
+            </div>
+            
+            <div class="col-span-1">
+                <p class="text-2xl">Followers: </p>
+            </div>
+
+            <div class="col-span-1">
+                <p class="text-2xl">{{ user.followers.count }}</p>
+            </div>
+
+            <div class="col-span-2">
+                <a href="{% url 'dashboard:view-profile' user.username %}">
+                    <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">Log Out</button>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="mt-6 px-6 py-6">
+        <div class="grid grid-cols-2">
+            <div class="col-span-1">
+                <a href="{% url 'dashboard:my-purchases' %}">
+                    <button class="text-xl bt-nushopprimary rounded-xl text-center">My Purchases</button>
+                </a>
+            </div>
+            <div class="col-span-1">
+                <a href="{% url 'dashboard:my-sales' %}">
+                    <button class="text-xl bt-nushopprimary rounded-xl text-center">My Sales</button>
+                </a>
             </div>
         </div>
     </div>
-    <div class="mt-6 px-6 py-12 rounded-xl">
-        <div class="grid grid-cols-2">
-            <h2 class="mb-12 text-3xl font-semibold">Dashboard</h2>
-            <div class="space-x-6 bt-right">
+
+    <div class="mt-6 px-6 py-6">
+        <div class="grid grid-cols-5">
+            <div class="col-span-3">
+                <p class="mb-12 text-3xl font-semibold">NUShop Wallet</p>
+            </div>
+            <div class="col-span-1">
+                <a href="{% url 'dashboard:my-purchases' %}">
+                    <button class="text-xl bt-nushopsecondary rounded-xl text-center">Top Up</button>
+                </a>
+            </div>
+            <div class="col-span-1">
+                <a href="{% url 'dashboard:my-purchases' %}">
+                    <button class="text-xl bt-nushopsecondary rounded-xl text-center">Withdraw</button>
+                </a>
+            </div>
+            <div class="col-span-5">
+                <p class="mb-12 text-2xl">Balance: </p>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="mt-6 px-6 py-6">
+        <div class="grid grid-cols-5">
+            <div class="col-span-4">
+                <p class="mb-12 text-3xl font-semibold">Dashboard</p>
+            </div>
+            <div class="col-span-1">
                 <a href="{% url 'product:new' %}">
-                    <button class="py-3 px-8 bt-nushoptertiary-2 text-xl rounded-xl">Add Product</button>
+                    <button class="bt-nushoptertiary-2 text-xl rounded-xl">Add Product</button>
                 </a>
             </div>
         </div>
@@ -82,4 +125,6 @@
             {% endfor %}
         </div>
     </div>
+        
+
 {% endblock %}   
