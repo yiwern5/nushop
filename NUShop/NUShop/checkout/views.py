@@ -11,6 +11,7 @@ from .forms import EditDeliveryDetailsForm
 import stripe
 from django.views import View
 from django.views.generic import TemplateView
+from django.templatetags.static import static
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -23,6 +24,10 @@ class CreateStripeCheckoutSessionView(View):
         cart = Cart.objects.get(id=self.kwargs["pk"])
         total_amount = cart.get_total_amount()
         total_quantity = cart.get_total_quantity()
+
+        # Generate the URL for the static image in your Django template
+        image_url = request.build_absolute_uri(static('green logo.png'))
+
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             line_items=[
@@ -32,10 +37,8 @@ class CreateStripeCheckoutSessionView(View):
                         "unit_amount": int(total_amount) * 100,
                         "product_data": {
                             "name": "NUShop Cart",
-                            "description": 'complete payment to process your order',
-                            "images": [
-                                "{% static 'green logo.png' %}"
-                            ],
+                            "description": 'Complete payment to process your order',
+                            "images": [image_url],
                         },
                     },
                     "quantity": total_quantity,
@@ -47,6 +50,7 @@ class CreateStripeCheckoutSessionView(View):
             cancel_url=settings.PAYMENT_CANCEL_URL,
         )
         return redirect(checkout_session.url)
+
     
 class SuccessView(TemplateView):
     template_name = "checkout/success.html"
@@ -58,9 +62,11 @@ class CancelView(TemplateView):
 @login_required
 def index(request):
     products = CartProduct.objects.filter(created_by=request.user)
+    cart = Cart.objects.filter(created_by=request.user)
 
     return render(request, 'checkout/index.html', {
         'products': products, 
+        'cart' : cart,
     })
 
 @login_required
