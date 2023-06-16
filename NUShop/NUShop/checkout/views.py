@@ -4,11 +4,6 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
-import stripe
-import time
-from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponse
-from .models import UserPayment
 from product.models import Product
 from .models import CartProduct, Cart
 from authuser.models import User
@@ -86,26 +81,10 @@ def remove_from_cart(request, pk):
     return redirect("checkout:index")
 
 @login_required
-def payment(request):
+def checkout(request):
     products = Product.objects.filter(created_by=request.user)
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    if request.method == 'POST':
-        checkout_session = stripe.checkout.Session.create(
-            payment_method_types = ['card'],
-            line_items = [
-                {
-                    'price': settings.PRODUCT_PRICE,
-                    'quantity': 1,
-                },
-            ],
-            mode = 'payment',
-            customer_creation = 'always',
-            success_url = settings.REDIRECT_DOMAIN + '/payment_successful?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url = settings.REDIRECT_DOMAIN + '/payment_cancelled',
-        )
-        return redirect(checkout_session.url, code=303)
-    return render(request, 'checkout/payment.html', {
-        'title': 'Payment',
+    return render(request, 'checkout/checkout.html', {
+        'title': 'Checkout',
         'products': products,
     })
 
@@ -119,7 +98,7 @@ def add_shipping_details(request):
             delivery_details.save()
             request.user.save()
             messages.info(request, "Delivery details are added.")
-            return redirect('checkout:payment')
+            return redirect('checkout:checkout')
     else:
         form = EditDeliveryDetailsForm()
 
@@ -137,7 +116,7 @@ def edit_shipping_details(request, username):
         if form.is_valid():
             form.save()
             messages.info(request, "Delivery details are updated.")
-            return redirect('checkout:payment')
+            return redirect('checkout:checkout')
     else:
         form = EditDeliveryDetailsForm(instance=delivery_details)
 
@@ -146,44 +125,7 @@ def edit_shipping_details(request, username):
         'title': 'Delivery Details',
     })
 
-def payment_successful(request):
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    checkout_session_id = request.GET.get('session_id', None)
-    session = stripe.checkout.Session.retrieve(checkout_session_id)
-    customer = stripe.Customer.retrieve(session.customer)
-    user_id = request.user.user_id
-    user_payment = UserPayment.objects.get(app_user=user_id)
-    user_payment.stripe_checkout_id = checkout_session_id
-    user_payment.save()
-    return render(request, 'user_payment/payment_successful.html', {'customer': customer})
 
-def payment_cancelled(request):
-    return render(request, 'user_payment/payment_cancelled.html')
-
-@csrf_exempt
-def stripe_webhook(request):
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    time.sleep(10)
-    payload = request.body
-    signature_header = request.META['HTTP_STRIPW_SIGNATURE']
-    event = None
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, signature_header, settings.STRIPE_WEBHOOK_SECRET
-        )
-    except ValueError as e:
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        return HttpResponse(status=400)
-    if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
-        session_id = session.get('id', None)
-        time.sleep(15)
-        user_payment = UserPayment.objects.get(stripe_checkout_id=session_id)
-        line_items = stripe.checkout.Session.list_line_items(session_id, limit=1)
-        user_payment.payment_bool = True
-        user_payment.save()
-    return HttpResponse(status=200)
 
 # @login_required
 # def card_detail(request):
