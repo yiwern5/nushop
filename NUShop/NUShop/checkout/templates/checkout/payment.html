@@ -1,108 +1,19 @@
 {% extends 'core/base.html' %}
 
-{% block title %}Payment{% endblock %}
+{% block title %}Cart{% endblock %}
 
 {% block content %}
-    <h1 class="my-3 text-3xl cinzel text-nushopprimary text-center">Payment</h1>
-    <div class="grid grid-cols-5 gap-4">     
-        <div class="col-span-3">
-            <div class="mt-6 px-6">
-                <h1 class="text-3xl mb-3">Shipping Details</h1>
-                {% comment %} Delivery Address Details {% endcomment %}
-                {% if user.delivery_address %}
-    
-                    <p class="text-gray-400">Full Name</p>
-                    <p class="text-xl font-semibold">{{ user.delivery_address.name }}</p>
-                    <p class="text-gray-400">Address 1</p>
-                    <p class="text-xl font-semibold">{{ user.delivery_address.address_line1 }}</p>
-                    <p class="text-gray-400">Address 2</p>
-                    <p class="text-xl font-semibold">{{ user.delivery_address.address_line2 }}</p>
-                    <p class="text-gray-400">Block Number</p>
-                    <p class="text-xl font-semibold">{{ user.delivery_address.block_unitno }}</p>
-                    <p class="text-gray-400">Postcode</p>
-                    <p class="text-xl font-semibold">{{ user.delivery_address.postcode }} Singapore</p>
-                    <a href="{% url 'checkout:edit-shipping-details' user.username %}">
-                        <button class="text-xl bt-nushopsecondary rounded-xl text-center">Edit Delivery Details</button>
-                    </a>
-                {% else %}
-                    <p>No registered shipping address</p>
-                    <a href="{% url 'checkout:add-shipping-details' user.username %}">
-                        <button class="text-xl bt-nushopsecondary rounded-xl text-center">Add Delivery Details</button>
-                    </a>
-                {% endif %}
+
+        <script src="https://js.stripe.com/v3/"></script>
+        <form action="/charge" method="post" id="payment-form">
+            <div class="form-row">
+                <label for="card-element">
+                    Credit or Debit Card
+                </label>
+
             </div>
+            {% csrf_token %}
+            <button class="bt-nushopprimary" type="submit">Pay</button>
+        </form>
 
-            <div class="mt-6 px-6">
-                <h1 class="text-3xl mb-3">Payment Method</h1>
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width:95%;">
-                    <option selected>Select payment method</option>
-                    <option value="1">Card</option>
-                    <option value="2">PayNow</option>
-                    <option value="3">Cash</option>
-                    <option value="4">NUShop Wallet</option>
-                </select>  
-
-                {% comment %} Card Details {% endcomment %}
-
-                <form method="post" action="{% url 'authuser:change-password' %}">
-                    {% csrf_token %}
-                    <div class="mb-3">
-                        <input type="password" name="old_password" placeholder="Enter Old Password" class="w-1/4 py-2 px-6 form-account">
-                    </div>
-                    <div class="mb-3">
-                        <input type="password" name="new_password1" placeholder="Enter New Password" class="w-1/4 py-2 px-6 form-account">
-                    </div>
-                    <div class="mb-3">
-                        <input type="password" name="new_password2" placeholder="Confirm New Password" class="w-1/4 py-2 px-6 form-account">
-                    </div>
-                    {% if form.errors or form.non_field_errors %}
-                        <div class="mb-3 p-6 bg-red-100 rounded-xl">
-                            {% for field in form %}
-                                {{ field.errors }}
-                            {% endfor %}
-                            {{ form.non_field_errors }}
-                        </div>
-                    {% endif %}
-                    <div>
-                        <button class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl mt-1 mb-6">Change Password</button>
-                    </div>
-                </form>
-
-                <a href="#">
-                    <button class="text-xl bt-nushopprimary rounded-xl text-center">Complete Payment</button>
-                </a>
-            </div>
-        </div>
-        
-        <div class="col-span-2 px-6">
-            <h1 class="text-3xl mt-6">Your Orders</h1>
-            <h1 class="text-3xl m-3">Total: $</h1>
-            <div class="list">
-                {% for product in products %}
-                    <div class="p-3 rounded-xl">
-                        <a href="{% url 'product:detail' product.id %}">
-                            <div class="grid grid-cols-5 gap-2">
-                                <div class="col-span-5 text-2xl">
-                                    <h1>NUS Computing</h1>
-                                </div>
-                                <div class="col-span-1">
-                                    <img src="{{ product.image.url }}" class="rounded-xl img-size">
-                                </div>
-                                <div class="col-span-4">
-                                    <h2 class="text-2xl text-black">{{ product.name }}</h2>
-                                    <p class="text-black text-xl">Variation:</p>
-                                    <p class="text-xl">Quantity:</p>
-                                    <p class="text-xl">Subtotal: $ {{ product.price }}</p>
-                                </div>
-                        
-                                
-                                
-                            </div>
-                        </a>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-    
 {% endblock %}
