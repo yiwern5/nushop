@@ -8,6 +8,51 @@ from product.models import Product
 from .models import CartProduct, Cart
 from authuser.models import User
 from .forms import EditDeliveryDetailsForm
+import stripe
+from django.views import View
+from django.views.generic import TemplateView
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+class CreateStripeCheckoutSessionView(View):
+    """
+    Create a checkout session and redirect the user to Stripe's checkout page
+    """
+
+    def post(self, request, *args, **kwargs):
+        cart = Cart.objects.get(id=self.kwargs["pk"])
+        total_amount = cart.get_total_amount()
+        total_quantity = cart.get_total_quantity()
+        checkout_session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            line_items=[
+                {
+                    "price_data": {
+                        "currency": "sgd",
+                        "unit_amount": int(total_amount) * 100,
+                        "product_data": {
+                            "name": "NUShop Cart",
+                            "description": 'complete payment to process your order',
+                            "images": [
+                                "{% static 'green logo.png' %}"
+                            ],
+                        },
+                    },
+                    "quantity": total_quantity,
+                }
+            ],
+            metadata={"product_id": cart.id},
+            mode="payment",
+            success_url=settings.PAYMENT_SUCCESS_URL,
+            cancel_url=settings.PAYMENT_CANCEL_URL,
+        )
+        return redirect(checkout_session.url)
+    
+class SuccessView(TemplateView):
+    template_name = "checkout/success.html"
+
+class CancelView(TemplateView):
+    template_name = "checkout/cancel.html"
 
 # Create your views here.
 @login_required
