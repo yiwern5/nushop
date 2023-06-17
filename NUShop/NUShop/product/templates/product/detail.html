@@ -6,34 +6,38 @@
 
 {% block content %}
 <div class="grid grid-cols-3 gap-2 mt-3">
+
     <div class="col-span-1 row-span-3">
         <div id="carouselExampleIndicators" class="carousel slide">
-            <div class="carousel-indicators">
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
-              <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                <div class="carousel-indicators">
+                    {% for image in images %}
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active" aria-current="true"{% endif %} aria-label="Slide {{ forloop.counter }}"></button>
+                    {% endfor %}
+                    <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{ images|length }}" aria-label="Additional Slide"></button>
+                </div>
+    
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img src="{{ product.thumbnail.url }}" class="d-block w-100 rounded-xl" alt="...">
+                    </div>
+                    {% for image in images %}
+                    <div class="carousel-item">
+                        <img src="{{ image.image.url }}" alt="Product Image" class="d-block w-100 rounded-xl" alt="...">
+                    </div>
+                    {% endfor %}
+                </div>
+    
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+    
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
             </div>
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="{{ product.image.url }}" class="d-block w-100 rounded-xl" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="{{ product.image.url }}" class="d-block w-100 rounded-xl" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="{{ product.image.url }}" class="d-block w-100 rounded-xl" alt="...">
-              </div>
-            </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Previous</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="visually-hidden">Next</span>
-            </button>
-        </div>
-        
+            
     </div>
 
     <div class="col-span-2 row-span-1">
@@ -53,7 +57,8 @@
 
         {% if request.user == product.created_by %}
             <div class="mt-6 p-6 bg white rounded-xl">
-                <p>This is your product!</p>
+                <p class="text-xl">This is your product! (You can change or delete images below)</p>
+                <a href="{% url 'product:addimage' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Image</a>
                 <a href="{% url 'product:edit' product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Edit</a>
                 <a href="{% url 'product:delete' product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
             </div>
@@ -105,6 +110,10 @@
                 </form>
             </script>
 
+            <!-- <a href="{% url 'checkout:add_to_cart' product.id %}" class="mt-2 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</a> -->
+            <a href="{% url 'checkout:add_to_cart' product.id %}">
+                <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</button>
+            </a>
         </div>
 
     </div>
@@ -230,35 +239,37 @@
                         <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
                 </div>
             </div>
 
             <div class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ product.image.url }}" width="50%" height="50%">
+                <img src="{{ product.thumbnail.url }}" width="50%" height="50%">
             </div>    
         </div>
+        {% for image in images %}
         <div class="col-span-1">                     
             <!-- Modal -->
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-body">
-                        <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+                        <img src="{{ image.image.url }}" alt="Product Image" class="rounded-xl h-full w-full">
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
                 </div>
             </div>
 
             <div class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ product.image.url }}" width="50%" height="50%">
+                <img src="{{ image.image.url }}" alt="Product Image" width="50%" height="50%">
             </div>    
         </div>
+        {% endfor %}
 
         <div class="col-span-3"></div>
 
@@ -275,64 +286,66 @@
         </div>
     </div>
 </div>
+
 <div id="images"></div>
 <div class="mt-9 mb-6 text-3xl">
     Images
+    {% if request.user == product.created_by %}
+    <p class="text-xl">(Manage a specific image by clicking on it)</p>
+    {% endif %}
 </div>
 
 <div class="px-6 pb-3 container-fluid scroll">
     <div class="d-flex flex-row flex-nowrap">
         
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="thumbnail" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-body">
-                    <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+                    <img src="{{ product.thumbnail.url }}" class="rounded-xl h-full w-full">
                 </div>
                 <div class="modal-footer">
-                <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                    <p class="text-xl">You can only change the thumbnail via the edit button above</p>
+                    <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
             </div>
         </div>
 
         <div class="col mr-4">
-            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#thumbnail">
+                <img src="{{ product.thumbnail.url }}" class="rounded-xl h-full w-full">
             </div>
         </div>
         
+        {% for image in images %}
+        <div class="modal fade" id="{{ image.id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <img src="{{ image.image.url }}" class="rounded-xl h-full w-full">
+                </div>
+                <div class="modal-footer">
+                    {% if request.user == image.uploaded_by %}
+                    <a href="{% url 'product:changeimage' image.id product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Change Image</a>
+                    <a href="{% url 'product:deleteimage' image.id product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
+                    <!-- <form action="{% url 'product:deleteimage' image.id product.id %}" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger text-red-500">Delete</button>
+                    </form> -->
+                    {% endif %}
+                    <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+            </div>
+        </div>
         <div class="col mr-4">
-            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
+            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#{{ image.id }}">
+                <img src="{{ image.image.url }}" alt="Product Image" class="rounded-xl h-full w-full">
             </div>
         </div>
-
-        <div class="col mr-4">
-            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
-            </div>
-        </div>
-
-        <div class="col mr-4">
-            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
-            </div>
-        </div>
-
-        <div class="col mr-4">
-            <div class="product-pic" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
-            </div>
-        </div>
-
-        <div class="col mr-4" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <div class="product-pic">
-                <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
-            </div>
-        </div>
-
+        {% endfor %}
     </div>
 </div>
 

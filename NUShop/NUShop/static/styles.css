@@ -278,3 +278,15 @@
 .form-account:focus{
     border-color: #528029;
 }
+
+.carousel-container {
+    width: 500px; /* Set your desired width */
+    height: 300px; /* Set your desired height */
+    margin: 0 auto; /* Center the carousel horizontally */
+  }
+
+.carousel-container .carousel-inner img {
+    width: 100%; /* Make the images fill the container width */
+    height: 100%; /* Make the images fill the container height */
+    object-fit: cover; /* Maintain aspect ratio and fill the container */
+}

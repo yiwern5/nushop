@@ -1,9 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
-
-from .models import Category, Product
-from .forms import NewProductForm, EditProductForm
+from .models import Category, Product, ProductImage
+from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm
 
 # Create your views here.
 def products(request):
@@ -32,6 +31,7 @@ def products(request):
 
 def detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
+    images = product.images.all()
     products = Product.objects.filter(is_sold=False)[0:6]
     """
     is_sold can be changed to is_out_of_stock; 
@@ -44,6 +44,7 @@ def detail(request, pk):
     seller_product = Product.objects.filter(created_by=seller)
     
     return render(request, 'product/detail.html', {
+        'images': images,
         'product': product,
         'products': products, 
         'related_products': related_products,
@@ -67,13 +68,39 @@ def new(request):
         'form': form,
         'title': 'New product',
     })
-        
+
 @login_required
 def delete(request, pk):
     product = get_object_or_404(Product, pk=pk, created_by=request.user)
     product.delete()
 
     return redirect('dashboard:index')
+
+@login_required
+def deleteimage(request, image_id, product_id):
+    image = get_object_or_404(ProductImage, pk=image_id, uploaded_by=request.user)
+    product = get_object_or_404(Product, pk=product_id, created_by=request.user)
+    image.delete()
+
+    return redirect('product:detail', pk=product.id)
+
+# @login_required
+# def new(request):
+#     if request.method == 'POST':
+#         form = NewProductForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             product = form.save(commit=False)
+#             product.created_by = request.user
+#             product.save()
+#             form.save_m2m()  # Save the many-to-many relationships
+#             return redirect('product:detail', pk=product.id)
+#     else:
+#         form = NewProductForm()
+
+#     return render(request, 'product/form.html', {
+#         'form': form,
+#         'title': 'New product',
+#     })
 
 @login_required
 def edit(request, pk):
@@ -90,3 +117,67 @@ def edit(request, pk):
         'form': form,
         'title': 'Edit product'
     })
+
+@login_required
+def changeimage(request, image_id, product_id):
+    image = get_object_or_404(ProductImage, pk=image_id, uploaded_by=request.user)
+    product = get_object_or_404(Product, pk=product_id, created_by=request.user)
+    if request.method == 'POST':
+        form = ChangeImageForm(request.POST, request.FILES, instance=image)
+        if form.is_valid():
+            form.save()
+            return redirect('product:detail', pk=product.id)
+    else:
+        form = ChangeImageForm(instance=image)
+
+    return render(request, 'product/form.html', {
+        'form': form,
+        'title': 'Change Image'
+    })
+
+@login_required
+def addimage(request, pk):
+    product = get_object_or_404(Product, pk=pk, created_by=request.user)
+    if request.method == 'POST':
+        form = AddImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            image = form.save(commit=False)
+            image.uploaded_by = request.user
+            image.product = product
+            image.save()
+            return redirect('product:detail', pk=product.id)
+    else:
+        form = AddImageForm()
+
+    return render(request, 'product/form.html', {
+        'form': form,
+        'title': 'Add image'
+    })
+
+# @login_required
+# def edit(request, pk):
+#     product = get_object_or_404(Product, pk=pk, created_by=request.user)
+#     ImageFormSet = inlineformset_factory(
+#         Product,
+#         ProductImage,
+#         form=ProductImageForm,
+#         extra=1,  # Number of extra image forms
+#         can_delete=True
+#     )
+
+#     if request.method == 'POST':
+#         form = EditProductForm(request.POST, request.FILES, instance=product)
+#         formset = ImageFormSet(request.POST, request.FILES, instance=product)
+#         if form.is_valid() and formset.is_valid():
+#             form.save()
+#             formset.save()
+#             return redirect('product:detail', pk=product.id)
+#     else:
+#         form = EditProductForm(instance=product)
+#         formset = ImageFormSet(instance=product)
+
+#     return render(request, 'product/form.html', {
+#         'form': form,
+#         'formset': formset,
+#         'title': 'Edit product'
+#     })
