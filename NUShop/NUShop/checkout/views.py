@@ -134,9 +134,11 @@ def remove_from_cart(request, pk):
 @login_required
 def checkout(request):
     products = Product.objects.filter(created_by=request.user)
+    cart = Cart.objects.filter(created_by=request.user)
     return render(request, 'checkout/checkout.html', {
         'title': 'Checkout',
         'products': products,
+        'cart': cart,
     })
 
 @login_required
