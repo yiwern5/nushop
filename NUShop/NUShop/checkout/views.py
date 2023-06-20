@@ -38,7 +38,7 @@ class CreateStripeCheckoutSessionView(View):
                         "product_data": {
                             "name": "NUShop Cart",
                             "description": 'Complete payment to process your order',
-                            "images": [image_url],
+                            # "images": [image_url],
                         },
                     },
                     "quantity": total_quantity,
@@ -46,8 +46,8 @@ class CreateStripeCheckoutSessionView(View):
             ],
             metadata={"product_id": cart.id},
             mode="payment",
-            success_url=settings.PAYMENT_SUCCESS_URL,
-            cancel_url=settings.PAYMENT_CANCEL_URL,
+            success_url=request.build_absolute_uri('/checkout/success/'),
+            cancel_url=request.build_absolute_uri('/checkout/cancel/'),
         )
         return redirect(checkout_session.url)
 

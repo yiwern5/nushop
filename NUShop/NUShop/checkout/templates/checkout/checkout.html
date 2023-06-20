@@ -41,10 +41,13 @@
                     <option value="3">Cash</option>
                     <option value="4">NUShop Wallet</option>
                 </select>  
-
-                <a href="#">
+                <form action="{% url 'checkout:create-checkout-session' 1 %}" method="POST">
+                    {% csrf_token %}
+                    <button class="text-xl bt-nushopprimary rounded-xl text-center">Complete Payment</button>
+                </form>
+                <!-- <a href="#">
                     <button class="text-xl bt-nushopprimary rounded-xl text-center">Proceed to Pay</button>
-                </a>
+                </a> -->
             </div>
         </div>
         
@@ -60,17 +63,14 @@
                                     <h1>NUS Computing</h1>
                                 </div>
                                 <div class="col-span-1">
-                                    <img src="{{ product.image.url }}" class="rounded-xl img-size">
+                                    <img src="{{ product.thumbnail.url }}" class="rounded-xl img-size">
                                 </div>
                                 <div class="col-span-4">
                                     <h2 class="text-2xl text-black">{{ product.name }}</h2>
                                     <p class="text-black text-xl">Variation:</p>
                                     <p class="text-xl">Quantity:</p>
                                     <p class="text-xl">Subtotal: $ {{ product.price }}</p>
-                                </div>
-                        
-                                
-                                
+                                </div>    
                             </div>
                         </a>
                     </div>
