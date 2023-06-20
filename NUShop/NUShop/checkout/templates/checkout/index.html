@@ -71,7 +71,7 @@
                 <p class="text-3xl">Total:</p>
             </div>
             <div class="m-6">
-                <form action="{% url 'checkout:create-checkout-session' pk=cart.id %}" method="POST">
+                <form action="{% url 'checkout:create-checkout-session' 1 %}" method="POST">
                     {% csrf_token %}
                     <button type='submit' class="text-xl bt-nushopsecondary rounded-xl text-center">Proceed to Checkout</button>
                 </form>

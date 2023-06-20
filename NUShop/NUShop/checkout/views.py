@@ -72,7 +72,7 @@ def index(request):
 @login_required
 def add_to_cart(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    cart_product = CartProduct.objects.get_or_create(
+    cart_product, created = CartProduct.objects.get_or_create(
         created_by=request.user,
         ordered=False,
         product=product,
