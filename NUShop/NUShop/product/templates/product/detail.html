@@ -52,18 +52,16 @@
         <h1 class="mb-6 text-3xl">{{ product.numbersold }}</h1>-->
     </div>
     <div class="col-span-2 row-span-1">
-        <p class="text-yellow-500 text-3xl">$ {{ product.price }}</p>
+        <p class="text-yellow-500 text-3xl">$ {{ product.price|floatformat:2 }}</p>
         <!--<p class="text-gray-500"><strong>Seller: </strong>{{ product.created_by.username }}</p>-->
 
         {% if request.user == product.created_by %}
             <div class="mt-6 p-6 bg white rounded-xl">
-                <p class="text-xl">This is your product! (You can change or delete images below)</p>
+                <p class="text-xl">This is your product! (You can change or delete images at the images section)</p>
                 <a href="{% url 'product:addimage' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Image</a>
                 <a href="{% url 'product:edit' product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Edit</a>
                 <a href="{% url 'product:delete' product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
             </div>
-        {% else %}
-            <a href="{% url 'chat:new' product.id %}" class="inline-block mt-6 px-6 py-3 text-lg font-semibold bg-teal-500 text-white hover:bg-teal-700 rounded-xl">Contact Seller</a>
         {% endif%}
     </div>
 
@@ -111,28 +109,30 @@
             </script>
 
             <!-- <a href="{% url 'checkout:add_to_cart' product.id %}" class="mt-2 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</a> -->
+            {% if request.user != product.created_by %}
             <a href="{% url 'checkout:add_to_cart' product.id %}">
-                <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</button>
+                <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center w-1/3">Add to Cart</button>
             </a>
+            {% endif %}
         </div>
 
     </div>
 </div>
 
-
+{% if request.user != product.created_by %}
 <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
     <div class="grid grid-cols-7 gap-3">
         <div class="w-full col-span-1 overflow-hidden center row-span-2">
             {% if seller.image %}
             <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
             {% else %}
-            <img src="{% static 'green logo.png' %}" class="pfp">
+            <img src="{% static 'default.png' %}" class="pfp">
             {% endif %}
         </div>
 
         <div class="col-span-2">
-            <h1 class="text-2xl">NUS Computing Club</h1>
-            <p class="text-lg">online now</p>
+            <h1 class="text-2xl font-semibold">{{ seller.name }}</h1>
+            <p class="text-lg font-semibold">online now</p>
         </div>
 
         <div class="col-span-1">
@@ -148,7 +148,7 @@
         </div>
 
         <div class="col-span-1">
-            <p class="text-2xl">98 </p>
+            <p class="text-2xl">8 </p>
         </div>
 
         <div class="col-span-1">
@@ -164,23 +164,23 @@
         </div>
         
         <div class="col-span-1">
-            <p class="text-2xl">Ratings: </p>
+            <p class="text-2xl">Response Rate: </p>
         </div>
 
         <div class="col-span-1">
-            <p class="text-2xl">3k</p>
+            <p class="text-2xl">99%</p>
         </div>
 
         <div class="col-span-1">
-            <p class="text-2xl">Listings: </p>
+            <p class="text-2xl">Followers: </p>
         </div>
 
         <div class="col-span-1">
-            <p class="text-2xl">98 </p>
+            <p class="text-2xl">{{ seller.followers.count }} </p>
         </div>
     </div>
 </div>
-        
+{% endif %}        
 
 <nav id="navbar-example2" class="navbar mb-3 rounded-lg mt-3">
     <ul class="nav nav-pills">
@@ -209,7 +209,7 @@
         </p>
     {% else %}
     <p class="text-black">
-        This Product does not have a Description
+        This product does not have a description.
     </p>
     {% endif %}
 </div>
@@ -223,7 +223,7 @@
             {% if seller.image %}
             <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
             {% else %}
-            <img src="{% static 'green logo.png' %}" class="pfp">
+            <img src="{% static 'random.png' %}" class="pfp">
             {% endif %}
         </div>
         <div class="col-span-1">
@@ -274,12 +274,10 @@
         <div class="col-span-3"></div>
 
         <div class="col-span-1">
-            <p>Date: </p>
-            <p>Variation: </p>
         </div>
         <div class="col-span-1">
-            <p>13/5/2023</p>
-            <p>XS, Delivery</p>
+            <p>Date: 13/5/2023</p>
+            <p>Variation: XS, Delivery</p>
         </div>
         <div class="col-span-5">
             <p>good product</p>
@@ -359,12 +357,12 @@
                 <div class="card rounded-xl border-0">
                     <a href="{% url 'product:detail' product.id %}">
                         <div class="product-pic">
-                            <img src="{{ product.image.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
+                            <img src="{{ product.thumbnail.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
                         </div>
             
                         <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
                             <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
-                            <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price }}</p>
+                            <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price|floatformat:2 }}</p>
                         </div>
                     </a>
                 </div>

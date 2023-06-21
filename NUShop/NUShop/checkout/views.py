@@ -21,7 +21,7 @@ class CreateStripeCheckoutSessionView(View):
     """
 
     def post(self, request, *args, **kwargs):
-        cart = Cart.objects.get(id=self.kwargs["pk"])
+        cart = Cart.objects.filter(created_by=request.user)[0]
         total_amount = cart.get_total_amount()
         total_quantity = cart.get_total_quantity()
 
@@ -62,11 +62,17 @@ class CancelView(TemplateView):
 @login_required
 def index(request):
     products = CartProduct.objects.filter(created_by=request.user)
-    cart = Cart.objects.filter(created_by=request.user)
+    cart_qs = Cart.objects.filter(created_by=request.user)
 
-    return render(request, 'checkout/index.html', {
-        'products': products, 
-        'cart' : cart,
+    if cart_qs:
+        cart = cart_qs[0]
+        return render(request, 'checkout/checkout.html', {
+            'products': products,
+            'cart': cart,
+        })
+    
+    return render(request, 'checkout/checkout.html', {
+            'products': products,
     })
 
 @login_required
@@ -133,12 +139,18 @@ def remove_from_cart(request, pk):
 
 @login_required
 def checkout(request):
-    products = Product.objects.filter(created_by=request.user)
-    cart = Cart.objects.filter(created_by=request.user)
+    products = CartProduct.objects.filter(created_by=request.user)
+    cart_qs = Cart.objects.filter(created_by=request.user)
+
+    if cart_qs:
+        cart = cart_qs[0]
+        return render(request, 'checkout/checkout.html', {
+            'products': products,
+            'cart': cart,
+        })
+    
     return render(request, 'checkout/checkout.html', {
-        'title': 'Checkout',
-        'products': products,
-        'cart': cart,
+            'products': products,
     })
 
 @login_required

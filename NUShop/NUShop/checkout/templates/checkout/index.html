@@ -11,7 +11,7 @@
             <div class="list">
                     {% for product in products %}
                         <div class="p-3 rounded-xl mb-3 mt-3 border-nushopprimary-3">
-                            <a href="{% url 'product:detail' product.product.id %}">
+                            <a href="{% url 'product:detail' product.product.pk %}">
                                 <div class="grid">
                                     <div class="row-span-1">
                                         <div class="grid grid-cols-10 gap-2">
@@ -20,9 +20,6 @@
                                             </div>
                                             <div class="col-span-7 text-2xl">
                                                 <h1>{{ product.product.created_by }}</h1>
-                                            </div>
-                                            <div class="col-span-2">
-                                                <button class="mt-2 px-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
                                             </div>
                                         </div>
                                     </div>
@@ -37,7 +34,7 @@
                                                 <p class="text-black text-xl">Variation:</p>
                                             </div>
                                             <div class="col-span-1">
-                                                <p class="text-3xl text-yellow-500">$ {{ product.product.price }}</p></p>
+                                                <p class="text-3xl text-yellow-500">$ {{ product.subtotal|floatformat:2 }}</p></p>
                                             </div>
                                         </div>
                                     </div>
@@ -66,10 +63,10 @@
             </div>
             <div class="text-left text-black m-6">
                 <div class="text-xl">
-                    <p>Subtotal:</p>
-                    <p>Shipping Fee:</p>
+                    <p>Subtotal: $ {{ cart.total_price|floatformat:2 }}</p>
+                    <p>Shipping Fee: $ 0.00</p>
                 </div>
-                <p class="text-3xl">Total:</p>
+                <p class="text-3xl">Total: $ {{ cart.total_price|floatformat:2 }}</p>
             </div>
             <div class="m-6">
                 <!-- <form action="{% url 'checkout:create-checkout-session' 1 %}" method="POST">

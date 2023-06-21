@@ -8,11 +8,26 @@ class CartProduct(models.Model):
     ordered = models.BooleanField(default=False)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)
+
+    @property
+    def subtotal(self):
+        return self.quantity * self.product.price
  
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
     
-class Cart(models.Model):
+class Cart(models.Model):    
+    created_by = models.ForeignKey(User, related_name='cart', on_delete=models.CASCADE)
+    ref_code = models.CharField(max_length=20, blank=True, null=True)
+    products = models.ManyToManyField(CartProduct)
+    start_date = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField()
+    completed = models.BooleanField(default=False)
+    
+    @property
+    def total_price(self):
+        return sum(product.subtotal for product in self.products.all())
+
     def get_total_amount(self):
         total_amount = 0
         for cart_product in self.products.all():
@@ -25,13 +40,6 @@ class Cart(models.Model):
             total_quantity += cart_product.quantity
         return total_quantity
     
-    created_by = models.ForeignKey(User, related_name='cart', on_delete=models.CASCADE)
-    ref_code = models.CharField(max_length=20, blank=True, null=True)
-    products = models.ManyToManyField(CartProduct)
-    start_date = models.DateTimeField(auto_now_add=True)
-    created_at = models.DateTimeField()
-    completed = models.BooleanField(default=False)
-
     def __str__(self):
         return f"Cart of {self.created_by.username}"
     

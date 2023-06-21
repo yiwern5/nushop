@@ -40,14 +40,14 @@
                                     <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
                                 </div>
                                 <div class="col-span-1 row-span-1">
-                                    <img src="{{ product.image.url }}" class="rounded-xl img-size">
+                                    <img src="{{ product.thumbnail.url }}" class="rounded-xl img-size">
                                 </div>
                                 <div class="col-span-4">
                                     <h2 class="text-3xl text-black">{{ product.name }}</h2>
                                     <div class="text-black text-xl">
                                         <p>Variation:</p>
                                         <p>Delivery Method:</p>
-                                        <p>Price: {{ product.price }}</p>
+                                        <p>Price: $ {{ product.price|floatformat:2 }}</p>
                                         <p>Quantity:</p>
                                         <p>Status:</p>
                                     </div>

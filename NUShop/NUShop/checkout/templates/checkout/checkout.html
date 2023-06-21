@@ -53,23 +53,23 @@
         
         <div class="col-span-2 px-6">
             <h1 class="text-3xl mt-6">Your Orders</h1>
-            <h1 class="text-3xl m-3">Total: $</h1>
+            <h1 class="text-3xl m-3">Total: $ {{ cart.total_price|floatformat:2 }}</h1>
             <div class="list">
                 {% for product in products %}
                     <div class="p-3 rounded-xl">
-                        <a href="{% url 'product:detail' product.id %}">
+                        <a href="{% url 'product:detail' product.product.id %}">
                             <div class="grid grid-cols-5 gap-2">
                                 <div class="col-span-5 text-2xl">
-                                    <h1>NUS Computing</h1>
+                                    <h1>{{ product.product.created_by.name }}</h1>
                                 </div>
                                 <div class="col-span-1">
-                                    <img src="{{ product.thumbnail.url }}" class="rounded-xl img-size">
+                                    <img src="{{ product.product.thumbnail.url }}" class="rounded-xl img-size">
                                 </div>
                                 <div class="col-span-4">
-                                    <h2 class="text-2xl text-black">{{ product.name }}</h2>
+                                    <h2 class="text-2xl text-black">{{ product.product.name }}</h2>
                                     <p class="text-black text-xl">Variation:</p>
-                                    <p class="text-xl">Quantity:</p>
-                                    <p class="text-xl">Subtotal: $ {{ product.price }}</p>
+                                    <p class="text-xl">Quantity: {{ product.quantity }}</p>
+                                    <p class="text-xl">Subtotal: $ {{ product.subtotal|floatformat:2 }}</p>
                                 </div>    
                             </div>
                         </a>

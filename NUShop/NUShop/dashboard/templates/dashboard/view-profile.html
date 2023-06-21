@@ -11,10 +11,10 @@
     <div class="w-full col-span-1 overflow-hidden">
         <div class="grid grid-rows-3">
             <div class="row-span-2 flex justify-center mt-5">
-                {% if seller.image %}
+                {% if user.image %}
                 <img src="{{ user.image.url }}" class="pfp">
                 {% else %}
-                <img src="{% static 'green logo.png' %}" class="pfp">
+                <img src="{% static 'default.png' %}" class="pfp">
                 {% endif %}
             </div>
             <div class="row-span-1 flex justify-center">

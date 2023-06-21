@@ -290,3 +290,7 @@
     height: 100%; /* Make the images fill the container height */
     object-fit: cover; /* Maintain aspect ratio and fill the container */
 }
+
+.review-pic {
+    height: 180px;
+}
