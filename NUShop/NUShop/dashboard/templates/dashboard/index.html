@@ -54,9 +54,10 @@
             </div>
 
             <div class="col-span-2">
-                <a href="#" class="center">
-                    <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center w-2/3">Log Out</button>
-                </a>
+                <form method="post" action="{% url 'core:logout' %}" class="center">
+                    {% csrf_token %}
+                    <button type="submit" class="text-xl bt-nushoptertiary-2 rounded-xl text-center w-2/3">Log Out</button>
+                </form>
             </div>
 
         </div>
