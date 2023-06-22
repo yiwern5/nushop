@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from .forms import SignupForm
 from product.models import Category, Product
 
@@ -12,9 +13,6 @@ def index(request):
         'products': products,
     })
 
-def contact(request):
-    return render(request, 'core/contact.html')
-
 def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -22,7 +20,7 @@ def signup(request):
         if form.is_valid():
             form.save()
 
-            return redirect('/login/')
+            return redirect(reverse('core:login'))
     else:
         form = SignupForm()
 
