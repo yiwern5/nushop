@@ -21,12 +21,12 @@
                     <p class="text-xl font-semibold">{{ user.delivery_address.block_unitno }}</p>
                     <p class="text-gray-400">Postcode</p>
                     <p class="text-xl font-semibold">{{ user.delivery_address.postcode }} Singapore</p>
-                    <a href="{% url 'checkout:edit-shipping-details' user.username %}">
+                    <a href="{% url 'checkout:edit_shipping_details' user.username %}">
                         <button class="text-xl bt-nushopsecondary rounded-xl text-center">Edit Delivery Details</button>
                     </a>
                 {% else %}
                     <p>No registered shipping address</p>
-                    <a href="{% url 'checkout:add-shipping-details' user.username %}">
+                    <a href="{% url 'checkout:add_shipping_details' user.username %}">
                         <button class="text-xl bt-nushopsecondary rounded-xl text-center">Add Delivery Details</button>
                     </a>
                 {% endif %}
@@ -41,7 +41,7 @@
                     <option value="3">Cash</option>
                     <option value="4">NUShop Wallet</option>
                 </select>  
-                <form action="{% url 'checkout:create-checkout-session' 1 %}" method="POST">
+                <form action="{% url 'checkout:create_checkout_session' 1 %}" method="POST">
                     {% csrf_token %}
                     <button class="text-xl bt-nushopprimary rounded-xl text-center">Complete Payment</button>
                 </form>

@@ -9,7 +9,7 @@ urlpatterns = [
     path('<int:pk>/', views.detail, name='detail'),
     path('<int:pk>/delete/', views.delete, name='delete'),
     path('<int:pk>/edit/', views.edit, name='edit'),
-    path('<int:pk>/addimage/', views.addimage, name='addimage'),
-    path('<int:image_id>/<int:product_id>/deleteimage/', views.deleteimage, name='deleteimage'),
-    path('<int:image_id>/<int:product_id>/changeimage/', views.changeimage, name='changeimage'),
+    path('<int:pk>/add_image/', views.add_image, name='add_image'),
+    path('<int:image_id>/<int:product_id>/delete_image/', views.delete_image, name='delete_image'),
+    path('<int:image_id>/<int:product_id>/change_image/', views.change_image, name='change_image'),
 ]

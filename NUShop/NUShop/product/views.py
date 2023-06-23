@@ -77,7 +77,7 @@ def delete(request, pk):
     return redirect('dashboard:index')
 
 @login_required
-def deleteimage(request, image_id, product_id):
+def delete_image(request, image_id, product_id):
     image = get_object_or_404(ProductImage, pk=image_id, uploaded_by=request.user)
     product = get_object_or_404(Product, pk=product_id, created_by=request.user)
     image.delete()
@@ -119,7 +119,7 @@ def edit(request, pk):
     })
 
 @login_required
-def changeimage(request, image_id, product_id):
+def change_image(request, image_id, product_id):
     image = get_object_or_404(ProductImage, pk=image_id, uploaded_by=request.user)
     product = get_object_or_404(Product, pk=product_id, created_by=request.user)
     if request.method == 'POST':
@@ -136,7 +136,7 @@ def changeimage(request, image_id, product_id):
     })
 
 @login_required
-def addimage(request, pk):
+def add_image(request, pk):
     product = get_object_or_404(Product, pk=pk, created_by=request.user)
     if request.method == 'POST':
         form = AddImageForm(request.POST, request.FILES)
