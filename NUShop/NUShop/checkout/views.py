@@ -154,7 +154,7 @@ def checkout(request):
     })
 
 @login_required
-def add_shipping_details(request):
+def add_shipping_details(request, username):
     if request.method == 'POST':
         form = EditDeliveryDetailsForm(request.POST, request.FILES)
         if form.is_valid():
@@ -190,19 +190,3 @@ def edit_shipping_details(request, username):
         'title': 'Delivery Details',
     })
 
-
-
-# @login_required
-# def card_detail(request):
-#     if request.method == 'POST':
-#         form = CardForm(request.user, request.POST)
-
-#         if form.is_valid():
-#             form.save()
-#             return redirect('core:login')
-#     else:
-#         form = CardForm()
-
-#     return render(request, 'checkout/payment.html', {
-#         'form': form
-#     })

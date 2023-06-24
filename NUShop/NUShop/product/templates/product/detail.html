@@ -328,10 +328,7 @@
                     {% if request.user == image.uploaded_by %}
                     <a href="{% url 'product:change_image' image.id product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Change Image</a>
                     <a href="{% url 'product:delete_image' image.id product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
-                    <!-- <form action="{% url 'product:deleteimage' image.id product.id %}" method="POST">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger text-red-500">Delete</button>
-                    </form> -->
+
                     {% endif %}
                     <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
                 </div>
