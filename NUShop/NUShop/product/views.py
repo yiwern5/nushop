@@ -84,24 +84,6 @@ def delete_image(request, image_id, product_id):
 
     return redirect('product:detail', pk=product.id)
 
-# @login_required
-# def new(request):
-#     if request.method == 'POST':
-#         form = NewProductForm(request.POST, request.FILES)
-#         if form.is_valid():
-#             product = form.save(commit=False)
-#             product.created_by = request.user
-#             product.save()
-#             form.save_m2m()  # Save the many-to-many relationships
-#             return redirect('product:detail', pk=product.id)
-#     else:
-#         form = NewProductForm()
-
-#     return render(request, 'product/form.html', {
-#         'form': form,
-#         'title': 'New product',
-#     })
-
 @login_required
 def edit(request, pk):
     product = get_object_or_404(Product, pk=pk, created_by=request.user)
@@ -153,31 +135,3 @@ def add_image(request, pk):
         'form': form,
         'title': 'Add image'
     })
-
-# @login_required
-# def edit(request, pk):
-#     product = get_object_or_404(Product, pk=pk, created_by=request.user)
-#     ImageFormSet = inlineformset_factory(
-#         Product,
-#         ProductImage,
-#         form=ProductImageForm,
-#         extra=1,  # Number of extra image forms
-#         can_delete=True
-#     )
-
-#     if request.method == 'POST':
-#         form = EditProductForm(request.POST, request.FILES, instance=product)
-#         formset = ImageFormSet(request.POST, request.FILES, instance=product)
-#         if form.is_valid() and formset.is_valid():
-#             form.save()
-#             formset.save()
-#             return redirect('product:detail', pk=product.id)
-#     else:
-#         form = EditProductForm(instance=product)
-#         formset = ImageFormSet(instance=product)
-
-#     return render(request, 'product/form.html', {
-#         'form': form,
-#         'formset': formset,
-#         'title': 'Edit product'
-#     })

@@ -12,6 +12,7 @@ class CartProduct(models.Model):
     @property
     def subtotal(self):
         return self.quantity * self.product.price
+
  
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
