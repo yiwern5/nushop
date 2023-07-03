@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product,  ProductImage
+from .models import Product,  ProductImage, Variation, Subvariation
 from django.forms import inlineformset_factory
 
 INPUT_CLASSES = 'mb-3 w-full py-2 px-6 form-account rounded-xl'
@@ -69,3 +69,27 @@ class AddImageForm(forms.ModelForm):
             }),
         }
 
+class AddVariationForm(forms.ModelForm):
+    class Meta:
+        model = Variation
+        fields = ('type',)
+
+        widgets = {
+            'type': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+        }
+
+class AddSubvariationForm(forms.ModelForm):
+    class Meta:
+        model = Subvariation
+        fields = ('variation','option')
+
+        widgets = {
+            'variation': forms.Select(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'option': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+        }

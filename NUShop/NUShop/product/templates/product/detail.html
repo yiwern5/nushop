@@ -58,6 +58,8 @@
         {% if request.user == product.created_by %}
             <div class="mt-6 p-6 bg white rounded-xl">
                 <p class="text-xl">This is your product! (You can change or delete images at the images section)</p>
+                <a href="{% url 'product:add_variation' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Variation</a>
+                <a href="{% url 'product:add_subvariation' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Subariation</a>
                 <a href="{% url 'product:add_image' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Image</a>
                 <a href="{% url 'product:edit' product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Edit</a>
                 <a href="{% url 'product:delete' product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
@@ -72,7 +74,12 @@
         </div>
 
         <div class="bg-primary-light rounded-xl p-4">
-
+            {% for variation in variations %}
+                <p>{{variation.type}}</p>
+                {% for subvariation in variation.subvariations.all %}
+                <p>{{subvariation.option}}</p>
+                {% endfor %}
+            {% endfor %}
             <p class="text-xl">Size</p>
             <div>
                 <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off">

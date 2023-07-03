@@ -36,3 +36,15 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"Image of {self.product.name}"
+    
+class Variation(models.Model):
+    product = models.ForeignKey(Product, related_name='variations', on_delete=models.CASCADE)
+    type = models.CharField(max_length=255)
+    def __str__(self):
+        return self.type
+
+class Subvariation(models.Model):
+    variation = models.ForeignKey(Variation, related_name='subvariations', on_delete=models.CASCADE)
+    option = models.CharField(max_length=255)
+    def __str__(self):
+        return self.option

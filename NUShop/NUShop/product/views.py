@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Product, ProductImage
-from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm
+from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm, AddVariationForm, AddSubvariationForm
 
 # Create your views here.
 def products(request):
@@ -32,6 +32,7 @@ def products(request):
 def detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     images = product.images.all()
+    variations = product.variations.all()
     products = Product.objects.filter(is_sold=False)[0:6]
     """
     is_sold can be changed to is_out_of_stock; 
@@ -44,6 +45,7 @@ def detail(request, pk):
     seller_product = Product.objects.filter(created_by=seller)
     
     return render(request, 'product/detail.html', {
+        'variations': variations,
         'images': images,
         'product': product,
         'products': products, 
@@ -134,4 +136,39 @@ def add_image(request, pk):
     return render(request, 'product/form.html', {
         'form': form,
         'title': 'Add image'
+    })
+
+@login_required
+def add_variation(request, pk):
+    product = get_object_or_404(Product, pk=pk, created_by=request.user)
+    if request.method == 'POST':
+        form = AddVariationForm(request.POST, request.FILES)
+        if form.is_valid():
+            variation = form.save(commit=False)
+            variation.product = product
+            variation.save()
+            return redirect('product:detail', pk=product.id)
+    else:
+        form = AddVariationForm()
+
+    return render(request, 'product/form.html', {
+        'form': form,
+        'title': 'Add Variation'
+    })
+
+@login_required
+def add_subvariation(request, pk):
+    product = get_object_or_404(Product, pk=pk, created_by=request.user)
+    if request.method == 'POST':
+        form = AddSubvariationForm(request.POST, request.FILES)
+        if form.is_valid():
+            subvariation = form.save(commit=False)
+            subvariation.save()
+            return redirect('product:detail', pk=product.id)
+    else:
+        form = AddSubvariationForm()
+
+    return render(request, 'product/form.html', {
+        'form': form,
+        'title': 'Add Variation'
     })
