@@ -19,4 +19,5 @@ urlpatterns = [
     path('<int:pk>/add_image/', views.add_image, name='add_image'),
     path('<int:image_id>/<int:product_id>/delete_image/', views.delete_image, name='delete_image'),
     path('<int:image_id>/<int:product_id>/change_image/', views.change_image, name='change_image'),
+    path('<int:pk>/add_review/', views.add_review, name='add_review'),
 ]

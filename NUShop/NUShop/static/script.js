@@ -23,10 +23,10 @@ function updateRating(rating) {
     stars.forEach((star, index) => {
       const starValue = index + 1;
   
-      if (starValue <= numericRating) {
+      if (starValue <= Math.floor(numericRating)) {
         star.classList.add('filled');
         star.classList.remove('half-filled');
-      } else if (starValue - 0.5 <= numericRating) {
+      } else if (starValue === Math.ceil(numericRating)) {
         star.classList.add('half-filled');
         star.classList.remove('filled');
       } else {
@@ -35,4 +35,7 @@ function updateRating(rating) {
       }
     });
 }
+  
+  
+  
   

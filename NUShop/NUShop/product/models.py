@@ -1,5 +1,6 @@
 from django.db import models
 from authuser.models import User
+from django.db.models import Avg
 from django import forms
 
 # Create your models here.
@@ -28,6 +29,10 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
+    
+    @property
+    def average_rating(self):
+        return self.reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
@@ -46,5 +51,18 @@ class Variation(models.Model):
 class Subvariation(models.Model):
     variation = models.ForeignKey(Variation, related_name='subvariations', on_delete=models.CASCADE)
     option = models.CharField(max_length=255)
+    stock = models.IntegerField(blank=True, null=True)
     def __str__(self):
         return self.option
+    
+class Review(models.Model):
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    description = models.TextField(blank=True, null=True)
+    image1 = models.ImageField(upload_to='product_images')
+    image2 = models.ImageField(upload_to='product_images', blank=True, null=True)
+    image3 = models.ImageField(upload_to='product_images', blank=True, null=True)
+    image4 = models.ImageField(upload_to='product_images', blank=True, null=True)
+    image5 = models.ImageField(upload_to='product_images', blank=True, null=True)
+    rating = models.DecimalField(max_digits=2, decimal_places=1)
+    created_by = models.ForeignKey(User, related_name='reviews', on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)

@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Product, ProductImage, Variation, Subvariation
-from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm, AddVariationForm, AddSubvariationForm, ChangeSubvariationForm, ChangeVariationForm
+from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm, AddVariationForm, AddSubvariationForm, ChangeSubvariationForm, ChangeVariationForm, ReviewForm
 
 # Create your views here.
 def products(request):
@@ -33,6 +33,7 @@ def detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     images = product.images.all()
     variations = product.variations.all()
+    reviews = product.reviews.all()
     products = Product.objects.filter(is_sold=False)[0:6]
     """
     is_sold can be changed to is_out_of_stock; 
@@ -45,6 +46,7 @@ def detail(request, pk):
     seller_product = Product.objects.filter(created_by=seller)
     
     return render(request, 'product/detail.html', {
+        'reviews': reviews,
         'variations': variations,
         'images': images,
         'product': product,
@@ -224,3 +226,22 @@ def delete_subvariation(request, subvariation_id, product_id):
     subvariation.delete()
 
     return redirect('product:detail', pk=product.id)
+
+@login_required
+def add_review(request, pk):
+    product = get_object_or_404(Product, pk=pk, created_by=request.user)
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.created_by = request.user
+            review.product = product
+            review.save()
+            return redirect('product:detail', pk=product.id)
+    else:
+        form = ReviewForm()
+
+    return render(request, 'product/form.html', {
+        'form': form,
+        'title': 'Add Review'
+    })
