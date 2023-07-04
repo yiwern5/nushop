@@ -41,79 +41,78 @@
     </div>
 
     <div class="col-span-2 row-span-1">
-        <h1 class="mb-6 text-3xl">{{ product.name }}</h1>
-        <div class="text-xl">
-            <p class="text-3xl text-yellow-500">* * * * *</p>
-            <p>20 ratings</p>
-            <p>553 sold</p>
+        <h1 class="mb-6 text-6xl">{{ product.name }}</h1>
+        <div class="text-2xl flex">
+            <div class="rating">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+            </div>
+              
+            <!-- <input type="number" min="1" max="5" step="0.5" id="ratingInput" onchange="updateRating(4)"> -->
+
+            <p class="ml-6">20 ratings</p>
+            <p class="ml-6">553 sold</p>
         </div>
+        <p class="text-yellow-500 text-4xl mt-3">$ {{ product.price|floatformat:2 }}</p>
         <!--<h1 class="mb-6 text-3xl">{{ product.review }}</h1>
         <h1 class="mb-6 text-3xl">{{ product.rating }}</h1>
         <h1 class="mb-6 text-3xl">{{ product.numbersold }}</h1>-->
     </div>
+    {% if request.user == product.created_by %}
     <div class="col-span-2 row-span-1">
-        <p class="text-yellow-500 text-3xl">$ {{ product.price|floatformat:2 }}</p>
-        <!--<p class="text-gray-500"><strong>Seller: </strong>{{ product.created_by.username }}</p>-->
-
-        {% if request.user == product.created_by %}
-            <div class="mt-6 p-6 bg white rounded-xl">
-                <p class="text-xl">This is your product! (You can change or delete images at the images section)</p>
-                <a href="{% url 'product:add_variation' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Variation</a>
-                <a href="{% url 'product:add_subvariation' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Subariation</a>
-                <a href="{% url 'product:add_image' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Image</a>
+            <div class="mt-6 bg white rounded-xl">
+                <p class="text-2xl">This is your product!</p>
                 <a href="{% url 'product:edit' product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Edit</a>
                 <a href="{% url 'product:delete' product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
-            </div>
-        {% endif%}
+            </div>  
     </div>
+    {% endif%}
 
     <div class="col-span-2 row-span-1">
-
-        <div class="text-3xl">
-            <p>Variations</p>
+        <div class="mt-6 mb-3 text-3xl">
+            Variations
+            {% if request.user == product.created_by %}
+            <a href="{% url 'product:add_variation' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl ml-3">Add Variation</a>
+            {% endif %}
         </div>
-
         <div class="bg-primary-light rounded-xl p-4">
             {% for variation in variations %}
-                <p>{{variation.type}}</p>
-                {% for subvariation in variation.subvariations.all %}
-                <p>{{subvariation.option}}</p>
-                {% endfor %}
+            <div class="mb-3 text-2xl font-semibold">
+                {{ variation.type }}
+                {% if request.user == product.created_by %}
+                <!-- <a href="{% url 'product:change_variation' variation.id product.id %}" class="text-yellow-500 underline text-right">Edit</a> -->
+                <a href="{% url 'product:delete_variation' variation.id product.id %}" class="text-red-500 underline text-right">Delete</a>
+                {% endif %}
+
+                <div class="text-lg">
+                    {% for subvariation in variation.subvariations.all %}
+                    <input type="radio" class="btn-check" name="option{{ forloop.parentloop.counter }}" id="option{{ forloop.parentloop.counter }}_{{ forloop.counter }}" autocomplete="off">
+                    <label class="btn btn-default font-semibold" for="option{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ subvariation.option }}</label>
+                    {% if request.user == product.created_by %}
+                    <a href="{% url 'product:change_subvariation' subvariation.id product.id %}" class="text-yellow-500 underline">edit</a>
+                    <a href="{% url 'product:delete_subvariation' subvariation.id product.id %}" class="text-red-500 underline">remove</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% if request.user == product.created_by %}
+            <a href="{% url 'product:add_subvariation' variation.id product.id %}" class="text-lg text-green-500 underline">Add Option</a>
+            {% endif %}
             {% endfor %}
-            <p class="text-xl">Size</p>
-            <div>
-                <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off">
-                <label class="btn btn-secondary" for="option1">S</label>
-
-                <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off">
-                <label class="btn btn-secondary" for="option2">M</label>
-
-                <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off">
-                <label class="btn btn-secondary" for="option3">L</label>
-
-                <input type="radio" class="btn-check" name="options" id="option4" autocomplete="off">
-                <label class="btn btn-secondary" for="option4">XL</label>
-            </div>
             
-
-            <p class="text-xl">Delivery Method</p>
-            <div>
-                <input type="radio" class="btn-check" name="option" id="option5" autocomplete="off">
-                <label class="btn btn-secondary" for="option5">Meet Up</label>
-
-                <input type="radio" class="btn-check" name="option" id="option6" autocomplete="off">
-                <label class="btn btn-secondary" for="option6">Delivery</label>
-            </div>
+            <p class="text-2xl font-semibold mb-3">Quantity</p>
+            <form>
+                <div class="flex text-xl">
+                    <div class="btn btn-default ml-3 mr-3" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
+                    <input class="rounded-xl text-center" id="number" value="1"/>
+                    <div class="btn btn-default value-button ml-3 mr-3" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
+                </div>
+            </form>
+            <script src="{% static 'script.js' %}"></script>
             
-            
-            <p class="text-xl">Quantity</p>
-            <script src=”script.js”>
-                <form>
-                    <div class="value-button" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
-                    <input type="number" id="number" value="0"/>
-                    <div class="value-button" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
-                </form>
-            </script>
 
             <!-- <a href="{% url 'checkout:add_to_cart' product.id %}" class="mt-2 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</a> -->
             {% if request.user != product.created_by %}
@@ -296,6 +295,7 @@
 <div class="mt-9 mb-6 text-3xl">
     Images
     {% if request.user == product.created_by %}
+    <a href="{% url 'product:add_image' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl ml-3">Add Image</a>
     <p class="text-xl">(Manage a specific image by clicking on it)</p>
     {% endif %}
 </div>
@@ -355,23 +355,25 @@
 <div class="mt-9 mb-6 text-3xl">
     Recommended
 </div>
-<div class="px-6 py-3 rounded-xl">
+<div class="px-6 pb-3 container-fluid scroll">
+    <div class="d-flex flex-row flex-nowrap">
         {% for product in related_products %}
-            <div class="col mr-4">
-                <div class="card rounded-xl border-0">
-                    <a href="{% url 'product:detail' product.id %}">
-                        <div class="product-pic">
-                            <img src="{{ product.thumbnail.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
-                        </div>
-            
-                        <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
-                            <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
-                            <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price|floatformat:2 }}</p>
-                        </div>
-                    </a>
-                </div>
+        <div class="col mr-4">
+            <div class="card rounded-xl border-0">
+                <a href="{% url 'product:detail' product.id %}">
+                    <div class="product-pic">
+                        <img src="{{ product.thumbnail.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
+                    </div>
+        
+                    <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
+                        <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
+                        <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price|floatformat:2 }}</p>
+                    </div>
+                </a>
             </div>
+        </div>
         {% endfor %}
+    </div>
 </div>
 
 {% endblock %}

@@ -83,13 +83,32 @@ class AddVariationForm(forms.ModelForm):
 class AddSubvariationForm(forms.ModelForm):
     class Meta:
         model = Subvariation
-        fields = ('variation','option')
+        fields = ('option',)
 
         widgets = {
-            'variation': forms.Select(attrs={
+            'option': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
             }),
-            'option': forms.TextInput(attrs={
+        }
+
+class ChangeVariationForm(forms.ModelForm):
+    class Meta:
+        model = Variation
+        fields = ('type',)
+
+        widgets = {
+            'type': forms.FileInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+        }
+
+class ChangeSubvariationForm(forms.ModelForm):
+    class Meta:
+        model = Subvariation
+        fields = ('option',)
+
+        widgets = {
+            'option': forms.FileInput(attrs={
                 'class': INPUT_CLASSES
             }),
         }
