@@ -127,10 +127,11 @@
         </div>
     </div>
 
+    {% if request.user.major %}
     <h2 class="mb-3 ml-6 mt-6 text-3xl text-bold">For You</h2>
     <div class="px-6 pb-3 container-fluid scroll">
         <div class="d-flex flex-row flex-nowrap">
-            {% for product in products %}
+            {% for product in foryou %}
             <div class="col mr-4">
                 <div class="card rounded-xl border-0">
                     <a href="{% url 'product:detail' product.id %}">
@@ -148,6 +149,10 @@
             {% endfor %}
         </div>
     </div>
+    {% else %}
+    <h2 class="mb-3 ml-6 mt-6 text-3xl text-bold">For You</h2>
+    <a href="{% url 'dashboard:view-profile' user.username %}" class="center font-semibold">Click here to complete your profile so we can recommend products personalised for you.</a>
+    {% endif %}
 
     <h2 class="mb-3 ml-6 mt-6 text-3xl text-bold">On Sale</h2>
     <div class="px-6 pb-3 container-fluid scroll">

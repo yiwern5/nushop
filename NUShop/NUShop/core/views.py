@@ -8,6 +8,15 @@ def index(request):
     products = Product.objects.filter(is_sold=False)
     categories = Category.objects.all()
 
+    if request.user.major:
+        foryou = Product.objects.filter(is_sold=False, created_by__major__faculty_name=request.user.major.faculty_name)
+
+        return render(request, 'core/index.html', {
+            'categories': categories,
+            'products': products,
+            'foryou': foryou,
+        })
+    
     return render(request, 'core/index.html', {
         'categories': categories,
         'products': products,
