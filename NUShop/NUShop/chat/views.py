@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from product.models import Product
+from checkout.models import OrderProduct
 
 from .forms import ChatMessageForm
 from .models import Chat
@@ -33,6 +34,37 @@ def new_chat(request, product_pk):
             chat_message.save()
 
             return redirect('product:detail', pk=product_pk)
+    else:
+        form = ChatMessageForm()
+    
+    return render(request, 'chat/new.html', {
+        'form': form
+    })
+
+@login_required
+def order_chat(request, product_pk):
+    order_product = get_object_or_404(OrderProduct, pk=product_pk)
+    
+    chats = Chat.objects.filter(order_product=order_product).filter(members__in=[request.user.id])
+
+    if chats:
+        return redirect('chat:detail', pk=chats.first().id)
+
+    if request.method == 'POST':
+        form = ChatMessageForm(request.POST)
+
+        if form.is_valid():
+            chat = Chat.objects.create(order_product=order_product)
+            chat.members.add(order_product.seller)
+            chat.members.add(order_product.buyer)
+            chat.save()
+
+            chat_message = form.save(commit=False)
+            chat_message.chat = chat
+            chat_message.created_by = request.user
+            chat_message.save()
+
+            return redirect('dashboard:index')
     else:
         form = ChatMessageForm()
     

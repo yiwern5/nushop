@@ -5,7 +5,7 @@
 {% block content %}
     <div class="grid grid-cols-5 gap-4">
         <div class="col-span-1 vl">
-            <form method="get" action="{% url 'product:products' %}" class="pt-4 pr-2">
+            <form method="get" action="{% url 'dashboard:my-purchases' %}" class="pt-4 pr-2">
                 <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
 
                 <button class="mt-2 text-xl bg-nushopprimary bt-nushopprimary text-white rounded-xl text-center">Search</button>
@@ -13,32 +13,57 @@
 
             <hr class="my-6">
 
-            <p class="text-sm font-semibold">Status:</p>
+            <p class="text-sm font-semibold">Status</p>
 
             <ul>
-                {% for stat in status %}
-                    <li class="py-2 px-2 rounded-xl{% if category.id == category_id %} bg-gray-200{% endif %}">
-                        <a href="{% url 'product:products' %}?query={{ query }}&category={{ category.id }}">{{ category.name }}</a>
+                {% for status in orderstatuses %}
+                    <li class="py-2 px-2 text-sm rounded-xl{% if status.id == orderstatus_id %} bg-primary-light {% endif %}">
+                        <a href="{% url 'dashboard:my-purchases' %}?query={{ query }}&orderstatus={{ status.id }}">{{ status.name }}</a>
                     </li>
                 {% endfor %}
             </ul>
 
             <ul class="pr-2">
-                <li><a href="{% url 'product:products' %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>            
+                <li><a href="{% url 'dashboard:my-purchases' %}" class="mt-2 inline-block bt-nushopsecondary text-xl rounded-xl text-center">Clear Filter</a>            
         </div>
 
-        <div class="col-span-4">
+        <div class="col-span-4 pt-4 pl-2">
+            <h1 class="mb-4 text-3xl cinzel text-nushopprimary">
+                {% if query %}
+                    {% if orderstatus_id %}
+                        {{ query }} in {{ orderstatus_name }}
+                    {% else %}
+                        {{ query }}
+                    {% endif %}
+                {% elif orderstatus_id %}
+                    {{ orderstatus_name }}
+                {% else %}
+                    My Purchases
+                {% endif %}
+            </h1>
             <div class="list">
                 {% for product in products %}
                     <div class="p-3 bg-primary-light rounded-xl mb-3 mt-3">
-                        <a href="{% url 'product:detail' product.id %}">
+                        <div class="grid grid-cols-5 gap-2">
+                            <div class="col-span-4 text-2xl">
+                                <h1>{{ product.seller.username }}</h1>
+                            </div>
+                            <div class="col-span-1">
+                                {% if product.seller %}
+                                    {% if product.seller != request.user %}
+                                        <a href="{% url 'dashboard:view-seller' product.seller.username %}">
+                                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Seller</button>
+                                        </a>
+                                    {% else %}
+                                        <a href="{% url 'dashboard:view-seller' product.buyer.username %}">
+                                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Buyer</button>
+                                        </a>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        </div>
+                        <a href="{% url 'checkout:order-details' product.id %}">
                             <div class="grid grid-cols-5 gap-2">
-                                <div class="col-span-4 text-2xl">
-                                    <h1>NUS Computing</h1>
-                                </div>
-                                <div class="col-span-1">
-                                    <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Shop</button>
-                                </div>
                                 <div class="col-span-1 row-span-1">
                                     <img src="{{ product.thumbnail.url }}" class="rounded-xl img-size">
                                 </div>
@@ -48,20 +73,31 @@
                                         <p>Variation:</p>
                                         <p>Delivery Method:</p>
                                         <p>Price: $ {{ product.price|floatformat:2 }}</p>
-                                        <p>Quantity:</p>
-                                        <p>Status:</p>
-                                    </div>
-                                    
-                                </div>
-                                <div class="col-span-3"></div>
-                                <div class="row-span-1 col-span-1">
-                                    <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Order Received</button>
-                                </div>
-                                <div class="col-span-1">
-                                    <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat With Seller</button>
+                                        <p>Quantity: {{ product.quantity }}</p>
+                                        <p>Status: {{ product.buyer_status }} {% if product.seller_status.name == 'Completed' and product.buyer_status.name != 'Completed'%} (Delivered) {% endif %}</p>
+                                    </div> 
                                 </div>
                             </div>
                         </a>
+                        <div class="grid grid-cols-5 gap-2">
+                                <div class="col-span-3"></div>
+                                <div class="row-span-1 col-span-1">
+                                    {% if product.buyer_status.name == 'To Ship' or product.buyer_status.name == 'To Receive' %}
+                                        <a href="{% url 'checkout:order-received' product.id %}">
+                                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Order Received</button>
+                                        </a>
+                                    {% elif product.buyer_status.name == 'Completed' %}
+                                        <a href="#">
+                                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Review</button>
+                                        </a>
+                                    {% endif %}
+                                </div>
+                                <div class="col-span-1">
+                                    <a href="{% url 'chat:order' product.id %}">
+                                        <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat With Seller</button>
+                                    </a>
+                                </div>
+                        </div>
                     </div>
                 {% endfor %}
             </div>

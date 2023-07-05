@@ -32,7 +32,7 @@ def products(request):
 def detail(request, pk):
     product = get_object_or_404(Product, pk=pk)
     images = product.images.all()
-    products = Product.objects.filter(is_sold=False)[0:6]
+    products = Product.objects.filter(is_sold=False)
     """
     is_sold can be changed to is_out_of_stock; 
     exclude pk=pk is to exclude this product from being shown in recommended;

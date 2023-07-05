@@ -1,0 +1,304 @@
+{% extends 'core/base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Order Details
+{% endblock %}  
+
+{% block content %}
+    {% if order_product.seller != request.user %}
+        <h1 class="pt-3 px-4 text-3xl cinzel text-nushopprimary">{{ order_product.buyer_status }}</h1>
+        {% if order_product.seller_status.name == 'Completed' and order_product.buyer_status.name != 'Completed' %}
+        <p class="px-6 font-semibold"> The seller has indicated that the product has been delivered. Have you received the product?</p>
+        {% elif order_product.buyer_status.name == 'Return/Refund' %}
+        <p class="px-6 font-semibold"> The seller has received your return/refund request. </p>
+        {% endif %}
+    {% else %}
+        <h1 class="pt-3 px-4 text-3xl cinzel text-nushopprimary">{{ order_product.seller_status }}</h1>    
+        {% if order_product.seller_status.name == 'Return/Refund' %}
+        <p class="px-6 font-semibold text-red-600"> **The buyer requested for return/refund, chat with them to address their concerns. </p>
+        {% endif %}
+    {% endif %}
+    <div class="p-3 bg-primary-light rounded-xl mb-3 mt-3">
+        <div class="grid grid-cols-5 gap-2">
+            <div class="col-span-4 text-2xl px-2">
+                {% if order_product.seller != request.user %}
+                    <h1>{{ order_product.seller.username }}</h1>
+                {% else %}
+                    <h1>{{ order_product.buyer.username }}</h1>
+                {% endif %}
+            </div>
+            <div class="col-span-1">
+                {% if product %}
+                    <a href="{% url 'product:detail' product.id %}">
+                        <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">View Product</button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        <div class="grid grid-cols-5 gap-2">
+            <div class="col-span-1 row-span-1">
+                <img src="{{ order_product.thumbnail.url }}" class="rounded-xl img-size">
+            </div>
+            <div class="col-span-4">
+                <h2 class="text-3xl text-black">{{ order_product.name }}</h2>
+                <div class="text-black text-xl">
+                    <p>Variation:</p>
+                    <p>Delivery Method:</p>
+                    <p>Price: $ {{ order_product.price|floatformat:2 }}</p>
+                    <p>Quantity: {{ order_product.quantity }}</p>
+                </div> 
+            </div>
+        </div>
+        <div class="grid grid-cols-5 gap-2">
+            <div class="col-span-3"></div>
+            <div class="row-span-1 col-span-1">
+                {% if order_product.seller != request.user %}
+                    {% if order_product.buyer_status.name == 'Completed' %}
+                        <a href="{% url 'checkout:return-refund' order_product.id %}">
+                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Return/Refund</button>
+                        </a>
+                    {% elif order_product.seller_status.name == 'To Ship' %}
+                        <a href="{% url 'checkout:cancel-order' order_product.id %}">
+                            <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Cancel</button>
+                        </a>
+                    {% endif %}
+                {% else %}
+                    {% if order_product.seller_status.name == 'To Ship'%}
+                    <a href="{% url 'checkout:cancel-order' order_product.id %}">
+                        <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Cancel</button>
+                    </a>
+                    {% elif order_product.seller_status.name == 'Shipped' %}
+                        <a href="{% url 'checkout:delivered' order_product.id %}">
+                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Mark as Delivered</button>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="col-span-1">
+                {% if order_product.seller != request.user %}
+                    {% if order_product.buyer_status.name == 'To Ship' or order_product.buyer_status.name == 'To Receive' %}
+                        <a href="{% url 'checkout:order-received' order_product.id %}">
+                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Order Received</button>
+                        </a>
+                    {% elif order_product.buyer_status.name == 'Completed' %}
+                        <a href="#">
+                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Review</button>
+                        </a>
+                    {% endif %}
+                {% else %}
+                    {% if order_product.seller_status.name == 'To Ship' or order_product.seller_status.name == 'Shipped' %}
+                        <a href="{% url 'checkout:update-status' order_product.id %}">
+                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Update Status</button>
+                        </a>
+                    {% elif order_product.seller_status.name == 'Completed' %}
+                        <a href="#">
+                            <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Check Review</button>
+                        </a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
+        <div class="grid grid-cols-7">
+            <div class="w-full col-span-1 overflow-hidden center row-span-2">
+                {% if order_product.seller != request.user %}
+                    {% if order_product.seller.image %}
+                    <img src="{{ order_product.seller.image.url }}" alt="Seller Image" class="pfp">
+                    {% else %}
+                    <img src="{% static 'default.png' %}" class="pfp">
+                    {% endif %}
+                {% else %}
+                    {% if order_product.buyer.image %}
+                        <img src="{{ order_product.buyer.image.url }}" alt="Buyer Image" class="pfp">
+                        {% else %}
+                        <img src="{% static 'default.png' %}" class="pfp">
+                        {% endif %}
+                {% endif %}
+            </div>
+
+            <div class="col-span-2">
+                {% if order_product.seller != request.user %}
+                    <p class="text-2xl font-semibold">{{ order_product.seller.name }}</p>
+                    <p class="text-xl font-semibold text-nushopprimary">{{ order_product.seller.role }}</p>
+                {% else %}
+                    <p class="text-2xl font-semibold">{{ order_product.buyer.name }}</p>
+                    <p class="text-xl font-semibold text-nushopprimary">{{ order_product.buyer.role }}</p>
+                {% endif %}
+            </div>
+
+            <div class="col-span-1">
+                <p class="text-2xl font-semibold">Listings: </p>
+            </div>
+
+            <div class="col-span-1">
+                {% if order_product.seller != request.user %}
+                    <p class="text-2xl font-semibold">{{ seller_listings.count }}</p>
+                {% else %}
+                    <p class="text-2xl font-semibold">{{ buyer_listings.count }}</p>
+                {% endif %}
+            </div>
+
+            <div class="col-span-2">
+                <a href="{% url 'chat:order' order_product.id %}">
+                    <button class="text-xl bt-nushoptertiary-1 rounded-xl text-center">Chat</button>
+                </a>
+            </div>
+
+            <div class="col-span-2">
+                {% if order_product.seller != request.user %}
+                    {% if order_product.seller.bio %}
+                    <p class="text-lg text-gray-500 font-semibold">{{ order_product.seller.bio }}</p>
+                    {% else %}
+                    <p class="text-lg text-gray-500 font-semibold">No bio yet...</p>
+                    {% endif %}
+                {% else %}
+                    {% if order_product.buyer.bio %}
+                    <p class="text-lg text-gray-500 font-semibold">{{ order_product.buyer.bio }}</p>
+                    {% else %}
+                    <p class="text-lg text-gray-500 font-semibold">No bio yet...</p>
+                    {% endif %}
+                {% endif %}
+            </div>
+            
+            <div class="col-span-1">
+                <p class="text-2xl font-semibold">Followers: </p>
+            </div>
+
+            <div class="col-span-1">
+                {% if order_product.seller != request.user %}
+                    <p class="text-2xl font-semibold">{{ order_product.seller.followers.count }}</p>
+                {% else %}
+                    <p class="text-2xl font-semibold">{{ order_product.buyer.followers.count }}</p>
+                {% endif %}
+            </div>
+
+            <div class="col-span-2">
+                {% if order_product.seller != request.user %}
+                    <a href="{% url 'dashboard:view-seller' order_product.seller.username %}">
+                        <button class="text-xl bt-nushoptertiary-1 rounded-xl text-center">View Seller</button>
+                    </a>
+                {% else %}
+                    <a href="{% url 'dashboard:view-seller' order_product.buyer.username %}">
+                        <button class="text-xl bt-nushoptertiary-1 rounded-xl text-center">View Buyer</button>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="grid grid-cols-2 mt-6 px-2">
+        <div class='col-span-1'>
+            <div class="text-2xl cinzel text-nushopprimary">Order Details</div>
+        </div>
+        <div class='col-span-1'>
+            <div class="text-2xl cinzel text-nushopprimary">Delivery Address</div>
+        </div>
+    </div>
+    
+    <div class="grid grid-cols-2 pt-2 px-2">
+        {% comment %} Order Details {% endcomment %}
+        <div class='col-span-1'>
+            <div class="grid grid-row-5 gap-4">
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Placed On</li>
+                        <li class="text-xl font-semibold">{{ order_product.created_at }}</li>
+                    </ul>
+                </div>
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Payment Method</li>
+                        <li class="text-xl font-semibold">Card</li>
+                    </ul>
+                </div>
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Subtotal</li>
+                        <li class="text-xl font-semibold">$ {{ order_product.cart_product.subtotal|floatformat:2 }}</li>
+                    </ul>
+                </div>
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Shipping Fee</li>
+                        <li class="text-xl font-semibold">$ 0.00</li>
+                    </ul>
+                </div>
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Subtotal</li>
+                        <li class="text-xl font-semibold">$ {{ order_product.cart_product.subtotal|floatformat:2 }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class='col-span-1'>
+            {% comment %} Delivery Address Details {% endcomment %}
+            <div class="grid grid-row-6 gap-4">
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Full Name</li>
+                        <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.name }}</li>
+                    </ul>
+                </div>
+                <div class='row-span-2'>
+                    <ul>
+                        <li class="text-gray-400">Address</li>
+                        <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.address_line1 }}</li>
+                        <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.address_line2 }}</li>
+                        <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.block_unitno }}</li>
+                        <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.postcode }} Singapore</li>
+                    </ul>
+                </div>
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Contact Number</li>
+                        <li class="text-xl font-semibold">{{ order_product.buyer.contact_number }}</li>
+                    </ul>
+                </div>
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Tracking Number</li>
+                        {% if order_product.tracking_number %}
+                            <li class="text-xl font-semibold">{{ order_product.tracking_number }}</li>
+                        {% else %}
+                            <li class="text-xl font-semibold text-yellow-300">Order Not Shipped Yet</li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class='row-span-1'>
+                    <ul>
+                        <li class="text-gray-400">Delivery Partner</li>
+                        {% if order_product.delivery_partner %}
+                            <li class="text-xl font-semibold">{{ order_product.delivery_partner }}</li>
+                        {% else %}
+                            <li class="text-xl font-semibold text-yellow-300">Order Not Shipped Yet</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="px-2 mt-4 text-2xl cinzel text-nushopprimary">
+        Recommended
+    </div>
+    <div class="px-6 py-3 rounded-xl">
+            {% for product in related_product %}
+                <div class="col mr-4">
+                    <div class="card rounded-xl border-0">
+                        <a href="{% url 'product:detail' product.id %}">
+                            <div class="product-pic">
+                                <img src="{{ product.thumbnail.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
+                            </div>
+                
+                            <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
+                                <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
+                                <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price|floatformat:2 }}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+    </div>
+{% endblock %}
