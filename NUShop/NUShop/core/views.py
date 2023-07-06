@@ -29,16 +29,13 @@ def signup(request):
     })
 
 def aboutus(request):
-
     return render(request, 'core/aboutus.html', {
     })
 
 def privacypolicy(request):
-
     return render(request, 'core/privacypolicy.html', {
     })
 
 def tnc(request):
-
     return render(request, 'core/tnc.html', {
     })

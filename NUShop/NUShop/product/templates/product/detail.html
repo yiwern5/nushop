@@ -44,12 +44,45 @@
         <h1 class="mb-6 text-6xl font-serif">{{ product.name }}</h1>
         <div class="text-2xl flex">
             <div class="rating">
-                <span class="star" onclick="updateRating(1)" {% if product.average_rating >= 1 %}style="color: orange;"{% endif %}>&#9733;</span>
-                <span class="star" onclick="updateRating(2)" {% if product.average_rating >= 2 %}style="color: orange;"{% endif %}>&#9733;</span>
-                <span class="star" onclick="updateRating(3)" {% if product.average_rating >= 3 %}style="color: orange;"{% endif %}>&#9733;</span>
-                <span class="star" onclick="updateRating(4)" {% if product.average_rating >= 4 %}style="color: orange;"{% endif %}>&#9733;</span>
-                <span class="star" onclick="updateRating(5)" {% if product.average_rating >= 5 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <!-- {% if product.average_rating >= 5 %}
+                <span class="star filled">&#9733;</span>
+                <span class="star filled">&#9733;</span>
+                <span class="star filled">&#9733;</span>
+                <span class="star filled">&#9733;</span>
+                <span class="star filled">&#9733;</span>
+                {% endif %} -->
+                {% if product.average_rating is null %}
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                {% endif %}
+                {% if product.average_rating >= 1 %}
+                <span class="star filled">&#9733;</span>
+                {% endif %}
+                {% if product.average_rating >= 2 %}
+                <span class="star filled">&#9733;</span>
+                {% elif product.average_rating >= 1.5 %}
+                <span class="star half-filled">&#9733;</span>
+                {% endif %}
+                {% if product.average_rating >= 3 %}
+                <span class="star filled">&#9733;</span>
+                {% elif product.average_rating >= 2.5 %}
+                <span class="star half-filled">&#9733;</span>
+                {% endif %}
+                {% if product.average_rating >= 4 %}
+                <span class="star filled">&#9733;</span>
+                {% elif product.average_rating >= 3.5 %}
+                <span class="star half-filled">&#9733;</span>
+                {% endif %}
+                {% if product.average_rating >= 5 %}
+                <span class="star filled">&#9733;</span>
+                {% elif product.average_rating >= 4.5 %}
+                <span class="star half-filled">&#9733;</span>
+                {% endif %}
             </div>
+              
             <!-- <div class="rating">
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
@@ -125,7 +158,7 @@
             <!-- <a href="{% url 'checkout:add_to_cart' product.id %}" class="mt-2 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</a> -->
             {% if request.user != product.created_by %}
             <a href="{% url 'checkout:add_to_cart' product.id %}">
-                <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center w-1/3">Add to Cart</button>
+                <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center ">Add to Cart</button>
             </a>
             {% endif %}
         </div>
@@ -221,11 +254,11 @@
 </div>
 <div class="bg-primary-light rounded-lg p-4">
     {% if product.description %}
-        <p class="text-black">
+        <p class="text-black text-xl">
             {{ product.description}}
         </p>
     {% else %}
-    <p class="text-black">
+    <p class="text-black text-xl">
         This product does not have a description.
     </p>
     {% endif %}
@@ -247,17 +280,17 @@
             {% endif %}
             <p class="text-2xl">{{ review.created_by.name }}</p>
             <div class="rating">
-                <span class="star" onclick="updateRating(1)" {% if review.rating >= 1 %}style="color: orange;"{% endif %}>&#9733;</span>
-                <span class="star" onclick="updateRating(2)" {% if review.rating >= 2 %}style="color: orange;"{% endif %}>&#9733;</span>
-                <span class="star" onclick="updateRating(3)" {% if review.rating >= 3 %}style="color: orange;"{% endif %}>&#9733;</span>
-                <span class="star" onclick="updateRating(4)" {% if review.rating >= 4 %}style="color: orange;"{% endif %}>&#9733;</span>
-                <span class="star" onclick="updateRating(5)" {% if review.rating >= 5 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(1)" {% if review.rating >= 1 %}style="color: gold;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(2)" {% if review.rating >= 2 %}style="color: gold;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(3)" {% if review.rating >= 3 %}style="color: gold;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(4)" {% if review.rating >= 4 %}style="color: gold;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(5)" {% if review.rating >= 5 %}style="color: gold;"{% endif %}>&#9733;</span>
             </div>
             <p>{{ review.created_at }}</p>
             <p>Variation: XS, Delivery</p>
         </div>
 
-        <div class="col-span-4 text-lg">
+        <div class="col-span-4 text-xl">
             <p>{{ review.description }}</p>
             <div class="d-flex flex-row flex-nowrap container-fluid scroll">
                 {% if review.image1 %}

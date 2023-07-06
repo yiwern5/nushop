@@ -229,7 +229,7 @@ def delete_subvariation(request, subvariation_id, product_id):
 
 @login_required
 def add_review(request, pk):
-    product = get_object_or_404(Product, pk=pk, created_by=request.user)
+    product = get_object_or_404(Product, pk=pk,)
     if request.method == 'POST':
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():

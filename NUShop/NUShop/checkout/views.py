@@ -22,7 +22,7 @@ class CreateStripeCheckoutSessionView(View):
 
     def post(self, request, *args, **kwargs):
         cart = Cart.objects.filter(created_by=request.user)[0]
-        total_amount = cart.get_total_amount()
+        total_amount = cart.get_total_amount() * 100
         total_quantity = cart.get_total_quantity()
 
         # Generate the URL for the static image in your Django template
@@ -34,14 +34,14 @@ class CreateStripeCheckoutSessionView(View):
                 {
                     "price_data": {
                         "currency": "sgd",
-                        "unit_amount": int(total_amount) * 100,
+                        "unit_amount": int(total_amount),
                         "product_data": {
                             "name": "NUShop Cart",
                             "description": 'Complete payment to process your order',
                             # "images": [image_url],
                         },
                     },
-                    "quantity": total_quantity,
+                    "quantity": 1,
                 }
             ],
             metadata={"product_id": cart.id},
@@ -66,12 +66,12 @@ def index(request):
 
     if cart_qs:
         cart = cart_qs[0]
-        return render(request, 'checkout/checkout.html', {
+        return render(request, 'checkout/index.html', {
             'products': products,
             'cart': cart,
         })
     
-    return render(request, 'checkout/checkout.html', {
+    return render(request, 'checkout/index.html', {
             'products': products,
     })
 

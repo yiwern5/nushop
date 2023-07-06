@@ -2,8 +2,6 @@
 
 {% block title %}Cart{% endblock %}
 
-{% block script %} <script src="https://js.stripe.com/v3/"></script> {% endblock script%} 
-
 {% block content %}
     <h1 class="my-3 text-3xl cinzel text-nushopprimary text-center">Cart</h1>
     <div class="grid grid-cols-6 gap-4">
@@ -69,10 +67,7 @@
                 <p class="text-3xl">Total: $ {{ cart.total_price|floatformat:2 }}</p>
             </div>
             <div class="m-6">
-                <!-- <form action="{% url 'checkout:create-checkout-session' 1 %}" method="POST">
-                    {% csrf_token %}
-                    <button type='submit' class="text-xl bt-nushopsecondary rounded-xl text-center">Proceed to Checkout</button>
-                </form> -->
+
                 <a href="{% url 'checkout:checkout'%}">
                     <button class="text-xl bt-nushopsecondary rounded-xl text-center">Proceed to Checkout</button>
                 </a>
