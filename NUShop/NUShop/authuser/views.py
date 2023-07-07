@@ -123,7 +123,7 @@ def edit_delivery_details(request, username):
 @login_required
 def add_bank_details(request, username):
     if request.method == 'POST':
-        form = EditBankDetailsForm(request.POST, request.FILES, instance=bank)
+        form = EditBankDetailsForm(request.POST, request.FILES)
         if form.is_valid():
             otp = request.POST.get('otp')
 
@@ -137,11 +137,10 @@ def add_bank_details(request, username):
                     totp = pyotp.TOTP(otp_secret_key, interval=60)
                     if totp.verify(otp):
                         bank = form.save(commit=False)
-                        request.user.bank_details = bank
-                        request.user.save()
-            
                         bank.otp = ''
                         bank.save()
+                        request.user.bank_details = bank
+                        request.user.save()
                         messages.info(request, "Bank details are added. If you wish to change it please wait for at least 5 minutes.")
 
                         del request.session['otp_secret_key']
