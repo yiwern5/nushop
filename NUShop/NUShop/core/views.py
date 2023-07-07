@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
+from django.contrib.auth.models import AnonymousUser
 from .forms import SignupForm
 from product.models import Category, Product
 
@@ -8,7 +9,13 @@ def index(request):
     products = Product.objects.filter(is_sold=False)
     categories = Category.objects.all()
 
-    if request.user.major:
+    if not request.user.is_authenticated:
+        return render(request, 'core/index.html', {
+        'categories': categories,
+        'products': products,
+    })
+
+    elif request.user.major:
         foryou = Product.objects.filter(is_sold=False, created_by__major__faculty_name=request.user.major.faculty_name)
 
         return render(request, 'core/index.html', {

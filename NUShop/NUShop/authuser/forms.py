@@ -56,7 +56,7 @@ class EditStudentOrganisationForm(forms.ModelForm):
 class EditBankDetailsForm(forms.ModelForm):
     class Meta:
         model = Bank
-        fields = ('name', 'bank_name', 'account_number',)
+        fields = ('name', 'bank_name', 'account_number', 'otp',)
 
         widgets = {
             'name': forms.TextInput(attrs={
@@ -68,8 +68,12 @@ class EditBankDetailsForm(forms.ModelForm):
             'account_number': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
             }),
+            'otp': forms.TextInput(attrs={
+                'class': INPUT_CLASSES,
+                'autocomplete': 'off'
+            }),
         }
-
+    
 class EditDeliveryDetailsForm(forms.ModelForm):
     class Meta:
         model = DeliveryAddress
@@ -97,4 +101,3 @@ class CustomPasswordChangeForm(PasswordChangeForm):
     class Meta:
         model = User
         fields = ('old_password', 'new_password1', 'new_password2')
-
