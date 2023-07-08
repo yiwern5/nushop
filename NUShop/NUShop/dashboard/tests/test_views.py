@@ -4,6 +4,7 @@ from django.test import TestCase, Client
 from django.urls import reverse
 from authuser.models import User
 from product.models import Category, Product
+from checkout.models import OrderProduct, CartProduct, BuyerStatus, SellerStatus
 
 import json
 
@@ -31,6 +32,19 @@ class TestViews(TestCase):
             created_by=self.user,
             thumbnail=self.thumbnail_file,
         )
+        self.cart_product = CartProduct.objects.create(
+            product = self.product,
+            created_by = self.user,
+        )
+        self.buyer_status = BuyerStatus.objects.create(name="To Ship")
+        self.seller_status = SellerStatus.objects.create(name="To Ship")
+        self.order_product = OrderProduct.objects.create(
+            cart_product = self.cart_product,
+            buyer_status = self.buyer_status,
+            seller_status = self.seller_status,
+            buyer = self.user,
+            seller = self.seller,
+        )
 
         self.client.login(username='testuser', password='testpassword')
 
@@ -48,11 +62,13 @@ class TestViews(TestCase):
     def test_mypurchases(self):
         response = self.client.get(reverse('dashboard:my-purchases'))
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(response.context['orderstatuses']), list(BuyerStatus.objects.all()))
         self.assertTemplateUsed(response, 'dashboard/mypurchases.html')
 
     def test_mysales(self):
         response = self.client.get(reverse('dashboard:my-sales'))
         self.assertEqual(response.status_code, 200)
+        self.assertEqual(list(response.context['orderstatuses']), list(SellerStatus.objects.all()))
         self.assertTemplateUsed(response, 'dashboard/mysales.html')
 
     def test_follow(self):

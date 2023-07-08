@@ -18,7 +18,7 @@ class TestForms(TestCase):
         form = EditIndividualForm(data = {})
 
         self.assertFalse(form.is_valid())
-        self.assertEquals(len(form.errors), 3)
+        self.assertEquals(len(form.errors), 4)
 
     def test_edit_student_org_form_valid_data(self):
         form = EditStudentOrganisationForm(data = {
@@ -35,7 +35,7 @@ class TestForms(TestCase):
         form = EditStudentOrganisationForm(data = {})
 
         self.assertFalse(form.is_valid())
-        self.assertEquals(len(form.errors), 3)
+        self.assertEquals(len(form.errors), 4)
 
     def test_edit_bank_details_form_valid_data(self):
         form = EditBankDetailsForm(data = {
