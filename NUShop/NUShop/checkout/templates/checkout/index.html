@@ -6,54 +6,36 @@
     <h1 class="my-3 text-3xl cinzel text-nushopprimary text-center">Cart</h1>
     <div class="grid grid-cols-6 gap-4">
         <div class="col-span-4">
-            <div class="list">
-                    {% for product in products %}
-                        <div class="p-3 rounded-xl mb-3 mt-3 border-nushopprimary-3">
-                            <a href="{% url 'product:detail' product.product.pk %}">
-                                <div class="grid">
-                                    <div class="row-span-1">
-                                        <div class="grid grid-cols-10 gap-2">
-                                            <div class="col-span-1">
-                                                <input type="checkbox" name="selected_products" value="{{ cart_product.pk }}"> 
-                                            </div>
-                                            <div class="col-span-7 text-2xl">
-                                                <h1>{{ product.product.created_by }}</h1>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row-span-3">
-                                        <div class="grid grid-cols-5 gap-2">
-                                            <div class="col-span-1">
-                                                <img src="{{ product.product.thumbnail.url }}" class="rounded-xl img-size">
-                                            </div>
-                                            <div class="col-span-3">
-                                                <h2 class="text-3xl text-black">{{ product.product.name }}</h2>
-                                                <p class="text-black text-xl">Variation:</p>
-                                            </div>
-                                            <div class="col-span-1">
-                                                <p class="text-3xl text-yellow-500">$ {{ product.subtotal|floatformat:2 }}</p></p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="row-span-1">
-                                        <div class="grid grid-cols-5 gap-2">
-                                            <div class="col-span-1"></div>
-                                            <div class="col-span-1">
-                                                <p class="text-xl">Quantity: {{ product.quantity }}</p>
-                                            </div>
-                                            <div class="col-span-"></div>
-                                            <div class="col-span-2">
-                                                <a href="{% url 'checkout:remove_from_cart' product.product.pk %}" class="mt-2 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Remove from Cart</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </a>
+            {% for product in products %}
+            <a href="{% url 'product:detail' product.product.pk %}"></a>
+                <div class="p-3 rounded-xl mb-3 mt-3 border-nushopprimary-3">
+                        <div class="grid grid-cols-5 gap-2">
+                            <div class="col-span-5 flex">
+                                <input type="checkbox" name="selected_products" value="{{ cart_product.pk }}"> 
+                                <p class="text-xl ml-3">select product for checkout</p>
+                            </div>
+                            <div class="col-span-1">
+                                <img src="{{ product.product.thumbnail.url }}" class="rounded-xl img-size">
+                            </div>
+                            <div class="col-span-4">
+                                <h2 class="text-4xl mb-3">{{ product.product.name }}</h2>
+                                <div class="text-2xl">
+                                    <h1>Listed by: {{ product.product.created_by }}</h1>
+                                    <p>Price: $ {{ product.subtotal|floatformat:2 }}</p></p>
+                                    <p>{{ product.variation }}</p>
+                                    <p>Quantity: {{ product.quantity }}</p>
+                                </div> 
+                            </div>
+                            <div class="col-span-2 mt-3">
+                                <a href="{% url 'checkout:remove_from_cart' product.product.pk %}" class="mt-3 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Remove</a>
+                                <a href="{% url 'checkout:decrease_from_cart' product.product.pk %}" class="ml-3 mt-3 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">- 1</a>
+                                <a href="{% url 'checkout:increase_from_cart' product.product.pk %}" class="ml-3 mt-3 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">+ 1</a>
+                            </div>
                         </div>
-                    {% endfor %}
-            </div>
+                    
+                </div>
+            </a>
+            {% endfor %}
         </div>
         <div class="col-span-2 border-nushopprimary-3 rounded-xl m-6">
             <div class="text-white text-3xl text-center bg-nushopprimary p-3 rounded-t-lg">

@@ -4,10 +4,11 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
-from product.models import Product
+from product.models import Product, Variation, Subvariation
 from .models import CartProduct, Cart
 from authuser.models import User
 from .forms import EditDeliveryDetailsForm
+from checkout.forms import AddToCartForm
 import stripe
 from django.views import View
 from django.views.generic import TemplateView
@@ -78,34 +79,70 @@ def index(request):
 @login_required
 def add_to_cart(request, pk):
     product = get_object_or_404(Product, pk=pk)
-    cart_product, created = CartProduct.objects.get_or_create(
-        created_by=request.user,
-        ordered=False,
-        product=product,
-    )
-    cart_qs = Cart.objects.filter(created_by=request.user, completed=False)
-    if cart_qs.exists():
-        cart = cart_qs[0]
-        # check if the cart product is in the cart
-        if cart_product in cart.products.all():
-            cart_product.quantity += 1
-            cart_product.save()
-            messages.info(request, "This product quantity was updated.")
-            return redirect('product:detail', pk=product.id) 
-        else:
-            cart.products.add(cart_product)
-            messages.info(request, "This product was added to your cart.")
-            return redirect('product:detail', pk=product.id)
-                    
+    result = ''
+    quantity = 1
+    
+    if request.method == 'POST':
+        form = AddToCartForm(request.POST)
+        if form.is_valid():
+            quantity = form.cleaned_data['quantity']
+            selected_variations = []
+            selected_subvariations = []
+            result = ''
+            for key, value in request.POST.items():
+                if key.startswith('variation_'):
+                    variation_id = key.split('_')[1]
+                    subvariation_id = value
+                    selected_variations.append(variation_id)
+                    selected_subvariations.append(subvariation_id)
+
+            if len(selected_variations) == len(selected_subvariations) == len(product.variations.all()):
+                for variation_id, subvariation_id in zip(selected_variations, selected_subvariations):
+                    variation = Variation.objects.get(id=variation_id)
+                    subvariation = Subvariation.objects.get(id=subvariation_id)
+                    variation_type = variation.type
+                    subvariation_option = subvariation.option
+                    result += f'{variation_type}: {subvariation_option}; '
+                # Create your model instance using the variation, subvariation, quantity, and other data as needed
+            else:
+                messages.error(request, "Please select all variation options.")
+                return redirect('product:detail', pk=product.id)
+            
+            cart_product, created = CartProduct.objects.get_or_create(
+                variation=result,
+                created_by=request.user,
+                ordered=False,
+                product=product,
+                quantity=quantity,
+            )
+            
+            cart_qs = Cart.objects.filter(created_by=request.user, completed=False)
+            if cart_qs.exists():
+                cart = cart_qs[0]
+                # check if the cart product is in the cart
+                if cart_product in cart.products.all():
+                    cart_product.quantity += quantity
+                    cart_product.save()
+                    messages.info(request, "This product quantity was updated.")
+                    return redirect('product:detail', pk=product.id)
+                else:
+                    cart.products.add(cart_product)
+                    messages.info(request, "This product was added to your cart.")
+                    return redirect('product:detail', pk=product.id)
+            else:
+                created_at = timezone.now()
+                cart = Cart.objects.create(
+                    created_by=request.user,
+                    created_at=created_at,
+                )
+                cart.products.add(cart_product)
+                messages.info(request, "This product was added to your cart.")
+                return redirect('product:detail', pk=product.pk)
     else:
-        created_at = timezone.now()
-        cart = Cart.objects.create(
-            created_by=request.user, 
-            created_at=created_at,
-        )
-        cart.products.add(cart_product)
-        messages.info(request, "This product was added to your cart.")
-        return redirect('product:detail', pk=product.pk)
+        form = AddToCartForm()
+
+    return render(request, 'my_template.html', {'form': form})
+
     
 @login_required
 def select_cart_product(request):
@@ -136,6 +173,45 @@ def remove_from_cart(request, pk):
     messages.info(request, "This cart was removed from your cart.")
             
     return redirect("checkout:index")
+
+@login_required
+def decrease_from_cart(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    cart_product = CartProduct.objects.filter(
+        product=product,
+        created_by=request.user,
+        ordered=False
+    ).first()
+
+    if cart_product:
+        cart_product.quantity -= 1
+        cart_product.save()
+        messages.info(request, "The quantity was decreased by 1.")
+
+        if cart_product.quantity == 0:
+            remove_from_cart(request, pk) 
+
+    return redirect("checkout:index")
+
+
+@login_required
+def increase_from_cart(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    cart_product = CartProduct.objects.filter(
+        product=product,
+        created_by=request.user,
+        ordered=False
+    ).first()
+
+    if cart_product:
+        cart_product.quantity += 1
+        cart_product.save()
+        messages.info(request, "The quantity was increased by 1.")
+    else:
+        messages.error(request, "This product is not in your cart.")
+
+    return redirect("checkout:index")
+
 
 @login_required
 def checkout(request):

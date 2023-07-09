@@ -28,3 +28,7 @@ class EditDeliveryDetailsForm(forms.ModelForm):
             }),
            
         }
+    
+class AddToCartForm(forms.Form):
+    quantity = forms.IntegerField(min_value=1)
+    options = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False)

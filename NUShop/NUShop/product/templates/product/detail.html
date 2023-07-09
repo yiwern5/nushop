@@ -51,35 +51,45 @@
                 <span class="star filled">&#9733;</span>
                 <span class="star filled">&#9733;</span>
                 {% endif %} -->
-                {% if product.average_rating is null %}
+                <!-- {% if product.average_rating is null %}
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
                 <span class="star">&#9733;</span>
-                {% endif %}
+                {% endif %} -->
                 {% if product.average_rating >= 1 %}
                 <span class="star filled">&#9733;</span>
+                {% else %}
+                <span class="star">&#9733;</span>
                 {% endif %}
                 {% if product.average_rating >= 2 %}
                 <span class="star filled">&#9733;</span>
                 {% elif product.average_rating >= 1.5 %}
                 <span class="star half-filled">&#9733;</span>
+                {% else %}
+                <span class="star">&#9733;</span>
                 {% endif %}
                 {% if product.average_rating >= 3 %}
                 <span class="star filled">&#9733;</span>
                 {% elif product.average_rating >= 2.5 %}
                 <span class="star half-filled">&#9733;</span>
+                {% else %}
+                <span class="star">&#9733;</span>
                 {% endif %}
                 {% if product.average_rating >= 4 %}
                 <span class="star filled">&#9733;</span>
                 {% elif product.average_rating >= 3.5 %}
                 <span class="star half-filled">&#9733;</span>
+                {% else %}
+                <span class="star">&#9733;</span>
                 {% endif %}
                 {% if product.average_rating >= 5 %}
                 <span class="star filled">&#9733;</span>
                 {% elif product.average_rating >= 4.5 %}
                 <span class="star half-filled">&#9733;</span>
+                {% else %}
+                <span class="star">&#9733;</span>
                 {% endif %}
             </div>
               
@@ -92,7 +102,7 @@
             </div>
             
             <input type="number" min="1" max="5" step="0.5" id="ratingInput" onchange="updateRating(this.value)"> -->
-            <p>({{ product.average_rating }})</p>
+            <p>({{ product.average_rating|floatformat:1 }})</p>
             <p class="ml-6">20 ratings</p>
             <p class="ml-6">553 sold</p>
         </div>
@@ -119,48 +129,48 @@
             {% endif %}
         </div>
         <div class="bg-primary-light rounded-xl p-4">
-            {% for variation in variations %}
-            <div class="mb-3 text-2xl font-semibold">
-                {{ variation.type }}
-                {% if request.user == product.created_by %}
-                <!-- <a href="{% url 'product:change_variation' variation.id product.id %}" class="text-yellow-500 underline text-right">Edit</a> -->
-                <!-- <a href="{% url 'product:delete_variation' variation.id product.id %}" class="text-red-500 underline text-right">Delete</a> -->
-                {% endif %}
-
-                <div class="text-lg">
-                    {% for subvariation in variation.subvariations.all %}
-                    <input type="radio" class="btn-check" name="option{{ forloop.parentloop.counter }}" id="option{{ forloop.parentloop.counter }}_{{ forloop.counter }}" autocomplete="off">
-                    <label class="btn btn-default font-semibold" for="option{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ subvariation.option }}</label>
-                    {% if request.user == product.created_by %}
-                    <a href="{% url 'product:change_subvariation' subvariation.id product.id %}" class="text-yellow-500 underline">edit</a>
-                    <a href="{% url 'product:delete_subvariation' subvariation.id product.id %}" class="text-red-500 underline">remove</a>
-                    {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
-            {% if request.user == product.created_by %}
-            <a href="{% url 'product:add_subvariation' variation.id product.id %}" class="text-lg text-green-500 underline">Add Option</a>
-            <a href="{% url 'product:delete_variation' variation.id product.id %}" class="text-red-500 underline text-lg">Delete Variation</a>
-            {% endif %}
-            {% endfor %}
             
-            <p class="text-2xl font-semibold mb-3">Quantity</p>
-            <form>
+            <form method="POST" action="{% url 'checkout:add_to_cart' product.id %}">
+                {% csrf_token %}
+                
+                {% for variation in variations %}
+                  <div class="mb-3 text-2xl font-semibold">
+                    {{ variation.type }}
+                    <div class="text-lg">
+                      {% for subvariation in variation.subvariations.all %}
+                        <input type="radio" class="btn-check" name="variation_{{ variation.id }}" value="{{ subvariation.id }}" id="option{{ variation.id }}_{{ subvariation.id }}" autocomplete="off">
+                        <label class="btn btn-default font-semibold" for="option{{ variation.id }}_{{ subvariation.id }}">{{ subvariation.option }}</label>
+                        {% if request.user == product.created_by %}
+                          <a href="{% url 'product:change_subvariation' subvariation.id product.id %}" class="text-yellow-500 underline">edit</a>
+                          <a href="{% url 'product:delete_subvariation' subvariation.id product.id %}" class="text-red-500 underline">remove</a>
+                        {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  {% if request.user == product.created_by %}
+                    <a href="{% url 'product:add_subvariation' variation.id product.id %}" class="text-lg text-green-500 underline">Add Option</a>
+                    <a href="{% url 'product:delete_variation' variation.id product.id %}" class="text-red-500 underline text-lg">Delete Variation</a>
+                  {% endif %}
+                {% endfor %}
+                {% if request.user != product.created_by %}
+                <p class="text-2xl font-semibold mb-3">Quantity</p>
                 <div class="flex text-xl">
-                    <div class="btn btn-default ml-3 mr-3" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
-                    <input class="rounded-xl text-center" id="number" value="1"/>
-                    <div class="btn btn-default value-button ml-3 mr-3" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
+                  <div class="btn btn-default ml-3 mr-3" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
+                  <input class="rounded-xl text-center" id="number" type="number" name="quantity" value="1" />
+                  <div class="btn btn-default value-button ml-3 mr-3" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
                 </div>
+                
+                <script src="{% static 'script.js' %}"></script>
+                
+                
+                  <button type="submit" class="text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</button>
+                {% endif %}
             </form>
-            <script src="{% static 'script.js' %}"></script>
-            
-
-            <!-- <a href="{% url 'checkout:add_to_cart' product.id %}" class="mt-2 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</a> -->
-            {% if request.user != product.created_by %}
-            <a href="{% url 'checkout:add_to_cart' product.id %}">
-                <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center ">Add to Cart</button>
-            </a>
-            {% endif %}
+              
+              
+              
+              
+              
         </div>
 
     </div>

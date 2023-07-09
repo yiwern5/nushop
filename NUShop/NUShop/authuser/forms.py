@@ -4,6 +4,17 @@ from authuser.models import User, Bank, DeliveryAddress
 
 INPUT_CLASSES = 'mb-3 w-full py-2 px-6 form-account rounded-xl'
 
+class ChangeImageForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ('image',)
+        widgets = {
+            'image': forms.FileInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+        }
+
+
 class EditIndividualForm(forms.ModelForm):
     class Meta:
         model = User
