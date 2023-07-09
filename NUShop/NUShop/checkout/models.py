@@ -80,6 +80,7 @@ class OrderProduct(models.Model):
     price = models.FloatField()
     thumbnail = models.ImageField(upload_to='orderproduct_images', null=False)
     quantity = models.IntegerField()
+    variation = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"Order of {self.buyer.username}"
@@ -92,4 +93,5 @@ class OrderProduct(models.Model):
             self.seller_name = self.seller.username
             self.buyer_name = self.buyer.username
             self.quantity = self.cart_product.quantity
+            self.variation = self.cart_product.variation
         super().save(*args, **kwargs)

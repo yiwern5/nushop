@@ -44,7 +44,7 @@
             <div class="col-span-4">
                 <h2 class="text-3xl text-black">{{ order_product.name }}</h2>
                 <div class="text-black text-xl">
-                    <p>Variation:</p>
+                    <p>{{ order_product.variation }}</p>
                     <p>Delivery Method:</p>
                     <p>Price: $ {{ order_product.price|floatformat:2 }}</p>
                     <p>Quantity: {{ order_product.quantity }}</p>

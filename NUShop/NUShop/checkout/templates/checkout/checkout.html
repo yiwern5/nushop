@@ -69,7 +69,7 @@
                                 </div>
                                 <div class="col-span-4">
                                     <h2 class="text-2xl text-black">{{ product.product.name }}</h2>
-                                    <p class="text-black text-xl">Variation:</p>
+                                    <p class="text-black text-xl">{{ product.variation }}</p>
                                     <p class="text-xl">Quantity: {{ product.quantity }}</p>
                                     <p class="text-xl">Subtotal: $ {{ product.subtotal|floatformat:2 }}</p>
                                 </div>    

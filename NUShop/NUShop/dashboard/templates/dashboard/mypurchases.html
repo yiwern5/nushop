@@ -70,7 +70,9 @@
                                 <div class="col-span-4">
                                     <h2 class="text-3xl text-black">{{ product.name }}</h2>
                                     <div class="text-black text-xl">
-                                        <p>Variation:</p>
+                                        {% if product.variation %}
+                                        <p>{{ product.variation }}</p>
+                                        {% endif %}
                                         <p>Delivery Method:</p>
                                         <p>Price: $ {{ product.price|floatformat:2 }}</p>
                                         <p>Quantity: {{ product.quantity }}</p>
@@ -87,9 +89,11 @@
                                             <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Order Received</button>
                                         </a>
                                     {% elif product.buyer_status.name == 'Completed' %}
+                                        {% if product.cart_product.product.id %}
                                         <a href="{% url 'product:add_review' product.cart_product.product.id %}">
                                             <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Review</button>
                                         </a>
+                                        {% endif %}
                                     {% endif %}
                                 </div>
                                 <div class="col-span-1">
