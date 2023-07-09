@@ -13,8 +13,36 @@ import stripe
 from django.views import View
 from django.views.generic import TemplateView
 from django.templatetags.static import static
+from django.views.decorators.csrf import csrf_exempt
+from django.http.response import HttpResponse
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+
+@csrf_exempt
+def stripe_webhook(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        print("Payment was successful.")
+        # TODO: run some custom code here
+
+    return HttpResponse(status=200)
 
 class CreateStripeCheckoutSessionView(View):
     """
@@ -28,7 +56,7 @@ class CreateStripeCheckoutSessionView(View):
 
         # Generate the URL for the static image in your Django template
         image_url = request.build_absolute_uri(static('green logo.png'))
-
+        client_reference_id=request.user.id if request.user.is_authenticated else None,
         checkout_session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             line_items=[
