@@ -13,7 +13,6 @@ class CartProduct(models.Model):
     @property
     def subtotal(self):
         return self.quantity * self.product.price
-
  
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
@@ -28,11 +27,11 @@ class Cart(models.Model):
     
     @property
     def total_price(self):
-        return sum(product.subtotal for product in self.products.all())
+        return sum(product.subtotal for product in self.products.filter(ordered=False))
 
     def get_total_amount(self):
         total_amount = 0
-        for cart_product in self.products.all():
+        for cart_product in self.products.filter(ordered=False):
             total_amount += cart_product.quantity * cart_product.product.price
         return total_amount
     

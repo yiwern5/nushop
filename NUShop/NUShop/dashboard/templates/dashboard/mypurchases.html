@@ -87,7 +87,7 @@
                                             <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Order Received</button>
                                         </a>
                                     {% elif product.buyer_status.name == 'Completed' %}
-                                        <a href="#">
+                                        <a href="{% url 'product:add_review' product.cart_product.product.id %}">
                                             <button class="mt-2 text-xl bt-nushoptertiary-2 rounded-xl text-center">Review</button>
                                         </a>
                                     {% endif %}

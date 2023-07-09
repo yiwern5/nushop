@@ -19,32 +19,6 @@ from django.http.response import HttpResponse
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
-@csrf_exempt
-def stripe_webhook(request):
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
-    payload = request.body
-    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-    event = None
-
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
-        )
-    except ValueError as e:
-        # Invalid payload
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        # Invalid signature
-        return HttpResponse(status=400)
-
-    # Handle the checkout.session.completed event
-    if event['type'] == 'checkout.session.completed':
-        print("Payment was successful.")
-        # TODO: run some custom code here
-
-    return HttpResponse(status=200)
-
 class CreateStripeCheckoutSessionView(View):
     """
     Create a checkout session and redirect the user to Stripe's checkout page
@@ -53,7 +27,6 @@ class CreateStripeCheckoutSessionView(View):
     def post(self, request, *args, **kwargs):
         cart = Cart.objects.filter(created_by=request.user)[0]
         total_amount = cart.get_total_amount() * 100
-        total_quantity = cart.get_total_quantity()
 
         # Generate the URL for the static image in your Django template
         image_url = request.build_absolute_uri(static('green logo.png'))
@@ -79,58 +52,58 @@ class CreateStripeCheckoutSessionView(View):
             success_url=request.build_absolute_uri('/checkout/success/'),
             cancel_url=request.build_absolute_uri('/checkout/cancel/'),
         )
-        return redirect(checkout_session.url)
-    
-    @csrf_exempt
-    def stripe_webhook(request):
-        # Retrieve the event data from the request
-        payload = request.body
-        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
-        event = None
-
-        try:
-            event = stripe.Webhook.construct_event(
-            payload, sig_header, endpoint_secret
-            )
-        except ValueError as e:
-            # Invalid payload
-            return HttpResponse(status=400)
-        except stripe.error.SignatureVerificationError as e:
-            # Invalid signature
-            return HttpResponse(status=400)
-
-        # Handle the 'checkout.session.async_payment_succeeded' event
-        if event.type == 'checkout.session.async_payment_succeeded':
-            session = event['data']['object']
-
-            # Extract necessary information from the session object
-            cart_id = session.get('metadata').get('product_id')
-
-            cart = Cart.objects.get(id=cart_id)
-            cart_products = cart.products.filter(ordered=False)
-            buyer_status = BuyerStatus.objects.get(name='To Ship')
-            seller_status = SellerStatus.objects.get(name='To Ship')
-            buyer = cart.created_by
-
-            for cart_product in cart_products:
-                order_product = OrderProduct.objects.create(
-                    cart_product=cart_product,
-                    buyer_status=buyer_status,
-                    seller_status=seller_status,
-                    buyer=buyer,
-                    seller=cart_product.product.created_by
-                )
-                cart_product.ordered = True
-                cart_product.save()
-
-        return HttpResponse(status=200)
-
+        return redirect(checkout_session.url, code=303)
     
 class SuccessView(TemplateView):
     template_name = "checkout/success.html"
 
 class CancelView(TemplateView):
     template_name = "checkout/cancel.html"
+
+@csrf_exempt
+def stripe_webhook(request):
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    # Handle the checkout.session.completed event
+    if event['type'] == 'checkout.session.completed':
+        session = event['data']['object']
+        fulfill_order(session)
+
+    return HttpResponse(status=200)
+
+def fulfill_order(session):
+    cart_id = session["metadata"]["product_id"]
+    cart = Cart.objects.get(id=cart_id)
+    cart_products = cart.products.filter(ordered=False)
+    buyer_status = BuyerStatus.objects.get(name='To Ship')
+    seller_status = SellerStatus.objects.get(name='To Ship')
+    buyer = cart.created_by
+
+    for cart_product in cart_products:
+        order_product = OrderProduct.objects.create(
+            cart_product=cart_product,
+            buyer_status=buyer_status,
+            seller_status=seller_status,
+            buyer=buyer,
+            seller=cart_product.product.created_by
+        )
+        cart_product.ordered = True
+        cart_product.save()
 
 # Create your views here.
 @login_required
@@ -288,7 +261,7 @@ def increase_from_cart(request, pk):
 
 @login_required
 def checkout(request):
-    products = CartProduct.objects.filter(created_by=request.user)
+    products = CartProduct.objects.filter(created_by=request.user, ordered=False)
     cart_qs = Cart.objects.filter(created_by=request.user)
 
     if cart_qs:
