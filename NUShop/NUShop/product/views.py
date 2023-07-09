@@ -34,7 +34,7 @@ def detail(request, pk):
     images = product.images.all()
     variations = product.variations.all()
     reviews = product.reviews.all()
-    products = Product.objects.filter(is_sold=False)[0:6]
+    products = Product.objects.filter(is_sold=False)
     """
     is_sold can be changed to is_out_of_stock; 
     exclude pk=pk is to exclude this product from being shown in recommended;

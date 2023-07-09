@@ -83,7 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, default='')
     bio = models.CharField(max_length=500, blank=True, null=True)
-    contact_number = models.CharField(max_length=8, blank=True, null=True)
+    contact_number = models.CharField(max_length=8, default='')
     image = models.ImageField(upload_to='user_images', blank=True, null=True)
 
     is_staff = models.BooleanField(default=False)

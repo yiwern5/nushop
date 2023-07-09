@@ -1,14 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.urls import reverse
 from django.conf import settings
+from .models import CartProduct, Cart, OrderProduct, BuyerStatus, SellerStatus
+from .forms import EditDeliveryDetailsForm, EditContactForm, UpdateStatusForm, AddToCartForm
 from product.models import Product, Variation, Subvariation
-from .models import CartProduct, Cart
 from authuser.models import User
-from .forms import EditDeliveryDetailsForm
-from checkout.forms import AddToCartForm
 import stripe
 from django.views import View
 from django.views.generic import TemplateView
@@ -17,6 +17,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http.response import HttpResponse
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
+endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
 @csrf_exempt
 def stripe_webhook(request):
@@ -79,6 +80,50 @@ class CreateStripeCheckoutSessionView(View):
             cancel_url=request.build_absolute_uri('/checkout/cancel/'),
         )
         return redirect(checkout_session.url)
+    
+    @csrf_exempt
+    def stripe_webhook(request):
+        # Retrieve the event data from the request
+        payload = request.body
+        sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+        event = None
+
+        try:
+            event = stripe.Webhook.construct_event(
+            payload, sig_header, endpoint_secret
+            )
+        except ValueError as e:
+            # Invalid payload
+            return HttpResponse(status=400)
+        except stripe.error.SignatureVerificationError as e:
+            # Invalid signature
+            return HttpResponse(status=400)
+
+        # Handle the 'checkout.session.async_payment_succeeded' event
+        if event.type == 'checkout.session.async_payment_succeeded':
+            session = event['data']['object']
+
+            # Extract necessary information from the session object
+            cart_id = session.get('metadata').get('product_id')
+
+            cart = Cart.objects.get(id=cart_id)
+            cart_products = cart.products.filter(ordered=False)
+            buyer_status = BuyerStatus.objects.get(name='To Ship')
+            seller_status = SellerStatus.objects.get(name='To Ship')
+            buyer = cart.created_by
+
+            for cart_product in cart_products:
+                order_product = OrderProduct.objects.create(
+                    cart_product=cart_product,
+                    buyer_status=buyer_status,
+                    seller_status=seller_status,
+                    buyer=buyer,
+                    seller=cart_product.product.created_by
+                )
+                cart_product.ordered = True
+                cart_product.save()
+
+        return HttpResponse(status=200)
 
     
 class SuccessView(TemplateView):
@@ -90,7 +135,7 @@ class CancelView(TemplateView):
 # Create your views here.
 @login_required
 def index(request):
-    products = CartProduct.objects.filter(created_by=request.user)
+    products = CartProduct.objects.filter(created_by=request.user, ordered=False)
     cart_qs = Cart.objects.filter(created_by=request.user)
 
     if cart_qs:
@@ -258,39 +303,117 @@ def checkout(request):
     })
 
 @login_required
-def add_shipping_details(request, username):
+def add_shipping_details(request):
     if request.method == 'POST':
-        form = EditDeliveryDetailsForm(request.POST, request.FILES)
-        if form.is_valid():
-            delivery_details = form.save(commit=False)
+        delivery_form = EditDeliveryDetailsForm(request.POST, request.FILES)
+        contact_form = EditContactForm(request.POST, request.FILES)
+        if delivery_form.is_valid() and contact_form.is_valid():
+            delivery_details = delivery_form.save(commit=False)
+            contact_form = contact_form.save(commit=False)
             request.user.delivery_address = delivery_details
+            request.user.contact_number = contact_form
             delivery_details.save()
+            contact_form.save()
             request.user.save()
             messages.info(request, "Delivery details are added.")
             return redirect('checkout:checkout')
     else:
-        form = EditDeliveryDetailsForm()
+        delivery_form = EditDeliveryDetailsForm()
+        contact_form = EditContactForm()
 
     return render(request, 'checkout/form.html', {
-        'form': form,
+        'delivery_form': delivery_form,
+        'contact_form': contact_form,
         'title': 'Delivery Details',
     })
 
 @login_required
-def edit_shipping_details(request, username):
-    user = User.objects.get(username=username)
+def edit_shipping_details(request):
+    user = request.user
     delivery_details = user.delivery_address
     if request.method == 'POST':
-        form = EditDeliveryDetailsForm(request.POST, request.FILES, instance=delivery_details)
-        if form.is_valid():
-            form.save()
+        delivery_form = EditDeliveryDetailsForm(request.POST, request.FILES, instance=delivery_details)
+        contact_form = EditContactForm(request.POST, request.FILES, instance=user)
+        if delivery_form.is_valid():
+            delivery_form.save()
+            contact_form.save()
             messages.info(request, "Delivery details are updated.")
             return redirect('checkout:checkout')
     else:
-        form = EditDeliveryDetailsForm(instance=delivery_details)
+        delivery_form = EditDeliveryDetailsForm(instance=delivery_details)
+        contact_form = EditContactForm(instance=user)
 
     return render(request, 'checkout/form.html', {
-        'form': form,
+        'delivery_form': delivery_form,
+        'contact_form': contact_form,
         'title': 'Delivery Details',
     })
 
+@login_required
+def order_details(request, pk):
+    order_product = get_object_or_404(OrderProduct, pk=pk)
+    product = order_product.cart_product.product
+    related_product = Product.objects.filter(category=product.category, is_sold=False).exclude(pk=product.pk)
+    seller_listings = Product.objects.filter(created_by=order_product.seller)
+    buyer_listings = Product.objects.filter(created_by=order_product.buyer)
+
+    return render(request, 'checkout/order_detail.html', {
+        'order_product': order_product,
+        'product': product,
+        'related_product': related_product,
+        'seller_listings': seller_listings,
+        'buyer_listings': buyer_listings,
+    })
+
+@login_required
+def cancel_order(request, pk):
+    order_product = get_object_or_404(OrderProduct, pk=pk)
+    order_product.buyer_status = BuyerStatus.objects.get(name='Cancelled')
+    order_product.seller_status = SellerStatus.objects.get(name='Cancelled')
+    order_product.save()
+
+    return redirect('checkout:order-details', pk=pk)
+
+@login_required
+def return_refund(request, pk):
+    order_product = get_object_or_404(OrderProduct, pk=pk)
+    order_product.buyer_status = BuyerStatus.objects.get(name='Return/Refund')
+    order_product.seller_status = SellerStatus.objects.get(name='Return/Refund')
+    order_product.save()
+
+    return redirect('checkout:order-details', pk=pk)
+
+@login_required
+def order_received(request, pk):
+    order_product = get_object_or_404(OrderProduct, pk=pk)
+    order_product.buyer_status = BuyerStatus.objects.get(name='Completed')
+    order_product.save()
+
+    return redirect('checkout:order-details', pk=pk)
+
+@login_required
+def update_status(request, pk):
+    order_product = get_object_or_404(OrderProduct, pk=pk)
+    if request.method == 'POST':
+        form = UpdateStatusForm(request.POST, request.FILES, instance=order_product)
+        if form.is_valid():
+            order_product.buyer_status = BuyerStatus.objects.get(name='To Receive')
+            order_product.seller_status = SellerStatus.objects.get(name='Shipped')
+            form.save()
+            return redirect('checkout:order-details', pk=pk)
+
+    else:
+        form = UpdateStatusForm(instance=order_product)
+
+    return render(request, 'authuser/form.html', {
+        'form': form,
+        'title': 'Update Status',
+    })
+
+@login_required
+def delivered(request, pk):
+    order_product = get_object_or_404(OrderProduct, pk=pk)
+    order_product.seller_status = SellerStatus.objects.get(name='Completed')
+    order_product.save()
+
+    return redirect('checkout:order-details', pk=pk)

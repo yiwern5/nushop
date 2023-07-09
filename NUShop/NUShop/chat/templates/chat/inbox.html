@@ -8,18 +8,38 @@
 <div class="space-y-6">
     {% for chat in chats %}
         <a href="{% url 'chat:detail' chat.id %}">
-            <div class="p-6 flex bg-primary-light rounded-xl">
+            <div class="p-6 flex bg-primary-light rounded-xl mb-2">
                 <div class="pr-6">
-                    <img src="{{ chat.product.image.url }}" class="w-20 rounded-xl">
+                    {% if chat.product %}
+                        <img src="{{ chat.product.thumbnail.url }}" class="w-20 rounded-xl">
+                    {% endif %}
+                    {% if chat.order_product %}
+                        <img src="{{ chat.order_product.thumbnail.url }}" class="w-20 rounded-xl">
+                    {% endif %}
                 </div>
 
                 <div>
-                    {% for member in chat.members.all %}
-                        {% if member != request.user %}
-                            <p class="mb-4"><strong>{{ member.username }}</strong> | {{ chat.modified_at }}</p>
-                            <p>{{ chat.product.name }}</p>
-                        {% endif %}
-                    {% endfor %}
+                    {% if chat.product %}
+                        {% for member in chat.members.all %}
+                            {% if member != request.user %}
+                                <p class="mb-4"><strong>{{ member.username }}</strong> | {{ chat.modified_at }}</p>
+                                <p>{{ chat.product.name }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
+                    {% if chat.order_product %}
+                        {% for member in chat.members.all %}
+                            {% if member != request.user %}
+                                <p class="mb-4"><strong>{{ member.username }}</strong> | {{ chat.modified_at }}</p>
+                                <p>{{ chat.order_product.name }}</p>
+                                {% if chat.order_product.seller == request.user %}
+                                    <p>Order Status: {{ chat.order_product.seller_status }}</p>
+                                {% else %}
+                                    <p>Order Status: {{ chat.order_product.buyer_status }}</p>
+                                {% endif %}
+                            {% endif %}
+                        {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </a>

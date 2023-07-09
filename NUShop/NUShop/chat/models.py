@@ -2,9 +2,11 @@ from authuser.models import User
 from django.db import models
 
 from product.models import Product
+from checkout.models import OrderProduct
 
 class Chat(models.Model):
-    product = models.ForeignKey(Product, related_name='chats', on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, related_name='chats', on_delete=models.CASCADE, null=True)
+    order_product = models.ForeignKey(OrderProduct, related_name='chats', on_delete=models.CASCADE, null=True)
     members = models.ManyToManyField(User, related_name='chats')
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)

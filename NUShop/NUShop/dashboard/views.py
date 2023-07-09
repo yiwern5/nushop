@@ -5,6 +5,7 @@ from django.db.models import Q
 from django.urls import reverse
 from product.models import Category, Product
 from authuser.models import User
+from checkout.models import SellerStatus, BuyerStatus, OrderProduct
 
 # Create your views here.
 @login_required
@@ -45,50 +46,50 @@ def viewseller(request, username):
 
 def mypurchases(request):
     query = request.GET.get('query', '')
-    category_id = request.GET.get('category', 0)
-    category_name = ''
-    categories = Category.objects.all()
-    products = Product.objects.filter(is_sold=False)
+    orderstatus_id = request.GET.get('orderstatus', 0)
+    orderstatus_name = ''
+    orderstatuses = BuyerStatus.objects.all()
+    products = OrderProduct.objects.filter(buyer=request.user)
 
-    if category_id:
-        products = products.filter(category_id=category_id)
-        category = categories.filter(id=category_id).first()
-        if category:
-            category_name = category.name
+    if orderstatus_id:
+        products = products.filter(buyer_status_id=orderstatus_id)
+        orderstatus = orderstatuses.filter(id=orderstatus_id).first()
+        if orderstatus:
+            orderstatus_name = orderstatus.name
 
     if query:
-        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        products = products.filter(Q(name__icontains=query) | Q(seller_name__icontains=query))
 
     return render(request, 'dashboard/mypurchases.html', {
         'products': products,
         'query': query,
-        'categories': categories,
-        'category_id': int(category_id),
-        'category_name': category_name,
+        'orderstatuses': orderstatuses,
+        'orderstatus_name': orderstatus_name,
+        'orderstatus_id': int(orderstatus_id),
     })
 
 def mysales(request):
     query = request.GET.get('query', '')
-    category_id = request.GET.get('category', 0)
-    category_name = ''
-    categories = Category.objects.all()
-    products = Product.objects.filter(is_sold=False)
+    orderstatus_id = request.GET.get('orderstatus', 0)
+    orderstatus_name = ''
+    orderstatuses = SellerStatus.objects.all()
+    products = OrderProduct.objects.filter(seller=request.user)
 
-    if category_id:
-        products = products.filter(category_id=category_id)
-        category = categories.filter(id=category_id).first()
-        if category:
-            category_name = category.name
+    if orderstatus_id:
+        products = products.filter(seller_status_id=orderstatus_id)
+        orderstatus = orderstatuses.filter(id=orderstatus_id).first()
+        if orderstatus:
+            orderstatus_name = orderstatus.name
 
     if query:
-        products = products.filter(Q(name__icontains=query) | Q(description__icontains=query))
+        products = products.filter(Q(name__icontains=query) | Q(buyer_name__icontains=query))
 
     return render(request, 'dashboard/mysales.html', {
         'products': products,
         'query': query,
-        'categories': categories,
-        'category_id': int(category_id),
-        'category_name': category_name,
+        'orderstatuses': orderstatuses,
+        'orderstatus_name': orderstatus_name,
+        'orderstatus_id': int(orderstatus_id),
     })
 
 @login_required
