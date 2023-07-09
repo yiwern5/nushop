@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Product, ProductImage, Variation, Subvariation
+from .models import Category, Product, ProductImage, Variation, Subvariation, Review
 from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm, AddVariationForm, AddSubvariationForm, ChangeSubvariationForm, ChangeVariationForm, ReviewForm
 
 # Create your views here.
@@ -229,7 +229,7 @@ def delete_subvariation(request, subvariation_id, product_id):
 
 @login_required
 def add_review(request, pk):
-    product = get_object_or_404(Product, pk=pk, created_by=request.user)
+    product = get_object_or_404(Product, pk=pk,)
     if request.method == 'POST':
         form = ReviewForm(request.POST, request.FILES)
         if form.is_valid():
@@ -245,3 +245,11 @@ def add_review(request, pk):
         'form': form,
         'title': 'Add Review'
     })
+
+@login_required
+def delete_review(request, review_id, product_id):
+    review = get_object_or_404(Review, pk=review_id)
+    product = get_object_or_404(Product, pk=product_id, created_by=request.user)
+    review.delete()
+
+    return redirect('product:detail', pk=product.id)

@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from .forms import CustomPasswordChangeForm, EditIndividualForm, EditStudentOrganisationForm, EditBankDetailsForm, EditDeliveryDetailsForm
+from .forms import CustomPasswordChangeForm, EditIndividualForm, EditStudentOrganisationForm, EditBankDetailsForm, EditDeliveryDetailsForm, ChangeImageForm
 from .models import User
 
 
@@ -133,4 +133,22 @@ def change_password(request):
 
     return render(request, 'dashboard/view-profile.html', {
         'form': form
+    })
+
+@login_required
+def change_image(request, username):
+    user = User.objects.get(username=username)
+    if request.method == 'POST':
+        form = ChangeImageForm(request.POST, request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.info(request, "Personal details are updated.")
+            return redirect(reverse('dashboard:view-profile', args=[username]))
+
+    else:
+        form = ChangeImageForm(instance=user)
+
+    return render(request, 'authuser/form.html', {
+        'form': form,
+        'title': 'Change Image',
     })

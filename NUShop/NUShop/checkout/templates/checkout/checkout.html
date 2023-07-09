@@ -37,9 +37,9 @@
                 <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width:95%;">
                     <option selected>Select payment method</option>
                     <option value="1">Card</option>
-                    <option value="2">PayNow</option>
+                    <!-- <option value="2">PayNow</option>
                     <option value="3">Cash</option>
-                    <option value="4">NUShop Wallet</option>
+                    <option value="4">NUShop Wallet</option> -->
                 </select>  
                 <form action="{% url 'checkout:create_checkout_session' 1 %}" method="POST">
                     {% csrf_token %}

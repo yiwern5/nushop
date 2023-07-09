@@ -32,7 +32,10 @@ class Product(models.Model):
     
     @property
     def average_rating(self):
-        return self.reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
+        avg_rating = self.reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
+        if avg_rating is not None:
+            avg_rating = round(avg_rating, 2)
+        return avg_rating
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
