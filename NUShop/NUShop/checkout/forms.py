@@ -28,7 +28,6 @@ class EditDeliveryDetailsForm(forms.ModelForm):
            
         }
 
-
 class EditContactForm(forms.ModelForm):
     class Meta:
         model = User
@@ -51,3 +50,7 @@ class UpdateStatusForm(forms.ModelForm):
                     'class': INPUT_CLASSES
                 }),
         }
+    
+class AddToCartForm(forms.Form):
+    quantity = forms.IntegerField(min_value=1)
+    options = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple, required=False)
