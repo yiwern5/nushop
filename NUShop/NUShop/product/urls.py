@@ -15,6 +15,7 @@ urlpatterns = [
     path('<int:variation_id>/<int:product_id>/add_subvariation/', views.add_subvariation, name='add_subvariation'),
     path('<int:subvariation_id>/<int:product_id>/change_subvariation/', views.change_subvariation, name='change_subvariation'),
     path('<int:subvariation_id>/<int:product_id>/delete_subvariation/', views.delete_subvariation, name='delete_subvariation'),
+    path('<int:review_id>/<int:product_id>/delete_review/', views.delete_review, name='delete_review'),
     path('<int:pk>/<int:variation_id>/add_subvariation/', views.add_subvariation, name='add_subvariation'),
     path('<int:pk>/add_image/', views.add_image, name='add_image'),
     path('<int:image_id>/<int:product_id>/delete_image/', views.delete_image, name='delete_image'),

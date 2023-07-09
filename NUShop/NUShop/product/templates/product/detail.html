@@ -284,9 +284,9 @@
     <div class="grid grid-cols-5 gap-3 mb-3">
         <div class="col-span-1">
             {% if review.created_by.image %}
-            <img src="{{ review.created_by.image.url }}" alt="Seller Image" class="pfp">
+            <img src="{{ review.created_by.image.url }}" alt="User Image" class="pfp">
             {% else %}
-            <img src="{% static 'random.png' %}" class="pfp">
+            <img src="{% static 'default.png' %}" class="pfp">
             {% endif %}
             <p class="text-2xl">{{ review.created_by.name }}</p>
             <div class="rating">
@@ -298,6 +298,10 @@
             </div>
             <p>{{ review.created_at }}</p>
             <p>Variation: XS, Delivery</p>
+            {% if request.user == review.created_by %}
+                <!-- <a href="#" class="text-lg text-yellow-500 underline">Edit</a> -->
+                <a href="{% url 'product:delete_review' review.id product.id %}" class="text-red-500 underline text-lg">Delete</a>
+            {% endif %}
         </div>
 
         <div class="col-span-4 text-xl">
