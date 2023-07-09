@@ -9,6 +9,8 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('<int:pk>/add_to_cart/', views.add_to_cart, name='add_to_cart'),
     path('<int:pk>/remove_from_cart/', views.remove_from_cart, name='remove_from_cart'),
+    path('<int:pk>/decrease_from_cart/', views.decrease_from_cart, name='decrease_from_cart'),
+    path('<int:pk>/increase_from_cart/', views.increase_from_cart, name='increase_from_cart'),
     path('<int:pk>/select_cart_product/', views.select_cart_product, name='select_cart_product'),
     path('checkout/', views.checkout, name='checkout'),
     path('add_shipping_details/', views.add_shipping_details, name='add_shipping_details'),
@@ -22,4 +24,5 @@ urlpatterns = [
     path('<int:pk>/return_refund/', views.return_refund, name='return-refund'),
     path('<int:pk>/update_status/', views.update_status, name='update-status'),
     path('<int:pk>/delivered/', views.delivered, name='delivered'),
+    path('stripe_webhook/', views.stripe_webhook, name='stripe_webhook'),
 ]

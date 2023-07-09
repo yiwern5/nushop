@@ -18,7 +18,7 @@
                 {% endif %}
             </div>
             <div class="row-span-1 flex justify-center">
-                <a href="#" class="text-sm font-semibold">Change</a>
+                <a href="{% url 'authuser:change_image' user.username %}" class="text-sm font-semibold">Change</a>
             </div>
         </div>
     </div>
@@ -115,13 +115,13 @@
 <form method="post" action="{% url 'authuser:change-password' %}">
     {% csrf_token %}
     <div class="mb-3">
-        <input type="password" name="old_password" placeholder="Enter Old Password" class="w-1/4 py-2 px-6 form-account">
+        <input type="password" name="old_password" placeholder="Enter Old Password" class="w-1/4 py-2 px-6 form-account rounded-xl">
     </div>
     <div class="mb-3">
-        <input type="password" name="new_password1" placeholder="Enter New Password" class="w-1/4 py-2 px-6 form-account">
+        <input type="password" name="new_password1" placeholder="Enter New Password" class="w-1/4 py-2 px-6 form-account rounded-xl">
     </div>
     <div class="mb-3">
-        <input type="password" name="new_password2" placeholder="Confirm New Password" class="w-1/4 py-2 px-6 form-account">
+        <input type="password" name="new_password2" placeholder="Confirm New Password" class="w-1/4 py-2 px-6 form-account rounded-xl">
     </div>
     {% if form.errors or form.non_field_errors %}
         <div class="mb-3 p-6 bg-red-100 rounded-xl">
