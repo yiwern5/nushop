@@ -7,9 +7,12 @@ INPUT_CLASSES = 'mb-3 w-full py-2 px-6 form-account rounded-xl'
 class EditIndividualForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('name', 'username', 'email', 'contact_number', 'major', 'bio',)
+        fields = ('image', 'name', 'username', 'email', 'contact_number', 'major', 'bio',)
 
         widgets = {
+            'image': forms.FileInput(attrs={
+                'class': INPUT_CLASSES
+            }),
             'name': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
             }),
@@ -33,9 +36,12 @@ class EditIndividualForm(forms.ModelForm):
 class EditStudentOrganisationForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('name', 'username', 'email', 'contact_number', 'bio',)
+        fields = ('image', 'name', 'username', 'email', 'contact_number', 'bio',)
 
         widgets = {
+            'image': forms.FileInput(attrs={
+                'class': INPUT_CLASSES
+            }),
             'name': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
             }),

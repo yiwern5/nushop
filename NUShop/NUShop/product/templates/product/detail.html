@@ -41,72 +41,86 @@
     </div>
 
     <div class="col-span-2 row-span-1">
-        <h1 class="mb-6 text-3xl">{{ product.name }}</h1>
-        <div class="text-xl">
-            <p class="text-3xl text-yellow-500">* * * * *</p>
-            <p>20 ratings</p>
-            <p>553 sold</p>
+        <h1 class="mb-6 text-6xl font-serif">{{ product.name }}</h1>
+        <div class="text-2xl flex">
+            <div class="rating">
+                <span class="star" onclick="updateRating(1)" {% if product.average_rating >= 1 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(2)" {% if product.average_rating >= 2 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(3)" {% if product.average_rating >= 3 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(4)" {% if product.average_rating >= 4 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(5)" {% if product.average_rating >= 5 %}style="color: orange;"{% endif %}>&#9733;</span>
+            </div>
+            <!-- <div class="rating">
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+                <span class="star">&#9733;</span>
+            </div>
+            
+            <input type="number" min="1" max="5" step="0.5" id="ratingInput" onchange="updateRating(this.value)"> -->
+            <p>({{ product.average_rating }})</p>
+            <p class="ml-6">20 ratings</p>
+            <p class="ml-6">553 sold</p>
         </div>
+        <p class="text-yellow-500 text-4xl mt-3">$ {{ product.price|floatformat:2 }}</p>
         <!--<h1 class="mb-6 text-3xl">{{ product.review }}</h1>
         <h1 class="mb-6 text-3xl">{{ product.rating }}</h1>
         <h1 class="mb-6 text-3xl">{{ product.numbersold }}</h1>-->
     </div>
+    {% if request.user == product.created_by %}
     <div class="col-span-2 row-span-1">
-        <p class="text-yellow-500 text-3xl">$ {{ product.price|floatformat:2 }}</p>
-        <!--<p class="text-gray-500"><strong>Seller: </strong>{{ product.created_by.username }}</p>-->
-
-        {% if request.user == product.created_by %}
-            <div class="mt-6 p-6 bg white rounded-xl">
-                <p class="text-xl">This is your product! (You can change or delete images at the images section)</p>
-                <a href="{% url 'product:add_image' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl">Add Image</a>
+            <div class="mt-6 bg white rounded-xl">
+                <p class="text-2xl">This is your product!</p>
                 <a href="{% url 'product:edit' product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Edit</a>
                 <a href="{% url 'product:delete' product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
-            </div>
-        {% endif%}
+            </div>  
     </div>
+    {% endif%}
 
     <div class="col-span-2 row-span-1">
-
-        <div class="text-3xl">
-            <p>Variations</p>
+        <div class="mt-6 mb-3 text-3xl">
+            Variations
+            {% if request.user == product.created_by %}
+            <a href="{% url 'product:add_variation' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl ml-3">Add Variation</a>
+            {% endif %}
         </div>
-
         <div class="bg-primary-light rounded-xl p-4">
+            {% for variation in variations %}
+            <div class="mb-3 text-2xl font-semibold">
+                {{ variation.type }}
+                {% if request.user == product.created_by %}
+                <!-- <a href="{% url 'product:change_variation' variation.id product.id %}" class="text-yellow-500 underline text-right">Edit</a> -->
+                <!-- <a href="{% url 'product:delete_variation' variation.id product.id %}" class="text-red-500 underline text-right">Delete</a> -->
+                {% endif %}
 
-            <p class="text-xl">Size</p>
-            <div>
-                <input type="radio" class="btn-check" name="options" id="option1" autocomplete="off">
-                <label class="btn btn-secondary" for="option1">S</label>
-
-                <input type="radio" class="btn-check" name="options" id="option2" autocomplete="off">
-                <label class="btn btn-secondary" for="option2">M</label>
-
-                <input type="radio" class="btn-check" name="options" id="option3" autocomplete="off">
-                <label class="btn btn-secondary" for="option3">L</label>
-
-                <input type="radio" class="btn-check" name="options" id="option4" autocomplete="off">
-                <label class="btn btn-secondary" for="option4">XL</label>
+                <div class="text-lg">
+                    {% for subvariation in variation.subvariations.all %}
+                    <input type="radio" class="btn-check" name="option{{ forloop.parentloop.counter }}" id="option{{ forloop.parentloop.counter }}_{{ forloop.counter }}" autocomplete="off">
+                    <label class="btn btn-default font-semibold" for="option{{ forloop.parentloop.counter }}_{{ forloop.counter }}">{{ subvariation.option }}</label>
+                    {% if request.user == product.created_by %}
+                    <a href="{% url 'product:change_subvariation' subvariation.id product.id %}" class="text-yellow-500 underline">edit</a>
+                    <a href="{% url 'product:delete_subvariation' subvariation.id product.id %}" class="text-red-500 underline">remove</a>
+                    {% endif %}
+                    {% endfor %}
+                </div>
             </div>
+            {% if request.user == product.created_by %}
+            <a href="{% url 'product:add_subvariation' variation.id product.id %}" class="text-lg text-green-500 underline">Add Option</a>
+            <a href="{% url 'product:delete_variation' variation.id product.id %}" class="text-red-500 underline text-lg">Delete Variation</a>
+            {% endif %}
+            {% endfor %}
             
-
-            <p class="text-xl">Delivery Method</p>
-            <div>
-                <input type="radio" class="btn-check" name="option" id="option5" autocomplete="off">
-                <label class="btn btn-secondary" for="option5">Meet Up</label>
-
-                <input type="radio" class="btn-check" name="option" id="option6" autocomplete="off">
-                <label class="btn btn-secondary" for="option6">Delivery</label>
-            </div>
+            <p class="text-2xl font-semibold mb-3">Quantity</p>
+            <form>
+                <div class="flex text-xl">
+                    <div class="btn btn-default ml-3 mr-3" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
+                    <input class="rounded-xl text-center" id="number" value="1"/>
+                    <div class="btn btn-default value-button ml-3 mr-3" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
+                </div>
+            </form>
+            <script src="{% static 'script.js' %}"></script>
             
-            
-            <p class="text-xl">Quantity</p>
-            <script src=”script.js”>
-                <form>
-                    <div class="value-button" id="decrease" onclick="decreaseValue()" value="Decrease Value">-</div>
-                    <input type="number" id="number" value="0"/>
-                    <div class="value-button" id="increase" onclick="increaseValue()" value="Increase Value">+</div>
-                </form>
-            </script>
 
             <!-- <a href="{% url 'checkout:add_to_cart' product.id %}" class="mt-2 px-6 text-xl bt-nushoptertiary-2 rounded-xl text-center">Add to Cart</a> -->
             {% if request.user != product.created_by %}
@@ -201,6 +215,9 @@
 
 <div id="description" class="mt-6 mb-3 text-3xl">
     Description
+    {% if request.user == product.created_by %}
+    <p class="text-xl">(Edit the descriptions with the edit button above)</p>
+    {% endif %}
 </div>
 <div class="bg-primary-light rounded-lg p-4">
     {% if product.description %}
@@ -214,81 +231,176 @@
     {% endif %}
 </div>
 <div id="review"></div>
-<div class="mt-9 mb-6 text-3xl">
+<div class="mt-6 mb-3 text-3xl">
     Reviews
+    <a href="{% url 'product:add_review' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl ml-3">Add Review</a>
 </div>
 <div class="bg-primary-light rounded-lg p-4">
-    <div class="grid grid-cols-7">
+    {% if reviews %}
+    {% for review in reviews %}
+    <div class="grid grid-cols-5 gap-3 mb-3">
         <div class="col-span-1">
-            {% if seller.image %}
-            <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
+            {% if review.created_by.image %}
+            <img src="{{ review.created_by.image.url }}" alt="Seller Image" class="pfp">
             {% else %}
             <img src="{% static 'random.png' %}" class="pfp">
             {% endif %}
-        </div>
-        <div class="col-span-1">
-            <p class="text-xl">{{ user.name }}</p>
-            <p>* * * * *</p>
-        </div>
-        <div class="col-span-1">                     
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <img src="{{ product.image.url }}" class="rounded-xl h-full w-full">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-                </div>
+            <p class="text-2xl">{{ review.created_by.name }}</p>
+            <div class="rating">
+                <span class="star" onclick="updateRating(1)" {% if review.rating >= 1 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(2)" {% if review.rating >= 2 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(3)" {% if review.rating >= 3 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(4)" {% if review.rating >= 4 %}style="color: orange;"{% endif %}>&#9733;</span>
+                <span class="star" onclick="updateRating(5)" {% if review.rating >= 5 %}style="color: orange;"{% endif %}>&#9733;</span>
             </div>
-
-            <div class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ product.thumbnail.url }}" width="50%" height="50%">
-            </div>    
-        </div>
-        {% for image in images %}
-        <div class="col-span-1">                     
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-body">
-                        <img src="{{ image.image.url }}" alt="Product Image" class="rounded-xl h-full w-full">
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-                </div>
-            </div>
-
-            <div class="" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                <img src="{{ image.image.url }}" alt="Product Image" width="50%" height="50%">
-            </div>    
-        </div>
-        {% endfor %}
-
-        <div class="col-span-3"></div>
-
-        <div class="col-span-1">
-        </div>
-        <div class="col-span-1">
-            <p>Date: 13/5/2023</p>
+            <p>{{ review.created_at }}</p>
             <p>Variation: XS, Delivery</p>
         </div>
-        <div class="col-span-5">
-            <p>good product</p>
+
+        <div class="col-span-4 text-lg">
+            <p>{{ review.description }}</p>
+            <div class="d-flex flex-row flex-nowrap container-fluid scroll">
+                {% if review.image1 %}
+                <div class="modal fade" id="1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="{{ review.image1.url }}" class="rounded-xl h-full w-full">
+                            </div>
+                            <div class="modal-footer">
+                                {% if request.user == image_variable.uploaded_by %}
+                                    <a href="{% url 'product:change_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Change Image</a>
+                                    <a href="{% url 'product:delete_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
+                                {% endif %}
+                                <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mr-4">
+                    <div class="product-pic" data-bs-toggle="modal" data-bs-target="#1">
+                        <img src="{{ review.image1.url }}" alt="Product Image" class="rounded-xl h-full w-full">
+                    </div>
+                </div>
+                {% endif %}
+    
+                {% if review.image2 %}
+                <div class="modal fade" id="2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="{{ review.image2.url }}" class="rounded-xl h-full w-full">
+                            </div>
+                            <div class="modal-footer">
+                                {% if request.user == image_variable.uploaded_by %}
+                                    <a href="{% url 'product:change_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Change Image</a>
+                                    <a href="{% url 'product:delete_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
+                                {% endif %}
+                                <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mr-4">
+                    <div class="product-pic" data-bs-toggle="modal" data-bs-target="#2">
+                        <img src="{{ review.image2.url }}" alt="Product Image" class="rounded-xl h-full w-full">
+                    </div>
+                </div>
+                {% endif %}
+    
+                {% if review.image3 %}
+                <div class="modal fade" id="3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="{{ review.image3.url }}" class="rounded-xl h-full w-full">
+                            </div>
+                            <div class="modal-footer">
+                                {% if request.user == image_variable.uploaded_by %}
+                                    <a href="{% url 'product:change_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Change Image</a>
+                                    <a href="{% url 'product:delete_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
+                                {% endif %}
+                                <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mr-4">
+                    <div class="product-pic" data-bs-toggle="modal" data-bs-target="#3">
+                        <img src="{{ review.image3.url }}" alt="Product Image" class="rounded-xl h-full w-full">
+                    </div>
+                </div>
+                {% endif %}
+    
+                {% if review.image4 %}
+                <div class="modal fade" id="4" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="{{ review.image4.url }}" class="rounded-xl h-full w-full">
+                            </div>
+                            <div class="modal-footer">
+                                {% if request.user == image_variable.uploaded_by %}
+                                    <a href="{% url 'product:change_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Change Image</a>
+                                    <a href="{% url 'product:delete_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
+                                {% endif %}
+                                <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mr-4">
+                    <div class="product-pic" data-bs-toggle="modal" data-bs-target="#4">
+                        <img src="{{ review.image4.url }}" alt="Product Image" class="rounded-xl h-full w-full">
+                    </div>
+                </div>
+                {% endif %}
+    
+                {% if review.image5 %}
+                <div class="modal fade" id="5" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <img src="{{ review.image5.url }}" class="rounded-xl h-full w-full">
+                            </div>
+                            <div class="modal-footer">
+                                {% if request.user == image_variable.uploaded_by %}
+                                    <a href="{% url 'product:change_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-yellow-500 px-12 py-2 text-white rounded-xl">Change Image</a>
+                                    <a href="{% url 'product:delete_image' image_variable.id product.id %}" class="inline-block text-lg font-semibold bg-red-500 px-12 py-2 text-white rounded-xl">Delete</a>
+                                {% endif %}
+                                <button type="button" class="btn btn-secondary text-yellow-500 border-yellow-500" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col mr-4">
+                    <div class="product-pic" data-bs-toggle="modal" data-bs-target="#5">
+                        <img src="{{ review.image5.url }}" alt="Product Image" class="rounded-xl h-full w-full">
+                    </div>
+                </div>
+                {% endif %}
+    
+            </div>
         </div>
+                       
+        
+
     </div>
+    {% endfor %}
+    {% else %}
+        <p class="text-black">
+            This product does not have any review.
+        </p>
+    {% endif %}
+
 </div>
 
+
 <div id="images"></div>
-<div class="mt-9 mb-6 text-3xl">
+<div class="mt-6 mb-3 text-3xl">
     Images
     {% if request.user == product.created_by %}
+    <a href="{% url 'product:add_image' product.id %}" class="inline-block text-lg font-semibold bg-green-500 px-12 py-2 text-white rounded-xl ml-3">Add Image</a>
     <p class="text-xl">(Manage a specific image by clicking on it)</p>
     {% endif %}
 </div>
@@ -348,23 +460,25 @@
 <div class="mt-9 mb-6 text-3xl">
     Recommended
 </div>
-<div class="px-6 py-3 rounded-xl">
+<div class="px-6 pb-3 container-fluid scroll">
+    <div class="d-flex flex-row flex-nowrap">
         {% for product in related_products %}
-            <div class="col mr-4">
-                <div class="card rounded-xl border-0">
-                    <a href="{% url 'product:detail' product.id %}">
-                        <div class="product-pic">
-                            <img src="{{ product.thumbnail.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
-                        </div>
-            
-                        <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
-                            <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
-                            <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price|floatformat:2 }}</p>
-                        </div>
-                    </a>
-                </div>
+        <div class="col mr-4">
+            <div class="card rounded-xl border-0">
+                <a href="{% url 'product:detail' product.id %}">
+                    <div class="product-pic">
+                        <img src="{{ product.thumbnail.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
+                    </div>
+        
+                    <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
+                        <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
+                        <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price|floatformat:2 }}</p>
+                    </div>
+                </a>
             </div>
+        </div>
         {% endfor %}
+    </div>
 </div>
 
 {% endblock %}
