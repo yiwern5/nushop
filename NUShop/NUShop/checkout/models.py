@@ -13,7 +13,6 @@ class CartProduct(models.Model):
     @property
     def subtotal(self):
         return self.quantity * self.product.price
-
  
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
@@ -28,11 +27,11 @@ class Cart(models.Model):
     
     @property
     def total_price(self):
-        return sum(product.subtotal for product in self.products.all())
+        return sum(product.subtotal for product in self.products.filter(ordered=False))
 
     def get_total_amount(self):
         total_amount = 0
-        for cart_product in self.products.all():
+        for cart_product in self.products.filter(ordered=False):
             total_amount += cart_product.quantity * cart_product.product.price
         return total_amount
     
@@ -81,6 +80,7 @@ class OrderProduct(models.Model):
     price = models.FloatField()
     thumbnail = models.ImageField(upload_to='orderproduct_images', null=False)
     quantity = models.IntegerField()
+    variation = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"Order of {self.buyer.username}"
@@ -93,4 +93,5 @@ class OrderProduct(models.Model):
             self.seller_name = self.seller.username
             self.buyer_name = self.buyer.username
             self.quantity = self.cart_product.quantity
+            self.variation = self.cart_product.variation
         super().save(*args, **kwargs)

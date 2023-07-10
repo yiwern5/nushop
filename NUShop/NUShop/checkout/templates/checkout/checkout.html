@@ -4,8 +4,8 @@
 
 {% block content %}
     <h1 class="my-3 text-3xl cinzel text-nushopprimary text-center">Checkout</h1>
-    <div class="grid grid-cols-5 gap-4">     
-        <div class="col-span-3">
+    <div class="grid grid-cols-4 gap-4">     
+        <div class="col-span-2">
             <div class="mt-6 px-6">
                 <h1 class="text-3xl mb-3">Shipping Details</h1>
                 {% comment %} Delivery Address Details {% endcomment %}
@@ -13,13 +13,10 @@
     
                     <p class="text-gray-400">Full Name</p>
                     <p class="text-xl font-semibold">{{ user.delivery_address.name }}</p>
-                    <p class="text-gray-400">Address 1</p>
-                    <p class="text-xl font-semibold">{{ user.delivery_address.address_line1 }}</p>
-                    <p class="text-gray-400">Address 2</p>
-                    <p class="text-xl font-semibold">{{ user.delivery_address.address_line2 }}</p>
-                    <p class="text-gray-400">Block Number</p>
+                    <p class="text-gray-400">Address</p>
                     <p class="text-xl font-semibold">{{ user.delivery_address.block_unitno }}</p>
-                    <p class="text-gray-400">Postcode</p>
+                    <p class="text-xl font-semibold">{{ user.delivery_address.address_line1 }}</p>
+                    <p class="text-xl font-semibold">{{ user.delivery_address.address_line2 }}</p>
                     <p class="text-xl font-semibold">{{ user.delivery_address.postcode }} Singapore</p>
                     <p class="text-gray-400">Contact Number</p>
                     <p class="text-xl font-semibold">{{ user.contact_number }}</p>
@@ -63,7 +60,7 @@
                 {% for product in products %}
                     <div class="p-3 rounded-xl">
                         <a href="{% url 'product:detail' product.product.id %}">
-                            <div class="grid grid-cols-5 gap-2">
+                            <div class="grid grid-cols-4 gap-2">
                                 <div class="col-span-5 text-2xl">
                                     <h1>{{ product.product.created_by.name }}</h1>
                                 </div>
@@ -72,7 +69,9 @@
                                 </div>
                                 <div class="col-span-4">
                                     <h2 class="text-2xl text-black">{{ product.product.name }}</h2>
-                                    <p class="text-black text-xl">Variation:</p>
+                                    {% if product.variation %}
+                                    <p class="text-black text-xl">{{ product.variation }}</p>
+                                    {% endif %}
                                     <p class="text-xl">Quantity: {{ product.quantity }}</p>
                                     <p class="text-xl">Subtotal: $ {{ product.subtotal|floatformat:2 }}</p>
                                 </div>    

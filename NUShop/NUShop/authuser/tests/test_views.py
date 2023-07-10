@@ -1,12 +1,10 @@
 from django.test import TestCase, Client
 from django.urls import reverse
 from authuser.models import User, Bank
-from authuser.forms import EditIndividualForm, EditStudentOrganisationForm, EditBankDetailsForm, EditDeliveryDetailsForm
+from authuser.forms import EditIndividualForm, EditStudentOrganisationForm, EditBankDetailsForm, EditDeliveryDetailsForm, ChangeImageForm
 from authuser.views import send_otp
 from django.contrib.messages import get_messages
-from django.http import HttpRequest
-from datetime import datetime, timedelta
-import pyotp
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 class TestViews(TestCase):
     def setUp(self):
@@ -218,3 +216,20 @@ class TestViews(TestCase):
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password('newtestpassword'))
         self.assertRedirects(response, reverse('core:login'))
+
+    def test_change_image(self):
+        image_data = b'\x00\x01\x02\x03'  # Example image data
+        self.image = SimpleUploadedFile('test_image.jpg', image_data, content_type='image/jpeg')
+        form_data = {
+            'image': self.image,
+        }
+
+        response = self.client.post(reverse('authuser:change-image', args=['testuser']), data=form_data)
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_edit_bank_details_GET(self):
+        response = self.client.get(reverse('authuser:change-image', args=['testuser']))
+        self.assertEqual(response.status_code, 200)
+        self.assertIsInstance(response.context['form'], ChangeImageForm)
+        self.assertTemplateUsed(response, 'authuser/form.html')
