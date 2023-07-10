@@ -44,7 +44,7 @@
             <div class="col-span-4">
                 <h2 class="text-3xl text-black">{{ order_product.name }}</h2>
                 <div class="text-black text-xl">
-                    <p>Variation:</p>
+                    <p>{{ order_product.variation }}</p>
                     <p>Delivery Method:</p>
                     <p>Price: $ {{ order_product.price|floatformat:2 }}</p>
                     <p>Quantity: {{ order_product.quantity }}</p>
@@ -83,7 +83,7 @@
                             <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Order Received</button>
                         </a>
                     {% elif order_product.buyer_status.name == 'Completed' %}
-                        <a href="#">
+                        <a href="{% url 'product:add_review' product.id %}">
                             <button class="mt-2 text-xl bt-nushoptertiary-1 rounded-xl text-center">Review</button>
                         </a>
                     {% endif %}
@@ -245,9 +245,9 @@
                 <div class='row-span-2'>
                     <ul>
                         <li class="text-gray-400">Address</li>
+                        <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.block_unitno }}</li>
                         <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.address_line1 }}</li>
                         <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.address_line2 }}</li>
-                        <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.block_unitno }}</li>
                         <li class="text-xl font-semibold">{{ order_product.buyer.delivery_address.postcode }} Singapore</li>
                     </ul>
                 </div>

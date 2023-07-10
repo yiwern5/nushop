@@ -64,7 +64,9 @@
                                 <div class="col-span-4">
                                     <h2 class="text-3xl text-black">{{ product.name }}</h2>
                                     <div class="text-black text-xl">
-                                        <p>Variation:</p>
+                                        {% if product.variation %}
+                                        <p>{{ product.variation }}</p>
+                                        {% endif %}
                                         <p>Delivery Method:</p>
                                         <p>Price: $ {{ product.price|floatformat:2 }}</p>
                                         <p>Quantity: {{ product.quantity }}</p>
