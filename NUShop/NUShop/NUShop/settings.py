@@ -72,7 +72,7 @@ ROOT_URLCONF = 'NUShop.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'core', 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -146,7 +146,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 STRIPE_PUBLIC_KEY = "pk_test_51NJF7YEn2jRr5EOoKwsEMyJhY5tydUvwZV6RhV1QUFzlHxCgs75ZQX4xLM4nPTI3tQVpJr6B2dYQqLpljaxJiDqr00gsfcpfiP"
 STRIPE_SECRET_KEY = "sk_test_51NJF7YEn2jRr5EOo9xHJ0sTRllU5temSDL7iVAH4YuY2QkDyULM8FoTKaJ2Mk0cIAcN9U7fEapqEXhypJqh9CCsq00t4MGaFmH"
-STRIPE_WEBHOOK_SECRET = ""
+STRIPE_WEBHOOK_SECRET = "whsec_452151d3e66ce8dfbefa390e8ca3f5ed31bcff1c8530c244d14d097149f889af"
 
 BACKEND_DOMAIN= 'http://127.0.0.1:8000'
 PAYMENT_SUCCESS_URL= 'http://127.0.0.1:8000/success/'
@@ -154,7 +154,7 @@ PAYMENT_CANCEL_URL= 'http://127.0.0.1:8000/cancel/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
+EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'nushop5761@gmail.com'
-EMAIL_HOST_PASSWORD = 'jkntqslwimkmwsvj'
+EMAIL_HOST_PASSWORD = 'xluxuitkqowfpxsk'
