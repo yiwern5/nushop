@@ -1,6 +1,7 @@
 from django.test import TestCase
-from authuser.forms import EditIndividualForm, EditStudentOrganisationForm, EditBankDetailsForm, EditDeliveryDetailsForm, CustomPasswordChangeForm
+from authuser.forms import EditIndividualForm, EditStudentOrganisationForm, EditBankDetailsForm, EditDeliveryDetailsForm, CustomPasswordChangeForm, ChangeImageForm
 from authuser.models import User
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 class TestForms(TestCase):
     def test_edit_ind_form_valid_data(self):
@@ -91,3 +92,12 @@ class TestForms(TestCase):
 
         form = CustomPasswordChangeForm(user=user, data=form_data)
         self.assertFalse(form.is_valid())
+
+    def test_change_image_form_valid_data(self):
+        image_data = b'\x00\x01\x02\x03'  # Example image data
+        self.image = SimpleUploadedFile('test_image.jpg', image_data, content_type='image/jpeg')
+        form = ChangeImageForm(data = {
+            'image': self.image,
+        })
+
+        self.assertTrue(form.is_valid())

@@ -228,7 +228,7 @@ class TestViews(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-    def test_edit_bank_details_GET(self):
+    def test_change_image_GET(self):
         response = self.client.get(reverse('authuser:change-image', args=['testuser']))
         self.assertEqual(response.status_code, 200)
         self.assertIsInstance(response.context['form'], ChangeImageForm)
