@@ -108,8 +108,8 @@ class OrderProduct(models.Model):
             self.subtotal = self.cart_product.pre_discount_subtotal
             self.saved = self.subtotal - self.price
             self.thumbnail = self.cart_product.product.thumbnail
-            self.seller_name = self.seller.username
-            self.buyer_name = self.buyer.username
+            self.seller.wallet_balance += self.price
+            self.seller.save()
             self.quantity = self.cart_product.quantity
             self.variation = self.cart_product.variation
         super().save(*args, **kwargs)

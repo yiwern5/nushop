@@ -99,6 +99,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     followers = models.ManyToManyField('self', related_name="followed_by", symmetrical=False, blank=True)
     bank_details = models.ForeignKey(Bank, related_name='bank_details', on_delete=models.CASCADE, blank=True, null=True)
     delivery_address = models.ForeignKey(DeliveryAddress, related_name='delivery_address', on_delete=models.CASCADE, blank=True, null=True)
+    wallet_balance = models.FloatField(default=0)
 
     USERNAME_FIELD = 'username'
     
