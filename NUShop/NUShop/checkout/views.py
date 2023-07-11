@@ -104,7 +104,7 @@ def fulfill_order(session):
         )
         cart_product.ordered = True
         cart_product.save()
-        cart_product.product.number_sold += 1
+        cart_product.product.number_sold += cart_product.quantity
         cart_product.product.save()
 
 # Create your views here.
