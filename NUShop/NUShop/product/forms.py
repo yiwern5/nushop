@@ -30,7 +30,7 @@ class NewProductForm(forms.ModelForm):
 class EditProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ('name', 'description', 'price', 'thumbnail', 'is_sold')
+        fields = ('name', 'description', 'price', 'discount_price', 'thumbnail', 'is_sold')
 
         widgets = {
             'name': forms.TextInput(attrs={
@@ -40,6 +40,9 @@ class EditProductForm(forms.ModelForm):
                 'class': INPUT_CLASSES
             }),
             'price': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'discount_price': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
             }),
             'thumbnail': forms.FileInput(attrs={

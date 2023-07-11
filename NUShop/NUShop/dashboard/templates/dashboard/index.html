@@ -123,7 +123,18 @@
                 
                             <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
                                 <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
+                                {% if product.discount_price %}
+                                <div class="grid grid-cols-2">
+                                    <div class="col-span-1">
+                                        <p class="mt-3 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.discount_price|floatformat:2 }}</p>
+                                    </div>
+                                    <div class="col-span-1">
+                                        <p class="mt-4 mb-4 text-right text-sm text-gray-500 font-medium card-text">{{ product.discount|floatformat:1 }} %</p>
+                                    </div>
+                                </div>
+                                {% else %}
                                 <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price|floatformat:2 }}</p>
+                                {% endif %}
                             </div>
                         </a>
                     </div>

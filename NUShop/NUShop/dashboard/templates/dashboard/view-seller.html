@@ -30,10 +30,16 @@
                 <p class="text-2xl font-semibold">{{ products.count }}</p>
             </div>
 
-            <div class="col-span-2">
-                <a href="#">
-                    <button class="text-xl bt-nushoptertiary-2 rounded-xl text-center">Chat</button>
-                </a>
+            <div class="col-span-1">
+                <p class="text-2xl font-semibold">Ratings: </p>
+            </div>
+
+            <div class="col-span-1">
+                {% if seller.average_rating %}
+                <p class="text-2xl font-semibold">{{ average_rating_seller|floatformat:1 }} stars</p>
+                {% else %}
+                <p class="text-2xl font-semibold">No ratings yet</p>
+                {% endif %}
             </div>
 
             <div class="col-span-2">
@@ -68,7 +74,7 @@
 
     <div class="grid grid-cols-5 gap-4">
         <div class="col-span-1 vl">
-            <form method="get" action="{% url 'dashboard:view-seller' user.username %}" class="pt-4 pr-2">
+            <form method="get" action="{% url 'dashboard:view-seller' seller.username %}" class="pt-4 pr-2">
                 <input name="query" class="w-full py-3 px-6 border rounded-xl" type="text" value="{{ query }}" placeholder="Search">
 
                 <button class="mt-2 text-xl bg-nushopprimary bt-nushopprimary text-white rounded-xl text-center">Search</button>
@@ -114,7 +120,18 @@
             
                         <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
                             <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
+                            {% if product.discount_price %}
+                            <div class="grid grid-cols-2">
+                                <div class="col-span-1">
+                                    <p class="mt-3 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.discount_price|floatformat:2 }}</p>
+                                </div>
+                                <div class="col-span-1">
+                                    <p class="mt-4 mb-4 text-right text-sm text-gray-500 font-medium card-text">{{ product.discount|floatformat:1 }} %</p>
+                                </div>
+                            </div>
+                            {% else %}
                             <p class="mt-4 mb-4 text-xl font-medium card-text text-nushoptertiary">${{ product.price|floatformat:2 }}</p>
+                            {% endif %}
                         </div>
                     </a>
                 </div>

@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
-from django.db.models import Q
+from django.db.models import Q, Avg
 from django.urls import reverse
 from product.models import Category, Product
 from authuser.models import User
@@ -25,6 +25,9 @@ def viewseller(request, username):
     category_name = ''
     categories = Category.objects.all()
     products = Product.objects.filter(is_sold=False, created_by=seller)
+    average_rating_seller = products.aggregate(average_rating=Avg('reviews__rating'))['average_rating']
+    if average_rating_seller is not None:
+        average_rating_seller = round(average_rating_seller, 2)
 
     if category_id:
         products = products.filter(category_id=category_id)

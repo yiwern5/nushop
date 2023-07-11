@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserM
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
+from django.db.models import Avg
 
 # Create your models here.
 class Faculty(models.Model):
