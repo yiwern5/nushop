@@ -27,6 +27,8 @@ class Product(models.Model):
     is_sold = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, related_name='products', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
+    stock = models.IntegerField(blank=True, null=True)
+    sold = models.IntegerField(blank=True, null=True)
     
     def __str__(self):
         return self.name
@@ -36,7 +38,7 @@ class Product(models.Model):
         avg_rating = self.reviews.aggregate(avg_rating=Avg('rating'))['avg_rating']
         if avg_rating is not None:
             avg_rating = round(avg_rating, 2)
-        return avg_rating
+            return avg_rating
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)
