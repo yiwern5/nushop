@@ -1,7 +1,6 @@
 from django.db import models
 from authuser.models import User
 from django.db.models import Avg
-from django import forms
 
 # Create your models here.
 class Category(models.Model):
@@ -15,14 +14,13 @@ class Category(models.Model):
     def __str__(self):
         return self.name
     
-
-    
 class Product(models.Model):
     category = models.ForeignKey(Category, related_name='products', on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
+    number_sold = models.BigIntegerField(default=0)
     thumbnail = models.ImageField(upload_to='product_images', null=False)
     is_sold = models.BooleanField(default=False)
     created_by = models.ForeignKey(User, related_name='products', on_delete=models.CASCADE)
@@ -37,6 +35,10 @@ class Product(models.Model):
         if avg_rating is not None:
             avg_rating = round(avg_rating, 2)
         return avg_rating
+    
+    @property
+    def discount(self):
+        return (self.discount_price - self.price) / self.price * 100
 
 class ProductImage(models.Model):
     product = models.ForeignKey(Product, related_name='images', on_delete=models.CASCADE)

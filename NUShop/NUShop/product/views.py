@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.db.models import Q, Avg, Count
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import Category, Product, ProductImage, Variation, Subvariation, Review
 from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm, AddVariationForm, AddSubvariationForm, ChangeSubvariationForm, ChangeVariationForm, ReviewForm
@@ -53,7 +53,7 @@ def detail(request, pk):
         'products': products, 
         'related_products': related_products,
         'seller': seller,
-        'seller_product': seller_product
+        'seller_product': seller_product,
     })
 
 @login_required

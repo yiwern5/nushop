@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.urls import reverse
-from django.contrib.auth.models import AnonymousUser
+from django.db.models import F, ExpressionWrapper, FloatField
 from .forms import SignupForm
 from product.models import Category, Product
 
@@ -8,11 +8,18 @@ from product.models import Category, Product
 def index(request):
     products = Product.objects.filter(is_sold=False)
     categories = Category.objects.all()
+    trending = products.order_by('-number_sold')
+    onsale = Product.objects.annotate(discount_percentage=ExpressionWrapper(
+        (F('price') - F('discount_price')) / F('price') * 100,
+        output_field=FloatField()
+    )).filter(discount_percentage__gt=50).order_by('-discount_percentage')
 
     if not request.user.is_authenticated:
         return render(request, 'core/index.html', {
         'categories': categories,
         'products': products,
+        'trending': trending,
+        'onsale': onsale,
     })
 
     elif request.user.major:
@@ -27,6 +34,8 @@ def index(request):
     return render(request, 'core/index.html', {
         'categories': categories,
         'products': products,
+        'trending': trending,
+        'onsale': onsale,
     })
 
 def signup(request):

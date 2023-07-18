@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserM
 from django.db import models
 from django.utils import timezone
 from django.core.validators import RegexValidator
+from django.db.models import Avg
 
 # Create your models here.
 class Faculty(models.Model):
@@ -98,6 +99,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     followers = models.ManyToManyField('self', related_name="followed_by", symmetrical=False, blank=True)
     bank_details = models.ForeignKey(Bank, related_name='bank_details', on_delete=models.CASCADE, blank=True, null=True)
     delivery_address = models.ForeignKey(DeliveryAddress, related_name='delivery_address', on_delete=models.CASCADE, blank=True, null=True)
+    wallet_balance = models.FloatField(default=0)
 
     USERNAME_FIELD = 'username'
     

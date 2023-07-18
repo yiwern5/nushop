@@ -26,7 +26,7 @@ class CreateStripeCheckoutSessionView(View):
 
     def post(self, request, *args, **kwargs):
         cart = Cart.objects.filter(created_by=request.user)[0]
-        total_amount = cart.get_total_amount() * 100
+        total_amount = cart.total_price * 100
 
         # Generate the URL for the static image in your Django template
         image_url = request.build_absolute_uri(static('green logo.png'))
@@ -104,6 +104,8 @@ def fulfill_order(session):
         )
         cart_product.ordered = True
         cart_product.save()
+        cart_product.product.number_sold += cart_product.quantity
+        cart_product.product.save()
 
 # Create your views here.
 @login_required
@@ -188,21 +190,6 @@ def add_to_cart(request, pk):
         form = AddToCartForm()
 
     return render(request, 'my_template.html', {'form': form})
-
-    
-@login_required
-def select_cart_product(request):
-    if request.method == 'POST':
-        ordered_product_pks = request.POST.getlist('ordered_products')
-        cart = Cart.objects.get(created_by=request.user, completed=False)
-
-        # Clear the current selection
-        cart.products.update(ordered=False)
-
-        # Update the selection based on the submitted form data
-        cart.products.filter(pk__in=ordered_product_pks).update(ordered=True)
-
-    return redirect('checkout:index')
 
 @login_required
 def remove_from_cart(request, pk):
