@@ -48,54 +48,18 @@ def edit_student_org_details(request, username):
         'title': 'Edit Personal Details',
     })
 
-def send_otp(request):
-    totp = pyotp.TOTP(pyotp.random_base32(), interval=60)
-    otp = totp.now()
-    request.session['otp_secret_key'] = totp.secret
-    valid_date = datetime.now() + timedelta(minutes=1)
-    request.session['otp_valid_date'] = str(valid_date)
-
-    subject = 'OTP for Bank Details Update'
-    message = f'Your OTP is: {otp}'
-    send_mail(subject, message, settings.EMAIL_HOST_USER, [request.user.email])
-
 @login_required
 def edit_bank_details(request, username):
     user = User.objects.get(username=username)
     bank = user.bank_details
-    
     if request.method == 'POST':
         form = EditBankDetailsForm(request.POST, request.FILES, instance=bank)
         if form.is_valid():
-            otp = request.POST.get('otp')
-
-            otp_secret_key = request.session['otp_secret_key']
-            otp_valid_date = request.session['otp_valid_date']
-
-            if otp_secret_key and otp_valid_date is not None:
-                valid_until = datetime.fromisoformat(otp_valid_date)
-
-                if valid_until > datetime.now():
-                    totp = pyotp.TOTP(otp_secret_key, interval=60)
-                    if totp.verify(otp):
-                        form.save()
-                        bank.otp = ''
-                        bank.save()
-                        messages.info(request, "Bank details are updated. If you wish to edit it again please wait for at least 5 minutes.")
-
-                        del request.session['otp_secret_key']
-                        del request.session['otp_valid_date']
-
-                        return redirect(reverse('dashboard:view-profile', args=[username]))
-                    else:
-                        form.add_error('otp', 'Invalid OTP. Please try again.')
-                else:
-                    form.add_error('otp', 'OTP expired. Please try again.')
-            else:
-                form.add_error('otp', 'OTP was sent. Please try again in 60 seconds.')
+            form.save()
+            messages.info(request, "Bank details are updated.")
+            return redirect(reverse('dashboard:view-profile', args=[username]))
     else:
         form = EditBankDetailsForm(instance=bank)
-        send_otp(request)            
 
     return render(request, 'authuser/form.html', {
         'form': form,
@@ -125,37 +89,14 @@ def add_bank_details(request, username):
     if request.method == 'POST':
         form = EditBankDetailsForm(request.POST, request.FILES)
         if form.is_valid():
-            otp = request.POST.get('otp')
-
-            otp_secret_key = request.session['otp_secret_key']
-            otp_valid_date = request.session['otp_valid_date']
-
-            if otp_secret_key and otp_valid_date is not None:
-                valid_until = datetime.fromisoformat(otp_valid_date)
-
-                if valid_until > datetime.now():
-                    totp = pyotp.TOTP(otp_secret_key, interval=60)
-                    if totp.verify(otp):
-                        bank = form.save(commit=False)
-                        bank.otp = ''
-                        bank.save()
-                        request.user.bank_details = bank
-                        request.user.save()
-                        messages.info(request, "Bank details are added. If you wish to change it please wait for at least 5 minutes.")
-
-                        del request.session['otp_secret_key']
-                        del request.session['otp_valid_date']
-
-                        return redirect(reverse('dashboard:view-profile', args=[username]))
-                    else:
-                        form.add_error('otp', 'Invalid OTP. Please try again.')
-                else:
-                    form.add_error('otp', 'OTP expired. Please try again.')
-            else:
-                form.add_error('otp', 'OTP was sent. Please try again in 60 seconds.')
+            bank = form.save(commit=False)
+            request.user.bank_details = bank
+            bank.save()
+            request.user.save()
+            messages.info(request, "Bank details are added.")
+            return redirect(reverse('dashboard:view-profile', args=[username]))
     else:
         form = EditBankDetailsForm()
-        send_otp(request)
 
     return render(request, 'authuser/form.html', {
         'form': form,

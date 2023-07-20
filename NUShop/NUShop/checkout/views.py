@@ -285,12 +285,10 @@ def checkout(request):
 def add_shipping_details(request):
     if request.method == 'POST':
         delivery_form = EditDeliveryDetailsForm(request.POST, request.FILES)
-        contact_form = EditContactForm(request.POST, request.FILES)
+        contact_form = EditContactForm(request.POST, request.FILES, instance=request.user)
         if delivery_form.is_valid() and contact_form.is_valid():
             delivery_details = delivery_form.save(commit=False)
-            contact_form = contact_form.save(commit=False)
             request.user.delivery_address = delivery_details
-            request.user.contact_number = contact_form
             delivery_details.save()
             contact_form.save()
             request.user.save()
