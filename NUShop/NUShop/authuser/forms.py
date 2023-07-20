@@ -73,7 +73,7 @@ class EditStudentOrganisationForm(forms.ModelForm):
 class EditBankDetailsForm(forms.ModelForm):
     class Meta:
         model = Bank
-        fields = ('name', 'bank_name', 'account_number', 'otp',)
+        fields = ('name', 'bank_name', 'account_number', )
 
         widgets = {
             'name': forms.TextInput(attrs={
@@ -84,10 +84,6 @@ class EditBankDetailsForm(forms.ModelForm):
             }),
             'account_number': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
-            }),
-            'otp': forms.TextInput(attrs={
-                'class': INPUT_CLASSES,
-                'autocomplete': 'off'
             }),
         }
     

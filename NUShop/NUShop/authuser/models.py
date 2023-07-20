@@ -52,7 +52,6 @@ class Bank(models.Model):
     name = models.CharField(max_length=255, default='')
     bank_name = models.CharField(max_length=255, default='')
     account_number = models.CharField(max_length=255, default='')
-    otp = models.CharField(max_length=6, null=True, blank=True)
 
     def __str__(self):
         return self.name
