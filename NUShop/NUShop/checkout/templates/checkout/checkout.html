@@ -36,17 +36,24 @@
 
             <div class="mt-6 px-6">
                 <h1 class="text-3xl mb-3">Payment Method</h1>
-                <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width:95%;">
-                    <option selected>Select payment method</option>
-                    <option value="1">Card</option>
-                    <!-- <option value="2">PayNow</option>
-                    <option value="3">Cash</option>
-                    <option value="4">NUShop Wallet</option> -->
-                </select>  
-                <form action="{% url 'checkout:create_checkout_session' 1 %}" method="POST">
+                
+                
+                <form action="{% url 'checkout:payment_method' %}" method="POST">
                     {% csrf_token %}
+                    <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example" style="width:95%;" name="payment_method">
+                        <option selected>Select payment method</option>
+                        <option value="1">Card</option>
+                        <option value="2">PayNow</option>
+                        <option value="3">Cash</option>
+                        <option value="4">NUShop Wallet</option>
+                    </select>  
+                    {% if user.delivery_address and user.contact_number %}
                     <button class="text-xl bt-nushopprimary rounded-xl text-center">Complete Payment</button>
+                    {% else %}
+                    <p class="text-xl">(Please enter your shipping details to complete payment)</p>
+                    {% endif %}
                 </form>
+                
                 <!-- <a href="#">
                     <button class="text-xl bt-nushopprimary rounded-xl text-center">Proceed to Pay</button>
                 </a> -->

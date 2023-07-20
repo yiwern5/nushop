@@ -103,8 +103,9 @@
             
             <input type="number" min="1" max="5" step="0.5" id="ratingInput" onchange="updateRating(this.value)"> -->
             <p>({{ product.average_rating|floatformat:1 }})</p>
-            <p class="ml-6">20 ratings</p>
-            <p class="ml-6">{{ product.number_sold}} sold</p>
+            <p class="ml-6">{{ reviews.count }} ratings</p>
+            <p class="ml-6">{{ product.sold }} sold</p>
+
         </div>
         {% if product.discount_price %}
         <p class="text-yellow-500 text-4xl mt-3">$ {{ product.discount_price|floatformat:2 }}</p>
@@ -205,11 +206,11 @@
         </div>
 
         <div class="col-span-1">
-            <p class="text-2xl">Ratings: </p>
+            <p class="text-2xl">Average Ratings: </p>
         </div>
 
         <div class="col-span-1">
-            <p class="text-2xl">3k</p>
+            <p class="text-2xl">{{ avgRating }}</p>
         </div>
 
         <div class="col-span-1">
@@ -217,7 +218,7 @@
         </div>
 
         <div class="col-span-1">
-            <p class="text-2xl">{{ seller_product.count }} </p>
+            <p class="text-2xl">{{ seller.products.count }}</p>
         </div>
 
         <div class="col-span-1">
@@ -233,11 +234,11 @@
         </div>
         
         <div class="col-span-1">
-            <p class="text-2xl">Response Rate: </p>
+            <p class="text-2xl">Number of Ratings: </p>
         </div>
 
         <div class="col-span-1">
-            <p class="text-2xl">99%</p>
+            <p class="text-2xl">{{ numRating }}</p>
         </div>
 
         <div class="col-span-1">
@@ -447,7 +448,7 @@
     </div>
     {% endfor %}
     {% else %}
-        <p class="text-black">
+        <p class="text-black text-xl">
             This product does not have any review.
         </p>
     {% endif %}

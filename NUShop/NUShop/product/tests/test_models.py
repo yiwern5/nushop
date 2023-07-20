@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.core.files.uploadedfile import SimpleUploadedFile
 from authuser.models import User
-from product.models import Category, Product, ProductImage
+from product.models import Category, Product, ProductImage, Review, Variation, Subvariation
 
 
 class CategoryModelTest(TestCase):
@@ -96,3 +96,40 @@ class ProductImageModelTest(TestCase):
         expected_string = 'Image of Test Product'
 
         self.assertEqual(str(product_image), expected_string)
+
+class VariationModelTest(TestCase):
+    def setUp(self):
+        self.product = Product.objects.create(name='Test Product')
+        self.variation = Variation.objects.create(product=self.product, type='Size')
+
+    def test_variation_str_representation(self):
+        expected_str = 'Size'
+        self.assertEqual(str(self.variation), expected_str)
+
+
+class SubvariationModelTest(TestCase):
+    def setUp(self):
+        self.product = Product.objects.create(name='Test Product')
+        self.variation = Variation.objects.create(product=self.product, type='Size')
+        self.subvariation = Subvariation.objects.create(variation=self.variation, option='Small')
+
+    def test_subvariation_str_representation(self):
+        expected_str = 'Small'
+        self.assertEqual(str(self.subvariation), expected_str)
+
+
+class ReviewModelTest(TestCase):
+    def setUp(self):
+        self.product = Product.objects.create(name='Test Product')
+        self.user = User.objects.create(username='testuser')
+        self.review = Review.objects.create(
+            product=self.product,
+            description='Test description',
+            image1='test_image.jpg',
+            rating=4.5,
+            created_by=self.user,
+        )
+
+    def test_review_str_representation(self):
+        expected_str = 'Review by testuser'
+        self.assertEqual(str(self.review), expected_str)

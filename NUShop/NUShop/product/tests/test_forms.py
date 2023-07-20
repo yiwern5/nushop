@@ -1,5 +1,5 @@
 from django.test import TestCase
-from product.forms import NewProductForm, EditProductForm, ChangeImageForm, AddImageForm
+from product.forms import NewProductForm, EditProductForm, ChangeImageForm, AddImageForm, AddVariationForm, AddSubvariationForm, ChangeVariationForm, ChangeSubvariationForm, ReviewForm
 from product.models import Category
 from django.core.files.uploadedfile import SimpleUploadedFile
 from authuser.models import User
@@ -14,7 +14,7 @@ class NewProductFormTest(TestCase):
             'category': self.category,
             'name': 'Test Product',
             'description': 'This is a test product',
-            'price': '20.00',
+            'price': 20.00,
             'thumbnail': self.thumbnail_file,
         }
         form = NewProductForm(data=form_data)
@@ -120,4 +120,97 @@ class AddImageFormTest(TestCase):
             'image': ''
         }
         form = AddImageForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+class AddVariationFormTest(TestCase):
+    def test_valid_form(self):
+        form_data = {
+            'type': 'Size',
+        }
+        form = AddVariationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        form_data = {
+            'type': '',  
+        }
+        form = AddVariationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+
+class AddSubvariationFormTest(TestCase):
+    def test_valid_form(self):
+        form_data = {
+            'option': 'Small',
+        }
+        form = AddSubvariationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        form_data = {
+            'option': '',
+        }
+        form = AddSubvariationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+
+class ChangeVariationFormTest(TestCase):
+    def test_valid_form(self):
+        form_data = {
+            'type': 'Size',
+        }
+        form = ChangeVariationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        form_data = {
+            'type': '',  
+        }
+        form = ChangeVariationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+
+class ChangeSubvariationFormTest(TestCase):
+    def test_valid_form(self):
+        form_data = {
+            'option': 'Small',
+        }
+        form = ChangeSubvariationForm(data=form_data)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        form_data = {
+            'option': '',  
+        }
+        form = ChangeSubvariationForm(data=form_data)
+        self.assertFalse(form.is_valid())
+
+
+class ReviewFormTest(TestCase):
+    def test_valid_form(self):
+        image_data = b'\x00\x01\x02\x03'
+        image_file = SimpleUploadedFile('test_image.jpg', image_data, content_type='image/jpeg')
+        form_data = {
+            'description': 'Test description',
+            'image1': image_file,
+            'image2': '',
+            'image3': '',
+            'image4': '',
+            'image5': '',
+            'rating': '4',
+        }
+        form = ReviewForm(data=form_data,)
+        self.assertTrue(form.is_valid())
+
+    def test_invalid_form(self):
+        form_data = {
+            'description': '', 
+            'image1': '',
+            'image2': '',
+            'image3': '',
+            'image4': '',
+            'image5': '',
+            'rating': '', 
+        }
+        form = ReviewForm(data=form_data)
         self.assertFalse(form.is_valid())

@@ -43,9 +43,18 @@ def detail(request, pk):
     """
     related_products = Product.objects.filter(category=product.category, is_sold=False).exclude(pk=pk)[0:3]
     seller = product.created_by
-    seller_product = Product.objects.filter(created_by=seller)
-    
+    seller_products = Product.objects.filter(created_by=seller)
+    numRating = 0
+    totalRating = 0
+    for seller_product in seller_products:
+        numRating += seller_product.reviews.count()
+        if seller_product.average_rating != None:
+            totalRating += seller_product.average_rating
+
+    avgRating = totalRating/numRating
     return render(request, 'product/detail.html', {
+        'avgRating': avgRating,
+        'numRating': numRating,
         'reviews': reviews,
         'variations': variations,
         'images': images,

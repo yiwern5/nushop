@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
-from django.urls import reverse
 from django.conf import settings
 from .models import CartProduct, Cart, OrderProduct, BuyerStatus, SellerStatus
 from .forms import EditDeliveryDetailsForm, EditContactForm, UpdateStatusForm, AddToCartForm
@@ -19,10 +18,43 @@ from django.http.response import HttpResponse
 stripe.api_key = settings.STRIPE_SECRET_KEY
 endpoint_secret = settings.STRIPE_WEBHOOK_SECRET
 
+@csrf_exempt
+def stripe_webhook(request):
+    # Retrieve the event data from the request
+    payload = request.body
+    sig_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+
+    try:
+        event = stripe.Webhook.construct_event(
+        payload, sig_header, endpoint_secret
+        )
+    except ValueError as e:
+        # Invalid payload
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        # Invalid signature
+        return HttpResponse(status=400)
+
+    if event['type'] == 'checkout.session.completed':
+        print("Payment was successful.")
+        session = stripe.checkout.Session.retrieve(
+            event['data']['object']['id'],
+            expand=['line_items'],
+        )
+
+        line_items = session.line_items
+        # Fulfill the purchase...
+        fulfill_order(line_items)
+
+    return HttpResponse(status=200)
+
+def fulfill_order(line_items):
+    print("Fulfilling order")
+
+
+
 class CreateStripeCheckoutSessionView(View):
-    """
-    Create a checkout session and redirect the user to Stripe's checkout page
-    """
 
     def post(self, request, *args, **kwargs):
         cart = Cart.objects.filter(created_by=request.user)[0]
@@ -52,8 +84,31 @@ class CreateStripeCheckoutSessionView(View):
             success_url=request.build_absolute_uri('/checkout/success/'),
             cancel_url=request.build_absolute_uri('/checkout/cancel/'),
         )
-        return redirect(checkout_session.url, code=303)
+        return redirect(checkout_session.url)
     
+def payment_method(request):
+    # Handle form submission and redirect based on the payment method
+    if request.method == 'POST':
+        payment_method = request.POST.get('payment_method')
+        if payment_method == "1":
+            create_checkout_session_view = CreateStripeCheckoutSessionView()
+            response = create_checkout_session_view.post(request)
+            return response
+        elif payment_method == "2":
+            messages.error(request, "This payment method is unavailable at the moment.")
+            return redirect('checkout:checkout')
+        elif payment_method == "3":
+            messages.error(request, "This payment method is unavailable at the moment.")
+            return redirect('checkout:checkout')
+        elif payment_method == "4":
+            messages.error(request, "This payment method is unavailable at the moment.")
+            return redirect('checkout:checkout')
+        else:
+            messages.error(request, "Please select a payment method")
+            return redirect('checkout:checkout')
+
+    
+
 class SuccessView(TemplateView):
     template_name = "checkout/success.html"
 
@@ -207,43 +262,7 @@ def remove_from_cart(request, pk):
             
     return redirect("checkout:index")
 
-@login_required
-def decrease_from_cart(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    cart_product = CartProduct.objects.filter(
-        product=product,
-        created_by=request.user,
-        ordered=False
-    ).first()
 
-    if cart_product:
-        cart_product.quantity -= 1
-        cart_product.save()
-        messages.info(request, "The quantity was decreased by 1.")
-
-        if cart_product.quantity == 0:
-            remove_from_cart(request, pk) 
-
-    return redirect("checkout:index")
-
-
-@login_required
-def increase_from_cart(request, pk):
-    product = get_object_or_404(Product, pk=pk)
-    cart_product = CartProduct.objects.filter(
-        product=product,
-        created_by=request.user,
-        ordered=False
-    ).first()
-
-    if cart_product:
-        cart_product.quantity += 1
-        cart_product.save()
-        messages.info(request, "The quantity was increased by 1.")
-    else:
-        messages.error(request, "This product is not in your cart.")
-
-    return redirect("checkout:index")
 
 
 @login_required
@@ -377,3 +396,55 @@ def delivered(request, pk):
     order_product.save()
 
     return redirect('checkout:order-details', pk=pk)
+
+@login_required
+def select_cart_product(request):
+    if request.method == 'POST':
+        ordered_product_pks = request.POST.getlist('ordered_products')
+        cart = Cart.objects.get(created_by=request.user, completed=False)
+
+        # Clear the current selection
+        cart.products.update(ordered=False)
+
+        # Update the selection based on the submitted form data
+        cart.products.filter(pk__in=ordered_product_pks).update(ordered=True)
+
+    return redirect('checkout:index')
+
+@login_required
+def decrease_from_cart(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    cart_product = CartProduct.objects.filter(
+        product=product,
+        created_by=request.user,
+        ordered=False
+    ).first()
+
+    if cart_product:
+        cart_product.quantity -= 1
+        cart_product.save()
+        messages.info(request, "The quantity was decreased by 1.")
+
+        if cart_product.quantity == 0:
+            remove_from_cart(request, pk) 
+
+    return redirect("checkout:index")
+
+
+@login_required
+def increase_from_cart(request, pk):
+    product = get_object_or_404(Product, pk=pk)
+    cart_product = CartProduct.objects.filter(
+        product=product,
+        created_by=request.user,
+        ordered=False
+    ).first()
+
+    if cart_product:
+        cart_product.quantity += 1
+        cart_product.save()
+        messages.info(request, "The quantity was increased by 1.")
+    else:
+        messages.error(request, "This product is not in your cart.")
+
+    return redirect("checkout:index")
