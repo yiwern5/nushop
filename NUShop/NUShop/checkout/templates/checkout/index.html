@@ -10,10 +10,6 @@
             <a href="{% url 'product:detail' product.product.pk %}"></a>
                 <div class="p-3 rounded-xl mb-3 mt-3 border-nushopprimary-3">
                         <div class="grid grid-cols-5 gap-2">
-                            <div class="col-span-5 flex">
-                                <input type="checkbox" name="selected_products" value="{{ cart_product.pk }}"> 
-                                <p class="text-xl ml-3">select product for checkout</p>
-                            </div>
                             <div class="col-span-1">
                                 <img src="{{ product.product.thumbnail.url }}" class="rounded-xl img-size">
                             </div>
@@ -22,7 +18,9 @@
                                 <div class="text-2xl">
                                     <h1>Listed by: {{ product.product.created_by }}</h1>
                                     <p>Price: $ {{ product.subtotal|floatformat:2 }}</p></p>
+                                    {% if product.variation %}
                                     <p>{{ product.variation }}</p>
+                                    {% endif %}
                                     <p>Quantity: {{ product.quantity }}</p>
                                 </div> 
                             </div>
@@ -43,10 +41,10 @@
             </div>
             <div class="text-left text-black m-6">
                 <div class="text-xl">
-                    <p>Subtotal: $ {{ cart.total_price|floatformat:2 }}</p>
-                    <p>Shipping Fee: $ 0.00</p>
+                    <p>Subtotal: $ {{ cart.subtotal|floatformat:2 }}</p>
+                    <p>Discount: - $ {{ cart.amount_saved|floatformat:2 }}</p>
                 </div>
-                <p class="text-3xl">Total: $ {{ cart.total_price|floatformat:2 }}</p>
+                <p class="text-3xl mt-2">Total: $ {{ cart.total_price|floatformat:2 }}</p>
             </div>
             <div class="m-6">
 

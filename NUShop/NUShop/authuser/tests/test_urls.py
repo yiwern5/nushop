@@ -1,6 +1,6 @@
 from django.test import SimpleTestCase
 from django.urls import reverse, resolve
-from authuser.views import edit_individual_details, edit_student_org_details, edit_bank_details, edit_delivery_details, add_bank_details, add_delivery_details, change_password
+from authuser.views import edit_individual_details, edit_student_org_details, edit_bank_details, edit_delivery_details, add_bank_details, add_delivery_details, change_password, change_image
 
 class TestUrls(SimpleTestCase):
 
@@ -38,3 +38,8 @@ class TestUrls(SimpleTestCase):
         url = reverse('authuser:change-password')
         print(resolve(url))
         self.assertEquals(resolve(url).func, change_password)
+
+    def test_change_image_url_is_resolved(self):
+        url = reverse('authuser:change-image', args=['username'])
+        print(resolve(url))
+        self.assertEquals(resolve(url).func, change_image)

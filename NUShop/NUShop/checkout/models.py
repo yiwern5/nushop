@@ -12,8 +12,13 @@ class CartProduct(models.Model):
 
     @property
     def subtotal(self):
+        if self.product.discount_price:
+            return self.quantity * self.product.discount_price
         return self.quantity * self.product.price
-
+    
+    @property
+    def pre_discount_subtotal(self):
+        return self.quantity * self.product.price
  
     def __str__(self):
         return f"{self.quantity} of {self.product.name}"
@@ -28,11 +33,19 @@ class Cart(models.Model):
     
     @property
     def total_price(self):
-        return sum(product.subtotal for product in self.products.all())
+        return sum(product.subtotal for product in self.products.filter(ordered=False))
+    
+    @property
+    def amount_saved(self):
+        return sum(product.pre_discount_subtotal for product in self.products.filter(ordered=False)) - sum(product.subtotal for product in self.products.filter(ordered=False))
 
+    @property
+    def subtotal(self):
+        return sum(product.pre_discount_subtotal for product in self.products.filter(ordered=False))
+    
     def get_total_amount(self):
         total_amount = 0
-        for cart_product in self.products.all():
+        for cart_product in self.products.filter(ordered=False):
             total_amount += cart_product.quantity * cart_product.product.price
         return total_amount
     
@@ -79,8 +92,11 @@ class OrderProduct(models.Model):
 
     name = models.CharField(max_length=255)
     price = models.FloatField()
+    subtotal = models.FloatField(null=True)
+    saved = models.FloatField(null=True)
     thumbnail = models.ImageField(upload_to='orderproduct_images', null=False)
     quantity = models.IntegerField()
+    variation = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return f"Order of {self.buyer.username}"
@@ -88,9 +104,12 @@ class OrderProduct(models.Model):
     def save(self, *args, **kwargs):
         if not self.pk:  # If the instance is being created
             self.name = self.cart_product.product.name
-            self.price = self.cart_product.product.price
+            self.price = self.cart_product.subtotal
+            self.subtotal = self.cart_product.pre_discount_subtotal
+            self.saved = self.subtotal - self.price
             self.thumbnail = self.cart_product.product.thumbnail
-            self.seller_name = self.seller.username
-            self.buyer_name = self.buyer.username
+            self.seller.wallet_balance += self.price
+            self.seller.save()
             self.quantity = self.cart_product.quantity
+            self.variation = self.cart_product.variation
         super().save(*args, **kwargs)
