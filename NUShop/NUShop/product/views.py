@@ -50,8 +50,11 @@ def detail(request, pk):
         numRating += seller_product.reviews.count()
         if seller_product.average_rating != None:
             totalRating += seller_product.average_rating
+    if numRating != 0:
+        avgRating = totalRating/numRating
+    else:
+        avgRating = 0
 
-    avgRating = totalRating/numRating
     return render(request, 'product/detail.html', {
         'avgRating': avgRating,
         'numRating': numRating,
