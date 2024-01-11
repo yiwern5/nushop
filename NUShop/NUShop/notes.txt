@@ -1,0 +1,17 @@
+added favicon
+updated variation model to include stock
+update add to cart function in checkout view to validate amount of stocks that could be bought
+change product detail html styling
+    change seller tab
+change dashboard view seller styling
+change user model bio from 500 to 50
+change dashboard styling
+change px of card
+change view profile styling
+
+ways to display products
+based on popularity
+based on latest timestamp
+based on most sold
+
+implement sort function

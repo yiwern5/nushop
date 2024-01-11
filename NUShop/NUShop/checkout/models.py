@@ -1,11 +1,11 @@
 from django.db import models
 from authuser.models import User 
-from product.models import Product, Subvariation
+from product.models import Product, Variation
 
 # Create your models here.
 class CartProduct(models.Model):
     created_by = models.ForeignKey(User, related_name='cart_product', on_delete=models.CASCADE)
-    variation = models.CharField(max_length=255, blank=True, null=True)
+    variation = models.ForeignKey(Variation, related_name='variation', on_delete=models.CASCADE)
     ordered = models.BooleanField(default=False)
     product = models.ForeignKey(Product, related_name='cart_product', on_delete=models.CASCADE)
     quantity = models.IntegerField(default=1)

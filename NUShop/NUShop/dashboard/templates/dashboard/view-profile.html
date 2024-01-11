@@ -7,6 +7,81 @@
 {% endblock %}  
 
 {% block content %}
+<h1 class="my-3 text-3xl cinzel text-nushopprimary text-center">Setting</h1>
+<div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
+    <div class="grid grid-cols-7 gap-1">
+        <div class="w-full col-span-1 overflow-hidden center row-span-2">
+            {% if user.image %}
+            <img src="{{ seller.image.url }}" alt="User Image" class="pfp">
+            {% else %}
+            <img src="{% static 'default.png' %}" class="pfp">
+            {% endif %}
+        </div>
+
+        <div class="col-span-2">
+            <h1 class="text-3xl ">{{ user.username }} ({{ user.role }})</h1>
+            {% if user.bio %}
+            <p class="text-lg text-gray-500">{{ user.bio }}</p>
+            {% else %}
+            <p class="text-lg text-gray-500">No bio yet...</p>
+            {% endif %}
+        </div>
+
+        <div class="col-span-2">
+            <p class="text-lg">Name: 
+                {% if user.name %}
+                {{ user.name }}
+                {% else %}
+                Complete your profile
+                {% endif %}</p>
+        </div>
+
+        <div class="col-span-2">
+            <p class="text-lg">Email: {{ user.email }}</p>
+        </div>
+
+        <div class="col-span-1">
+            <a href="{% url 'authuser:change_image' user.username %}">
+                <button class="text-lg bt-nushoptertiary-2 rounded-xl text-center">Change Profile pic</button>
+            </a>
+        </div>
+
+        <div class="col-span-1">
+            {% if user.role.pk == 2 %}
+            <a href="{% url 'authuser:individual-details' user.username %}">
+                <button class="text-lg bt-nushoptertiary-2 rounded-xl text-center">Edit Personal Info</button>
+            </a>
+            {% else %}
+            <a href="{% url 'authuser:student-org-details' user.username %}">
+                <button class="text-lg bt-nushoptertiary-2 rounded-xl text-center">Edit Personal Info</button>
+            </a>
+            {% endif %}
+        </div>
+        
+        <div class="col-span-2">
+            <p class="text-lg">Contact Number: 
+                {% if user.contact_number %}
+                {{ user.contact_number }}
+                {% else %}
+                Complete your profile
+                {% endif %}
+            </p>
+        </div>
+
+        <div class="col-span-2">
+            <p class="text-lg">Faculty and Major: 
+                {% if user.role.pk == 2 %}
+                {% if user.major %}
+                {{ user.major.faculty_name }} {{ user.major }}
+                {% else %}
+                Complete your profile
+                {% endif %}
+            {% endif %}</p>
+        </div>
+    </div>
+</div>
+
+<!-- 
 <div class="grid grid-cols-6 pt-6 pb-2 px-6">
     <div class="w-full col-span-1 overflow-hidden">
         <div class="grid grid-rows-3">
@@ -105,7 +180,7 @@
     {% else %}
     <a href="{% url 'authuser:student-org-details' user.username %}" class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl">Edit Personal Details</a>
     {% endif %}
-</li>
+</li> -->
 
 {% comment %} Change Password {% endcomment %}
 <div class="p-2">
@@ -132,13 +207,18 @@
         </div>
     {% endif %}
     <div>
-        <button class="py-2 px-2 w-1/5 bt-account text-xl text-center rounded-xl mt-1 mb-6">Change Password</button>
+        
+        <button class="py-2 px-2 w-1/4 bt-nushopsecondary text-xl text-center rounded-xl mt-1 mb-6">Change Password</button>
     </div>
 </form>
 
 <div class="grid grid-cols-2 mt-10">
     <div class='col-span-1'>
-        <div class="text-2xl cinzel text-nushopprimary">Bank Details</div>
+        <div class="text-2xl cinzel text-nushopprimary inline-block">Bank Details
+            <a href="{% url 'authuser:edit-bank-details' user.username %}">
+                <button class="bt-nushopsecondary text-xl text-center rounded-xl">Edit Bank Details</button>
+            </a>
+        </div>
     </div>
     <div class='col-span-1'>
         <div class="text-2xl cinzel text-nushopprimary">Delivery Address</div>

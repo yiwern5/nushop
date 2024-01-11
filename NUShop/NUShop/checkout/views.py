@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.conf import settings
 from .models import CartProduct, Cart, OrderProduct, BuyerStatus, SellerStatus
 from .forms import EditDeliveryDetailsForm, EditContactForm, UpdateStatusForm, AddToCartForm
-from product.models import Product, Variation, Subvariation
+from product.models import Product, Variation
 from authuser.models import User
 import stripe
 from django.views import View
@@ -179,6 +179,11 @@ def index(request):
             'products': products,
     })
 
+# @login_required
+# def update_stock(request, pk):
+#     cart = get_object_or_404(Cart, pk)
+#     cartProduct = 
+
 @login_required
 def add_to_cart(request, pk):
     product = get_object_or_404(Product, pk=pk)
@@ -188,56 +193,83 @@ def add_to_cart(request, pk):
     if request.method == 'POST':
         form = AddToCartForm(request.POST)
         if form.is_valid():
-            quantity = form.cleaned_data['quantity']
-            selected_variations = []
-            selected_subvariations = []
-            result = ''
-            for key, value in request.POST.items():
-                if key.startswith('variation_'):
-                    variation_id = key.split('_')[1]
-                    subvariation_id = value
-                    selected_variations.append(variation_id)
-                    selected_subvariations.append(subvariation_id)
-
-            if len(selected_variations) == len(selected_subvariations) == len(product.variations.all()):
-                for variation_id, subvariation_id in zip(selected_variations, selected_subvariations):
-                    variation = Variation.objects.get(id=variation_id)
-                    subvariation = Subvariation.objects.get(id=subvariation_id)
-                    variation_type = variation.type
-                    subvariation_option = subvariation.option
-                    result += f'{variation_type}: {subvariation_option}; '
-                # Create your model instance using the variation, subvariation, quantity, and other data as needed
-            else:
-                messages.error(request, "Please select all variation options.")
+            quantity = request.POST['quantity']
+            print(request.POST['quantity'])
+            result = False
+            for key, value in request.POST.lists():
+                if key.startswith('option'):
+                    result = True
+                    variation_id = request.POST['option']
+                    print(request.POST['option'])
+                    variation = Variation.objects.get(pk=variation_id)
+            if(result==False):
+                messages.error(request, "Please select a variation")
                 return redirect('product:detail', pk=product.id)
             
-            cart_product, created = CartProduct.objects.get_or_create(
-                variation=result,
-                created_by=request.user,
-                ordered=False,
-                product=product,
-                quantity=quantity,
-            )
+            # cart_product = CartProduct.objects.get_or_create(
+            #     variation=variation,
+            #     created_by=request.user,
+            #     ordered=False,
+            #     product=product,
+            #     quantity=quantity,
+            # )
             
             cart_qs = Cart.objects.filter(created_by=request.user, completed=False)
             if cart_qs.exists():
                 cart = cart_qs[0]
+                cart_products = cart.products.all()
+                result = False
+                for cart_prod in cart_products:
+                    if product == cart_prod.product and variation == cart_prod.variation:
+                        result = True
+                        if (cart_prod.quantity + int(quantity) > variation.stock):
+                            messages.error(request, f"You already have {cart_prod.quantity} quantity of stock(s) in your cart. You can add an additional {variation.stock-cart_prod.quantity} quantity of stock(s) to your cart.")
+                            return redirect('product:detail', pk=product.id)
+                        else:
+                            messages.info(request, "This product quantity was updated.")
+                            cart_prod.quantity += int(quantity)
+                            cart_prod.save()
+                        
+                        return redirect('product:detail', pk=product.id)
                 # check if the cart product is in the cart
-                if cart_product in cart.products.all():
-                    cart_product.quantity += quantity
-                    cart_product.save()
-                    messages.info(request, "This product quantity was updated.")
-                    return redirect('product:detail', pk=product.id)
-                else:
+                # if cart_product in cart.products.all():
+                #     cart_product.quantity += quantity
+                #     cart_product.save()
+                #     messages.info(request, "This product quantity was updated.")
+                #     return redirect('product:detail', pk=product.id)
+                if (result == False):
+                    if (int(quantity) > variation.stock):
+                        messages.error(request, f"There are only {variation.stock} amount of stock available, please select a quantity below the available amount")
+                        return redirect('product:detail', pk=product.id)
+                    cart_product, _ = CartProduct.objects.get_or_create(
+                        variation=variation,
+                        created_by=request.user,
+                        ordered=False,
+                        product=product,
+                        quantity=quantity,
+                    )
+    
                     cart.products.add(cart_product)
+                    print("addedto art")
                     messages.info(request, "This product was added to your cart.")
                     return redirect('product:detail', pk=product.id)
             else:
+                if (int(quantity) > variation.stock):
+                        messages.error(request, f"There are only {variation.stock} amount of stock available, please select a quantity below the available amount")
+                        return redirect('product:detail', pk=product.id)
+                cart_product, _ = CartProduct.objects.get_or_create(
+                    variation=variation,
+                    created_by=request.user,
+                    ordered=False,
+                    product=product,
+                    quantity=quantity,
+                )
                 created_at = timezone.now()
                 cart = Cart.objects.create(
                     created_by=request.user,
                     created_at=created_at,
                 )
+                print("idk what is this")
                 cart.products.add(cart_product)
                 messages.info(request, "This product was added to your cart.")
                 return redirect('product:detail', pk=product.pk)

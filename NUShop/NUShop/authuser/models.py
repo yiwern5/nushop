@@ -27,7 +27,7 @@ class Major(models.Model):
         return self.name
     
 class Role(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, default= 'unverified')
 
     def __str__(self):
         return self.name
@@ -83,7 +83,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150, unique=True)
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=255, default='')
-    bio = models.CharField(max_length=500, blank=True, null=True)
+    bio = models.CharField(max_length=50, blank=True, null=True)
     contact_number = models.CharField(max_length=8, default='')
     image = models.ImageField(upload_to='user_images', blank=True, null=True)
 

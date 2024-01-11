@@ -1,5 +1,5 @@
 from django import forms
-from .models import Product,  ProductImage, Variation, Subvariation, Review
+from .models import Product,  ProductImage, Variation, Review
 from django.forms import inlineformset_factory
 
 INPUT_CLASSES = 'mb-3 w-full py-2 px-6 form-account rounded-xl'
@@ -75,43 +75,27 @@ class AddImageForm(forms.ModelForm):
 class AddVariationForm(forms.ModelForm):
     class Meta:
         model = Variation
-        fields = ('type',)
-
-        widgets = {
-            'type': forms.TextInput(attrs={
-                'class': INPUT_CLASSES
-            }),
-        }
-
-class AddSubvariationForm(forms.ModelForm):
-    class Meta:
-        model = Subvariation
-        fields = ('option',)
+        fields = ('option', 'stock')
 
         widgets = {
             'option': forms.TextInput(attrs={
                 'class': INPUT_CLASSES
             }),
-        }
-
-class ChangeVariationForm(forms.ModelForm):
-    class Meta:
-        model = Variation
-        fields = ('type',)
-
-        widgets = {
-            'type': forms.FileInput(attrs={
+            'stock': forms.NumberInput(attrs={
                 'class': INPUT_CLASSES
             }),
         }
 
-class ChangeSubvariationForm(forms.ModelForm):
+class EditVariationForm(forms.ModelForm):
     class Meta:
-        model = Subvariation
-        fields = ('option',)
+        model = Variation
+        fields = ('option', 'stock') 
 
         widgets = {
-            'option': forms.FileInput(attrs={
+            'option': forms.TextInput(attrs={
+                'class': INPUT_CLASSES
+            }),
+            'stock': forms.NumberInput(attrs={
                 'class': INPUT_CLASSES
             }),
         }
@@ -155,3 +139,4 @@ class ReviewForm(forms.ModelForm):
                 'class': INPUT_CLASSES
             }),
         }
+
