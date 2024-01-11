@@ -7,7 +7,7 @@ from .forms import CustomPasswordChangeForm, EditIndividualForm, EditStudentOrga
 from .models import User
 from django.core.mail import send_mail
 from django.conf import settings
-import pyotp
+# import pyotp
 from datetime import datetime, timedelta
 
 # Create your views here.

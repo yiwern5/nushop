@@ -27,6 +27,7 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     stock = models.IntegerField(blank=True, null=True)
     sold = models.IntegerField(blank=True, null=True)
+
     
     def __str__(self):
         return self.name
@@ -52,16 +53,10 @@ class ProductImage(models.Model):
     
 class Variation(models.Model):
     product = models.ForeignKey(Product, related_name='variations', on_delete=models.CASCADE)
-    type = models.CharField(max_length=255)
-    def __str__(self):
-        return self.type
-
-class Subvariation(models.Model):
-    variation = models.ForeignKey(Variation, related_name='subvariations', on_delete=models.CASCADE)
     option = models.CharField(max_length=255)
     stock = models.IntegerField(blank=True, null=True)
     def __str__(self):
-        return self.option
+        return self.type
     
 class Review(models.Model):
     product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)

@@ -35,9 +35,10 @@
 .bt-nushopprimary {
     color: white;
     background-color: #528029;
+    border: 2px solid #528029;
     margin-top: 2%;
     margin-bottom: 2%;
-    width: 100%;
+    width: 95%;
     padding-top: 2%;
     padding-bottom: 2%
 }
@@ -53,7 +54,7 @@
     border: 2px solid #528029;
     margin-top: 2%;
     margin-bottom: 2%;
-    width: 100%;
+    width: 95%;
     padding-top: 2%;
     padding-bottom: 2%
 }
@@ -66,9 +67,10 @@
 .bt-nushoptertiary-1 {
     color: white;
     background-color: #E9B32C;
+    border: 2px solid #E9B32C;
     margin-top: 2%;
     margin-bottom: 2%;
-    width: 90%;
+    width: 95%;
     padding-top: 2%;
     padding-bottom: 2%
 }
@@ -83,7 +85,7 @@
     border: 2px solid #E9B32C;
     margin-top: 2%;
     margin-bottom: 2%;
-    width: 90%;
+    width: 95%;
     padding-top: 2%;
     padding-bottom: 2%
 }
@@ -114,19 +116,6 @@
 .grid-parent {    
     align-items: center;
     justify-items: center;
-}
-
-.grid-item {
-    width: 100%;
-    height: 330px;
-}
-
-.grid-item:hover {
-    width: 100%;
-    height: 330px;
-    transform: scale(1.021);
-    box-shadow: 0 10px 20px 4px rgba(35, 35, 35, .1);
-    border-radius: 10px;
 }
 
 .category-item {
@@ -182,20 +171,34 @@
  }
 
 .bt-account {
-background-color: #E9B32C;
-color: white;
+    border: 2px solid #E9B32C;
+    background-color: #E9B32C;
+    color: white;
 }
 
 .bt-account:hover {
+    border: 2px solid #528029;
     background-color: #528029;
     color: white;
- }
+}
 
- .card {
+.bt-account-2 {
+    border: 2px solid #E9B32C;
+    background-color: #FDFFF9;
+    color: #E9B32C;
+}
+
+.bt-account-2:hover {
+    border: 2px solid #528029;
+    background-color: #528029;
+    color: white;
+}
+
+.card {
     width: 220px;
     height: 330px;
     border-radius: 10px;
- }
+}
 
 .card:hover {
     transform: scale(1.021);
@@ -230,12 +233,16 @@ color: white;
 
 /* potential bootstrap issue */
 .border-b-primary {
-    border-bottom: 2px solid #528029;
+    border-bottom: 3px solid #528029;
 }
 
 .border-nushopprimary-1 {
     border: 1px solid #528029;
     margin: 20px;
+}
+
+.border-nushopprimary-2 {
+    border: 2px solid #528029;
 }
 
 /* border-nushopprimary-3 */
@@ -252,7 +259,7 @@ color: white;
 }
 
 .vl {
-    border-right: 2px solid #528029;
+    border-right: 3px solid #528029;
     padding-right: 6px;
 }
 
@@ -261,3 +268,56 @@ color: white;
     height: 100%;
     object-fit: cover;
 }
+
+.form-account {
+    border-radius: 2%;
+    border: 2px solid grey;
+    outline: none;
+}
+
+.form-account:focus{
+    border-color: #528029;
+}
+
+.carousel-container {
+    width: 500px; /* Set your desired width */
+    height: 300px; /* Set your desired height */
+    margin: 0 auto; /* Center the carousel horizontally */
+  }
+
+.carousel-container .carousel-inner img {
+    width: 100%; /* Make the images fill the container width */
+    height: 100%; /* Make the images fill the container height */
+    object-fit: cover; /* Maintain aspect ratio and fill the container */
+}
+
+.review-pic {
+    height: 180px;
+}
+
+.star {
+    color: #ccc;
+    font-size: 24px;
+}
+
+.star.filled {
+color   : gold;
+}
+
+.star.half-filled {
+    position: relative;
+    display: inline-block;
+    width: 24px;
+
+}
+
+.star.half-filled::before {
+    content: '\2605';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
+    color: gold;
+}
+  

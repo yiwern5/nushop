@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q, Avg, Count
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Category, Product, ProductImage, Variation, Subvariation, Review
-from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm, AddVariationForm, AddSubvariationForm, ChangeSubvariationForm, ChangeVariationForm, ReviewForm
+from .models import Category, Product, ProductImage, Variation, Review
+from .forms import NewProductForm, EditProductForm, AddImageForm, ChangeImageForm, AddVariationForm, EditVariationForm, ReviewForm
 
 # Create your views here.
 def products(request):
@@ -171,16 +171,16 @@ def add_variation(request, pk):
     })
 
 @login_required
-def change_variation(request, variation_id, product_id):
+def edit_variation(request, variation_id, product_id):
     variation = get_object_or_404(Variation, pk=variation_id)
     product = get_object_or_404(Product, pk=product_id, created_by=request.user)
     if request.method == 'POST':
-        form = ChangeVariationForm(request.POST, request.FILES, instance=variation)
+        form = EditVariationForm(request.POST, request.FILES, instance=variation)
         if form.is_valid():
             form.save()
             return redirect('product:detail', pk=product.id)
     else:
-        form = ChangeVariationForm(instance=variation)
+        form = EditVariationForm(instance=variation)
 
     return render(request, 'product/form.html', {
         'form': form,
@@ -196,48 +196,21 @@ def delete_variation(request, variation_id, product_id):
     return redirect('product:detail', pk=product.id)
 
 @login_required
-def add_subvariation(request, product_id, variation_id):
-    product = get_object_or_404(Product, pk=product_id, created_by=request.user)
+def edit_variation(request, variation_id, product_id):
     variation = get_object_or_404(Variation, pk=variation_id)
-    if request.method == 'POST':
-        form = AddSubvariationForm(request.POST, request.FILES)
-        if form.is_valid():
-            subvariation = form.save(commit=False)
-            subvariation.variation = variation
-            subvariation.save()
-            return redirect('product:detail', pk=product.id)
-    else:
-        form = AddSubvariationForm()
-
-    return render(request, 'product/form.html', {
-        'form': form,
-        'title': f'Add Options for {variation.type}'
-    })
-
-@login_required
-def change_subvariation(request, subvariation_id, product_id):
-    subvariation = get_object_or_404(Subvariation, pk=subvariation_id)
     product = get_object_or_404(Product, pk=product_id, created_by=request.user)
     if request.method == 'POST':
-        form = ChangeSubvariationForm(request.POST, request.FILES, instance=subvariation)
+        form = EditVariationForm(request.POST, request.FILES, instance=variation)
         if form.is_valid():
             form.save()
             return redirect('product:detail', pk=product.id)
     else:
-        form = ChangeSubvariationForm(instance=subvariation)
+        form = EditVariationForm(instance=variation)
 
     return render(request, 'product/form.html', {
         'form': form,
-        'title': f'Change options for {subvariation.option}'
+        'title': f'Change options for {variation.option}'
     })
-
-@login_required
-def delete_subvariation(request, subvariation_id, product_id):
-    subvariation = get_object_or_404(Subvariation, pk=subvariation_id)
-    product = get_object_or_404(Product, pk=product_id, created_by=request.user)
-    subvariation.delete()
-
-    return redirect('product:detail', pk=product.id)
 
 @login_required
 def add_review(request, pk):
@@ -265,3 +238,22 @@ def delete_review(request, review_id, product_id):
     review.delete()
 
     return redirect('product:detail', pk=product.id)
+
+def some_category(request):
+    club_merchandise = Category.objects.create(name = 'Club Merchandise')
+    
+# @login_required
+# def OFF_variation(request, pk):
+#     product = get_object_or_404(Product, pk=pk, created_by=request.user)
+#     product.variation_bool = False
+#     product.save()
+
+#     return redirect('product:detail', pk=product.id)
+
+# @login_required
+# def ON_variation(request, pk):
+#     product = get_object_or_404(Product, pk=pk, created_by=request.user)
+#     product.variation_bool = True
+#     product.save()
+    
+#     return redirect('product:detail', pk=product.id)

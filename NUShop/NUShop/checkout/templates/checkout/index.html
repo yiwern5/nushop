@@ -18,8 +18,8 @@
                                 <div class="text-2xl">
                                     <h1>Listed by: {{ product.product.created_by }}</h1>
                                     <p>Price: $ {{ product.subtotal|floatformat:2 }}</p></p>
-                                    {% if product.variation %}
-                                    <p>{{ product.variation }}</p>
+                                    {% if product.variation.option %}
+                                    <p>Variation: {{ product.variation.option }}</p>
                                     {% endif %}
                                     <p>Quantity: {{ product.quantity }}</p>
                                 </div> 

@@ -7,7 +7,68 @@
 {% endblock %}  
 
 {% block content %}
-    <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
+<div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
+    <div class="grid grid-cols-7 gap-1">
+        <div class="w-full col-span-1 overflow-hidden center row-span-2">
+            {% if seller.image %}
+            <img src="{{ seller.image.url }}" alt="Seller Image" class="pfp">
+            {% else %}
+            <img src="{% static 'default.png' %}" class="pfp">
+            {% endif %}
+        </div>
+
+        <div class="col-span-2">
+            <h1 class="text-3xl ">{{ seller.username }}</h1>
+            <p class="text-lg font-semibold text-nushopprimary">Role: {{ seller.role }}</p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-xl">Average Ratings: </p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-xl">{{ avgRating }}</p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-xl">Listings: </p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-xl">{{ seller.products.count }}</p>
+        </div>
+
+        <div class="col-span-2">
+            {% if request.user in seller.followers.all %}
+                <a href="{% url 'dashboard:unfollow' seller.username %}">
+                    <button class="text-lg bt-nushoptertiary-2 rounded-xl text-center">Unfollow</button>
+                </a>
+                {% else %}
+                <a href="{% url 'dashboard:follow' seller.username %}">
+                    <button class="text-lg bt-nushoptertiary-1 rounded-xl text-center">Follow</button>
+                </a>
+            {% endif %}
+        </div>
+
+        
+        <div class="col-span-1">
+            <p class="text-xl">Number of Ratings: </p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-xl">{{ numRating }}</p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-xl">Followers: </p>
+        </div>
+
+        <div class="col-span-1">
+            <p class="text-xl">{{ seller.followers.count }} </p>
+        </div>
+    </div>
+</div>
+    <!-- <div class="mt-6 px-3 py-6 border-nushopprimary-3 rounded-xl">
         <div class="grid grid-cols-7">
             <div class="w-full col-span-1 overflow-hidden center row-span-2">
                 {% if seller.image %}
@@ -70,7 +131,7 @@
                     {% endif %}
             </div>
         </div>
-    </div>
+    </div> -->
 
     <div class="grid grid-cols-5 gap-4">
         <div class="col-span-1 vl">
@@ -118,7 +179,7 @@
                             <img src="{{ product.thumbnail.url }}" class="rounded-t-xl h-full w-full object-cover object-center">
                         </div>
             
-                        <div class="px-4 product-desc rounded-b-xl bg-nushopsecondary">
+                        <div class="px-1 product-desc rounded-b-xl bg-nushopsecondary">
                             <span class="product-name mt-2 font-semibold card-title">{{ product.name }}</span>
                             {% if product.discount_price %}
                             <div class="grid grid-cols-2">
