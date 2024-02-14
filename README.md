@@ -4,10 +4,13 @@
 ---
 
 ## Level of Acheivement
-### [Artemis](https://credentials.nus.edu.sg/40f92ac8-7f8b-4ac4-80d6-52c3e7923341)
+[Artemis](https://credentials.nus.edu.sg/40f92ac8-7f8b-4ac4-80d6-52c3e7923341)
 
 ## Award
-### [Honorable Mention](https://credentials.nus.edu.sg/47d34a3b-4160-453e-86e2-681dc0217610)
+[Honorable Mention](https://credentials.nus.edu.sg/47d34a3b-4160-453e-86e2-681dc0217610)
+
+## Documentation
+View documentation [here](https://docs.google.com/document/d/1Z9RRJDebI3qpC2wTnnDsu2i90j7Rb_BpKB3kDHjUByE/edit?usp=sharing)
 
 ## Problem Motivation
 At present, various transactions, including the sale of T-shirts and resale of used goods, are being conducted through disparate telegram channels. As a consequence, certain students may fail to avail themselves of the opportunity to obtain attractive and engaging merchandise from NUS clubs and societies, or secondhand items at reduced prices, due to their absence from these telegram channels.
